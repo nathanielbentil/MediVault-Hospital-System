@@ -44,13 +44,13 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $email = $this->input('email');
-        $password = $this->input('password');
+        $email = strtolower(trim((string) $this->input('email')));
+        $password = (string) $this->input('password');
         $ip = $this->ip();
         $userAgent = $this->userAgent();
 
-        // 1. Locate user
-        $user = User::where('email', $email)->first();
+        // 1. Locate user (case-insensitive for PostgreSQL reliability)
+        $user = User::whereRaw('LOWER(email) = ?', [$email])->first();
 
         // 2. Check if user account is locked
         if ($user && $user->isLockedOut()) {
@@ -68,15 +68,11 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        // 3. Verify credentials (integrating HMAC Pepper and Argon2id)
-        $pepperVersion = $user ? $user->pepper_version : config('security.pepper.current_version', 'v1');
-        $pepper = config("security.pepper.versions.{$pepperVersion}", '');
-        
+        // 3. Verify credentials (integrating HMAC Pepper and Argon2id via PasswordService)
         $isPasswordValid = false;
         if ($user) {
-            // Compute HMAC with server pepper before password verification
-            $pepperedPassword = hash_hmac('sha256', $password, $pepper);
-            $isPasswordValid = password_verify($pepperedPassword, $user->password) || password_verify($password, $user->password);
+            $pepperVersion = $user->pepper_version ?? config('security.pepper.current_version', 'v1');
+            $isPasswordValid = \App\Services\PasswordService::verify($password, $user->password, $pepperVersion);
         }
 
         if (!$user || !$isPasswordValid) {

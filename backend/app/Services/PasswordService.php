@@ -57,9 +57,27 @@ class PasswordService
             $pepper = env('PEPPER_V1', '58ccdb65b61dfa1586e00d6cf4268f24d09d0c4ad69e7cfb555184c3fc02f91e');
         }
 
+        // 1. Standard HMAC Pepper + Argon2id
         $peppered = hash_hmac('sha256', $plainPassword, $pepper);
+        if (password_verify($peppered, $hash)) {
+            return true;
+        }
 
-        return password_verify($peppered, $hash);
+        // 2. Direct Argon2id check (if hash was created without pepper)
+        if (password_verify($plainPassword, $hash)) {
+            return true;
+        }
+
+        // 3. Tolerant check for accidental leading/trailing whitespace
+        $trimmed = trim($plainPassword);
+        if ($trimmed !== $plainPassword) {
+            $trimmedPeppered = hash_hmac('sha256', $trimmed, $pepper);
+            if (password_verify($trimmedPeppered, $hash) || password_verify($trimmed, $hash)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

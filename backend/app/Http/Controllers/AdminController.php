@@ -64,8 +64,8 @@ class AdminController extends Controller
         $hashResult = PasswordService::hash($request->password);
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name' => trim($request->name),
+            'email' => strtolower(trim($request->email)),
             'role' => $role->name,
             'password' => $hashResult['hash'],
             'salt' => $hashResult['salt'],

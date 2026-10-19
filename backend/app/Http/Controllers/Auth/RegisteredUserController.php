@@ -33,20 +33,24 @@ class RegisteredUserController extends Controller
         // 1. Hash password with Pepper + Argon2id
         $hashResult = PasswordService::hash($request->password);
 
-        // 2. Create user with active status
+        // 2. Resolve default clinical practitioner role
+        $dentistRole = Role::where('slug', 'Doctor')->orWhere('slug', 'Dentist')->orWhere('slug', 'User')->first();
+
+        // 3. Create user with active status, salt, and verified email
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => strtolower(trim($request->email)),
+            'role' => $dentistRole?->name ?? 'Doctor',
             'password' => $hashResult['hash'],
+            'salt' => $hashResult['salt'],
             'pepper_version' => $hashResult['pepper_version'],
             'status' => 'active',
+            'email_verified_at' => now(),
             'last_login_at' => now(),
             'last_login_ip' => $request->ip(),
             'password_changed_at' => now(),
         ]);
 
-        // 3. Assign default 'Dentist' / Clinical Practitioner role
-        $dentistRole = Role::where('slug', 'Dentist')->orWhere('slug', 'User')->first();
         if ($dentistRole) {
             $user->roles()->attach($dentistRole->id, ['created_at' => now()]);
         }
