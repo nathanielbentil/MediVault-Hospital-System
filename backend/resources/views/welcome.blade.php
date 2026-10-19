@@ -70,24 +70,24 @@
     <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
         <div class="text-center max-w-3xl mx-auto">
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/70 border border-cyan-500/30 text-cyan-300 text-xs font-semibold mb-6">
-                <span>🛡️</span>
-                <span>Secure Clinical Healthcare System • HIPAA & HL7 Certified</span>
+                <span>🏥</span>
+                <span>Hospital Management System & Clinical EHR Platform</span>
             </div>
             
             <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight">
                 Hospital Clinical EHR. <br>
                 <span class="bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">
-                    Zero-Trust Cloud Security.
+                    Streamlined In-Patient & Clinical Care.
                 </span>
             </h1>
             
             <p class="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed">
-                Next-generation hospital management platform delivering intelligent patient admissions, real-time clinical workflows, role-based governance, and bank-grade medical record protection.
+                Comprehensive healthcare management platform delivering patient admissions, ward bed logistics, clinical consultations, bedside nursing observations, and digital pharmacy dispensary management.
             </p>
 
             <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="{{ route('login') }}" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-500 text-slate-950 font-bold text-sm shadow-xl shadow-cyan-500/20 hover:from-cyan-500 hover:to-teal-400 transition-all flex items-center justify-center gap-2">
-                    <span>Enter Staff Station</span>
+                    <span>Enter Hospital Staff Portal</span>
                     <span>&rarr;</span>
                 </a>
             </div>
@@ -101,9 +101,9 @@
                     👑
                 </div>
                 <h3 class="text-lg font-bold text-white mb-1">Chief Medical Director</h3>
-                <p class="text-xs text-purple-300 font-medium mb-3">Super Admin Role</p>
+                <p class="text-xs text-purple-300 font-medium mb-3">Executive Administration</p>
                 <p class="text-xs text-slate-400 leading-relaxed">
-                    Full hospital governance, staff role management, configuration restore point snapshots, and cryptographic audit log verification.
+                    Overall hospital governance, medical personnel administration, institutional configuration snapshots, and operational oversight.
                 </p>
             </div>
 
@@ -160,10 +160,10 @@
                 <div class="h-10 w-10 rounded-xl bg-blue-950/80 border border-blue-500/40 flex items-center justify-center text-xl mb-4">
                     🔍
                 </div>
-                <h3 class="text-lg font-bold text-white mb-1">Compliance & HIPAA Auditor</h3>
-                <p class="text-xs text-blue-300 font-medium mb-3">Security & Forensic Telemetry</p>
+                <h3 class="text-lg font-bold text-white mb-1">Quality & Records Auditor</h3>
+                <p class="text-xs text-blue-300 font-medium mb-3">Regulatory Compliance Oversight</p>
                 <p class="text-xs text-slate-400 leading-relaxed">
-                    Read-only audit trail inspection, SHA-256 hash-chain verification, soft-deleted user recovery, and security telemetry.
+                    Clinical record verification, historical admissions audit trails, archived patient restoration, and healthcare compliance reviews.
                 </p>
             </div>
         </div>
@@ -180,12 +180,12 @@
                     <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Hospital Governance</div>
                 </div>
                 <div>
-                    <div class="text-3xl font-black text-emerald-400">Zero-Trust</div>
-                    <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">End-to-End Encryption</div>
+                    <div class="text-3xl font-black text-emerald-400">24/7</div>
+                    <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Ward & Emergency Care</div>
                 </div>
                 <div>
-                    <div class="text-3xl font-black text-purple-400">99.99%</div>
-                    <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">High Availability</div>
+                    <div class="text-3xl font-black text-purple-400">100%</div>
+                    <div class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Digital Health Records</div>
                 </div>
             </div>
         </div>

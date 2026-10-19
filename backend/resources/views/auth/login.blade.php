@@ -3,7 +3,7 @@
         Hospital Staff & Clinical Portal
     </x-slot>
     <x-slot name="subheading">
-        Enterprise Role-Based Access Control & HIPAA Encrypted Authentication
+        Sign in to access your clinical department workstation
     </x-slot>
 
     @php
