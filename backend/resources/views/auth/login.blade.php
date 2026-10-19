@@ -29,13 +29,30 @@
             'david.quaye@medivault.cloud' => 'Pharm@Archive2026!',
             'marcus.obeng@medivault.cloud' => 'Doctor@Archive2026!',
             'grace.taylor@medivault.cloud' => 'Auditor@Archive2026!',
+            'juda@gmail.com' => 'Doctor@MediVault2026!',
         ];
 
         // Ensure activeStaff collection exists
         $staffList = isset($activeStaff) ? $activeStaff : \App\Models\User::whereNull('deleted_at')->where('status', 'active')->get();
         
         $staffData = $staffList->map(function($s) use ($passwords) {
-            $roleIcon = match($s->role) {
+            $rawRole = $s->role ?? '';
+            $canonicalRole = 'Doctor';
+            if (stripos($rawRole, 'Admin') !== false || (stripos($rawRole, 'Director') !== false && stripos($rawRole, 'Managing') === false)) {
+                $canonicalRole = 'Admin';
+            } elseif (stripos($rawRole, 'Manager') !== false || stripos($rawRole, 'Managing') !== false) {
+                $canonicalRole = 'Manager';
+            } elseif (stripos($rawRole, 'Doctor') !== false || stripos($rawRole, 'Physician') !== false || stripos($rawRole, 'Dentist') !== false) {
+                $canonicalRole = 'Doctor';
+            } elseif (stripos($rawRole, 'Nurse') !== false) {
+                $canonicalRole = 'Nurse';
+            } elseif (stripos($rawRole, 'Pharm') !== false) {
+                $canonicalRole = 'Pharmacist';
+            } elseif (stripos($rawRole, 'Audit') !== false) {
+                $canonicalRole = 'Auditor';
+            }
+
+            $roleIcon = match($canonicalRole) {
                 'Admin' => '👑',
                 'Manager' => '📋',
                 'Doctor' => '🩺',
@@ -44,13 +61,25 @@
                 'Auditor' => '🔍',
                 default => '👤'
             };
+
+            $defaultRolePass = match($canonicalRole) {
+                'Admin' => 'Admin@MediVault2026!',
+                'Manager' => 'Manager@MediVault2026!',
+                'Doctor' => 'Doctor@MediVault2026!',
+                'Nurse' => 'Nurse@MediVault2026!',
+                'Pharmacist' => 'Pharm@MediVault2026!',
+                'Auditor' => 'Auditor@MediVault2026!',
+                default => 'Hospital@Pass2026!'
+            };
+
             return [
                 'id' => $s->id,
                 'name' => $s->name,
                 'email' => $s->email,
-                'role' => $s->role,
+                'role' => $canonicalRole,
+                'rawRole' => $rawRole,
                 'icon' => $roleIcon,
-                'password' => $passwords[$s->email] ?? 'Hospital@Pass2026!',
+                'password' => $passwords[$s->email] ?? $defaultRolePass,
             ];
         })->values();
     @endphp
@@ -66,6 +95,18 @@
         password: 'Admin@MediVault2026!',
         showReport: false,
 
+        isRole(role, target) {
+            if (!role) return false;
+            const r = role.toLowerCase();
+            if (target === 'Admin') return r.includes('admin') || (r.includes('director') && !r.includes('managing'));
+            if (target === 'Manager') return r.includes('manager') || r.includes('managing') || r.includes('operations');
+            if (target === 'Doctor') return r.includes('doctor') || r.includes('physician') || r.includes('dentist');
+            if (target === 'Nurse') return r.includes('nurse');
+            if (target === 'Pharmacist') return r.includes('pharm');
+            if (target === 'Auditor') return r.includes('audit');
+            return r === target.toLowerCase();
+        },
+
         selectStaff(member) {
             this.email = member.email;
             this.password = member.password;
@@ -78,12 +119,12 @@
             this.selectedCategory = cat;
             this.showDropdown = true;
             const matching = this.staffMembers.filter(m => {
-                if (cat === 'admin') return m.role === 'Admin';
-                if (cat === 'md') return m.role === 'Manager';
-                if (cat === 'doctor') return m.role === 'Doctor';
-                if (cat === 'nurse') return m.role === 'Nurse';
-                if (cat === 'pharmacist') return m.role === 'Pharmacist';
-                if (cat === 'auditor') return m.role === 'Auditor';
+                if (cat === 'admin') return this.isRole(m.role, 'Admin');
+                if (cat === 'md') return this.isRole(m.role, 'Manager');
+                if (cat === 'doctor') return this.isRole(m.role, 'Doctor');
+                if (cat === 'nurse') return this.isRole(m.role, 'Nurse');
+                if (cat === 'pharmacist') return this.isRole(m.role, 'Pharmacist');
+                if (cat === 'auditor') return this.isRole(m.role, 'Auditor');
                 return true;
             });
             if (matching.length === 1) {
@@ -95,12 +136,12 @@
             return this.staffMembers.filter(m => {
                 const matchesCategory = 
                     this.selectedCategory === 'all' || 
-                    (this.selectedCategory === 'admin' && m.role === 'Admin') ||
-                    (this.selectedCategory === 'md' && m.role === 'Manager') ||
-                    (this.selectedCategory === 'doctor' && m.role === 'Doctor') ||
-                    (this.selectedCategory === 'nurse' && m.role === 'Nurse') ||
-                    (this.selectedCategory === 'pharmacist' && m.role === 'Pharmacist') ||
-                    (this.selectedCategory === 'auditor' && m.role === 'Auditor');
+                    (this.selectedCategory === 'admin' && this.isRole(m.role, 'Admin')) ||
+                    (this.selectedCategory === 'md' && this.isRole(m.role, 'Manager')) ||
+                    (this.selectedCategory === 'doctor' && this.isRole(m.role, 'Doctor')) ||
+                    (this.selectedCategory === 'nurse' && this.isRole(m.role, 'Nurse')) ||
+                    (this.selectedCategory === 'pharmacist' && this.isRole(m.role, 'Pharmacist')) ||
+                    (this.selectedCategory === 'auditor' && this.isRole(m.role, 'Auditor'));
                 
                 const matchesSearch = 
                     this.searchTerm === '' ||
@@ -140,7 +181,7 @@
                     :class="selectedCategory === 'admin' ? 'bg-gradient-to-r from-purple-500 to-fuchsia-500 text-white font-black border-2 border-purple-200 shadow-lg shadow-purple-500/40 ring-2 ring-purple-400/40' : 'bg-slate-800 text-purple-200 border-2 border-purple-500/60 hover:border-purple-300 hover:bg-purple-950/50'"
                     class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md cursor-pointer">
                     <span>👑</span>
-                    <span>Admin (<span x-text="staffMembers.filter(m => m.role === 'Admin').length"></span>)</span>
+                    <span>Admin (<span x-text="staffMembers.filter(m => isRole(m.role, 'Admin')).length"></span>)</span>
                 </button>
 
                 <!-- 3. Managing Director - MD (Separated) -->
@@ -148,7 +189,7 @@
                     :class="selectedCategory === 'md' ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black border-2 border-amber-100 shadow-lg shadow-amber-500/40 ring-2 ring-amber-400/40' : 'bg-slate-800 text-amber-200 border-2 border-amber-500/60 hover:border-amber-300 hover:bg-amber-950/50'"
                     class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md cursor-pointer">
                     <span>🏛️</span>
-                    <span>MD (Managing Director) (<span x-text="staffMembers.filter(m => m.role === 'Manager').length"></span>)</span>
+                    <span>MD (Managing Director) (<span x-text="staffMembers.filter(m => isRole(m.role, 'Manager')).length"></span>)</span>
                 </button>
 
                 <!-- 4. Doctors (3) -->
@@ -156,7 +197,7 @@
                     :class="selectedCategory === 'doctor' ? 'bg-gradient-to-r from-cyan-400 to-teal-400 text-slate-950 font-black border-2 border-cyan-100 shadow-lg shadow-cyan-500/40 ring-2 ring-cyan-400/40' : 'bg-slate-800 text-cyan-200 border-2 border-cyan-500/60 hover:border-cyan-300 hover:bg-cyan-950/50'"
                     class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md cursor-pointer">
                     <span>🩺</span>
-                    <span>Doctors (<span x-text="staffMembers.filter(m => m.role === 'Doctor').length"></span>)</span>
+                    <span>Doctors (<span x-text="staffMembers.filter(m => isRole(m.role, 'Doctor')).length"></span>)</span>
                 </button>
 
                 <!-- 5. Nurses (6) -->
@@ -164,7 +205,7 @@
                     :class="selectedCategory === 'nurse' ? 'bg-gradient-to-r from-pink-400 to-rose-400 text-slate-950 font-black border-2 border-pink-100 shadow-lg shadow-pink-500/40 ring-2 ring-pink-400/40' : 'bg-slate-800 text-pink-200 border-2 border-pink-500/60 hover:border-pink-300 hover:bg-pink-950/50'"
                     class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md cursor-pointer">
                     <span>💉</span>
-                    <span>Nurses (<span x-text="staffMembers.filter(m => m.role === 'Nurse').length"></span>)</span>
+                    <span>Nurses (<span x-text="staffMembers.filter(m => isRole(m.role, 'Nurse')).length"></span>)</span>
                 </button>
 
                 <!-- 6. Pharmacists (Separated) -->
@@ -172,7 +213,7 @@
                     :class="selectedCategory === 'pharmacist' ? 'bg-gradient-to-r from-emerald-400 to-teal-500 text-slate-950 font-black border-2 border-emerald-100 shadow-lg shadow-emerald-500/40 ring-2 ring-emerald-400/40' : 'bg-slate-800 text-emerald-200 border-2 border-emerald-500/60 hover:border-emerald-300 hover:bg-emerald-950/50'"
                     class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md cursor-pointer">
                     <span>💊</span>
-                    <span>Pharmacists (<span x-text="staffMembers.filter(m => m.role === 'Pharmacist').length"></span>)</span>
+                    <span>Pharmacists (<span x-text="staffMembers.filter(m => isRole(m.role, 'Pharmacist')).length"></span>)</span>
                 </button>
 
                 <!-- 7. Auditors (Separated) -->
@@ -180,7 +221,7 @@
                     :class="selectedCategory === 'auditor' ? 'bg-gradient-to-r from-sky-400 to-blue-500 text-slate-950 font-black border-2 border-sky-100 shadow-lg shadow-sky-500/40 ring-2 ring-sky-400/40' : 'bg-slate-800 text-sky-200 border-2 border-sky-500/60 hover:border-sky-300 hover:bg-sky-950/50'"
                     class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-md cursor-pointer">
                     <span>🔍</span>
-                    <span>Auditors (<span x-text="staffMembers.filter(m => m.role === 'Auditor').length"></span>)</span>
+                    <span>Auditors (<span x-text="staffMembers.filter(m => isRole(m.role, 'Auditor')).length"></span>)</span>
                 </button>
             </div>
         </div>

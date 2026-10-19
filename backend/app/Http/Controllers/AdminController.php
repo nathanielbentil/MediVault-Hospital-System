@@ -66,7 +66,7 @@ class AdminController extends Controller
         $user = User::create([
             'name' => trim($request->name),
             'email' => strtolower(trim($request->email)),
-            'role' => $role->name,
+            'role' => $role->slug ?? $role->name,
             'password' => $hashResult['hash'],
             'salt' => $hashResult['salt'],
             'pepper_version' => $hashResult['pepper_version'],
