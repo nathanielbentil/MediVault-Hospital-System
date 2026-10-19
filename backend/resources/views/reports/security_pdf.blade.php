@@ -5,14 +5,24 @@
     <title>Project Report</title>
     <style>
         @page {
-            margin: 36pt 40pt;
+            margin: 28pt 36pt;
         }
         body {
             font-family: 'Times New Roman', Times, serif;
             color: #000000;
-            font-size: 10.5pt;
-            line-height: 1.35;
+            font-size: 10pt;
+            line-height: 1.3;
             background-color: #ffffff;
+        }
+        
+        /* Student & Course Header Details */
+        .student-details {
+            margin: 0 0 10pt 0;
+            font-size: 11pt;
+            line-height: 1.4;
+        }
+        .student-details div {
+            margin-bottom: 2pt;
         }
         
         /* Plain Word Headings */
@@ -20,7 +30,7 @@
             font-size: 16pt;
             font-weight: bold;
             color: #000000;
-            margin: 0 0 3pt 0;
+            margin: 0 0 2pt 0;
             text-align: left;
             text-transform: uppercase;
         }
@@ -28,54 +38,54 @@
             font-size: 13pt;
             font-weight: bold;
             color: #000000;
-            margin: 0 0 14pt 0;
+            margin: 0 0 10pt 0;
             text-align: left;
         }
         
         h2 {
-            font-size: 12pt;
-            font-weight: bold;
-            color: #000000;
-            margin-top: 14pt;
-            margin-bottom: 5pt;
-        }
-        h3 {
-            font-size: 11pt;
+            font-size: 11.5pt;
             font-weight: bold;
             color: #000000;
             margin-top: 10pt;
             margin-bottom: 3pt;
         }
+        h3 {
+            font-size: 10.5pt;
+            font-weight: bold;
+            color: #000000;
+            margin-top: 7pt;
+            margin-bottom: 2pt;
+        }
         p {
-            margin: 0 0 6pt 0;
+            margin: 0 0 4pt 0;
             text-align: justify;
         }
         ul {
-            margin: 0 0 6pt 20pt;
+            margin: 0 0 4pt 18pt;
             padding: 0;
         }
         li {
-            margin-bottom: 2pt;
+            margin-bottom: 1.5pt;
         }
         
         /* Standard Word Table (Plain Black Borders, No Shading) */
         table.word-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 6pt 0 10pt 0;
-            font-size: 9.5pt;
+            margin: 4pt 0 8pt 0;
+            font-size: 9pt;
         }
         table.word-table th {
             border: 1px solid #000000;
             font-weight: bold;
             text-align: left;
-            padding: 4pt 5pt;
+            padding: 3pt 4.5pt;
             background: none;
             color: #000000;
         }
         table.word-table td {
             border: 1px solid #000000;
-            padding: 3.5pt 5pt;
+            padding: 2.5pt 4.5pt;
             color: #000000;
             vertical-align: top;
         }
@@ -83,27 +93,27 @@
         /* Plain Code (Standard Courier Text, No Background) */
         pre.code-text {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 9pt;
-            margin: 4pt 0 8pt 15pt;
-            line-height: 1.3;
+            font-size: 8.5pt;
+            margin: 3pt 0 6pt 12pt;
+            line-height: 1.25;
             color: #000000;
         }
         
         /* Standard Word Image Insertion */
         .word-image-container {
-            margin: 10pt 0;
+            margin: 6pt 0;
             text-align: center;
         }
         .word-image {
             width: 100%;
-            max-height: 250pt;
+            max-height: 220pt;
             display: block;
             margin: 0 auto;
         }
         .word-caption {
-            font-size: 9.5pt;
+            font-size: 9pt;
             font-weight: bold;
-            margin-top: 4pt;
+            margin-top: 3pt;
             text-align: center;
             color: #000000;
         }
@@ -111,16 +121,16 @@
         .page-break {
             page-break-after: always;
         }
-        
-        .footer {
-            margin-top: 20pt;
-            text-align: center;
-            font-size: 9pt;
-            color: #000000;
-        }
     </style>
 </head>
 <body>
+
+    <!-- STUDENT & COURSE DETAILS -->
+    <div class="student-details">
+        <div><strong>Name:</strong> Nathaniel Bentil</div>
+        <div><strong>Index:</strong> PUIT/24210142</div>
+        <div><strong>Course:</strong> Information Security</div>
+    </div>
 
     <!-- DOCUMENT TITLE -->
     <h1 class="doc-title">PROJECT REPORT</h1>
@@ -467,10 +477,6 @@ $results = DB::select($sql, [$userInput]); // Input is strictly bound as text da
             @endforeach
         </tbody>
     </table>
-
-    <div class="footer">
-        MediVault Hospital Management System • Project Report • Requirements Implementation
-    </div>
 
 </body>
 </html>
