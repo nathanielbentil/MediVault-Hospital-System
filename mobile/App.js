@@ -16,6 +16,30 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// In-memory fallback wrapper to ensure rock-solid stability in Expo Go
+const memoryStore = {};
+const safeStorage = {
+  getItem: async (key) => {
+    try {
+      return (await AsyncStorage.getItem(key)) || memoryStore[key] || null;
+    } catch (_) {
+      return memoryStore[key] || null;
+    }
+  },
+  setItem: async (key, value) => {
+    memoryStore[key] = value;
+    try {
+      await AsyncStorage.setItem(key, value);
+    } catch (_) {}
+  },
+  removeItem: async (key) => {
+    delete memoryStore[key];
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch (_) {}
+  },
+};
+
 // Default Live Cloud API (Render + AWS Supabase PostgreSQL)
 const API_BASE_URL = 'https://medivault-hospital-system.onrender.com/api';
 
@@ -70,8 +94,8 @@ export default function App() {
 
   const checkSavedSession = async () => {
     try {
-      const savedToken = await AsyncStorage.getItem('@medivault_token');
-      const savedUser = await AsyncStorage.getItem('@medivault_user');
+      const savedToken = await safeStorage.getItem('@medivault_token');
+      const savedUser = await safeStorage.getItem('@medivault_user');
       if (savedToken && savedUser) {
         setAuthToken(savedToken);
         setCurrentUser(JSON.parse(savedUser));
@@ -155,8 +179,8 @@ export default function App() {
   const saveAuthSession = async (token, user) => {
     setAuthToken(token);
     setCurrentUser(user);
-    await AsyncStorage.setItem('@medivault_token', token);
-    await AsyncStorage.setItem('@medivault_user', JSON.stringify(user));
+    await safeStorage.setItem('@medivault_token', token);
+    await safeStorage.setItem('@medivault_user', JSON.stringify(user));
     fetchPatients(token);
   };
 
@@ -172,8 +196,8 @@ export default function App() {
         }).catch(() => {});
       }
     } finally {
-      await AsyncStorage.removeItem('@medivault_token');
-      await AsyncStorage.removeItem('@medivault_user');
+      await safeStorage.removeItem('@medivault_token');
+      await safeStorage.removeItem('@medivault_user');
       setAuthToken(null);
       setCurrentUser(null);
       setPatients([]);
