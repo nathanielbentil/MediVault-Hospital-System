@@ -190,19 +190,5 @@
             </div>
         </div>
     </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-slate-800/80 bg-slate-950 py-8 text-center text-xs text-slate-500">
-        <div class="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-2">
-                <span>🏥 MediVault Enterprise Hospital Management & Clinical EHR</span>
-                <span>•</span>
-                <span>Version 2.4.0</span>
-            </div>
-            <div>
-                <span>© 2026 MediVault Health Systems Inc. • HIPAA & GDPR Certified</span>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>

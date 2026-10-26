@@ -390,39 +390,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Global Footer -->
-    <footer class="border-t border-slate-800/80 bg-slate-950/80 backdrop-blur-xl py-4 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-3">
-            <div class="flex items-center gap-2.5 flex-wrap justify-center sm:justify-start">
-                <div class="h-6 w-6 rounded-lg bg-gradient-to-tr from-cyan-600 to-teal-400 p-0.5 shadow-sm shadow-cyan-500/20 flex items-center justify-center">
-                    <svg class="h-3.5 w-3.5 text-slate-950 fill-current" viewBox="0 0 24 24">
-                        <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/>
-                    </svg>
-                </div>
-                <span class="font-semibold text-slate-300">
-                    Medi<span class="text-cyan-400 font-bold">Vault</span> Enterprise Hospital Management & Clinical EHR
-                </span>
-                <span class="px-2 py-0.5 rounded-full bg-slate-900 border border-slate-700/80 text-[10px] font-mono font-bold text-cyan-300">
-                    v2.4.0-LTS
-                </span>
-            </div>
-            <div class="flex items-center gap-2.5 text-[11px] flex-wrap justify-center sm:justify-end">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-300 font-medium">
-                    <span class="relative flex h-1.5 w-1.5">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-                    </span>
-                    <span>256-bit TLS / SSL Active</span>
-                </span>
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-medium">
-                    <svg class="h-3 w-3 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                    <span>HIPAA & GDPR Certified</span>
-                </span>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
