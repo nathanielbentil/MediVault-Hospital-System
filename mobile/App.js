@@ -88,9 +88,20 @@ export default function App() {
   const [newDiagnosis, setNewDiagnosis] = useState('');
   const [newVitals, setNewVitals] = useState('BP 120/80 | Pulse 74 | Temp 36.8°C | SpO2 99%');
 
-  // Check saved session on app launch
+  // Check saved session & instant offline cache on app launch
   useEffect(() => {
-    checkSavedSession();
+    (async () => {
+      try {
+        const cached = await safeStorage.getItem('@cached_patients');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setPatients(parsed);
+          }
+        }
+      } catch (_) {}
+      checkSavedSession();
+    })();
   }, []);
 
   const checkSavedSession = async () => {
@@ -220,6 +231,7 @@ export default function App() {
       const data = await res.json();
       if (data.success && Array.isArray(data.patients)) {
         setPatients(data.patients);
+        safeStorage.setItem('@cached_patients', JSON.stringify(data.patients));
       }
     } catch (e) {
       console.log('Error fetching patients', e);
