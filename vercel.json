@@ -1,45 +1,5 @@
 {
   "version": 2,
-  "framework": null,
-  "functions": {
-    "api/index.php": {
-      "runtime": "vercel-php@0.7.3"
-    }
-  },
-  "routes": [
-    {
-      "src": "/(css|js|images|fonts)/(.*)",
-      "dest": "/backend/public/$1/$2"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.php"
-    }
-  ],
-  "env": {
-    "APP_NAME": "MediVault Hospital Management System",
-    "APP_ENV": "production",
-    "APP_DEBUG": "false",
-    "APP_KEY": "base64:Nfo+QDGVOn7k13Uw1Y5CzIlQgBduunBjj6HNWWae9VM=",
-    "APP_URL": "https://medivault-hospital.vercel.app",
-    "DB_CONNECTION": "pgsql",
-    "DB_HOST": "aws-0-eu-west-2.pooler.supabase.com",
-    "DB_PORT": "6543",
-    "DB_DATABASE": "postgres",
-    "DB_USERNAME": "postgres.wulriexoojidlilizmps",
-    "DB_PASSWORD": "f#_qApAc55qy54n",
-    "DB_SSLMODE": "require",
-    "CURRENT_PEPPER_VERSION": "v1",
-    "PEPPER_V1": "58ccdb65b61dfa1586e00d6cf4268f24d09d0c4ad69e7cfb555184c3fc02f91e",
-    "TWO_FACTOR_ISSUER": "MediVault Hospital",
-    "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
-    "APP_CONFIG_CACHE": "/tmp/config.php",
-    "APP_EVENTS_CACHE": "/tmp/events.php",
-    "APP_PACKAGES_CACHE": "/tmp/packages.php",
-    "APP_ROUTES_CACHE": "/tmp/routes.php",
-    "APP_SERVICES_CACHE": "/tmp/services.php",
-    "CACHE_STORE": "array",
-    "SESSION_DRIVER": "cookie",
-    "LOG_CHANNEL": "stderr"
-  }
+  "buildCommand": "cd web && npm run build",
+  "outputDirectory": "web/.next"
 }
