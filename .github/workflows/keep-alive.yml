@@ -1,0 +1,61 @@
+name: Supabase Activity Keep-Alive
+
+on:
+  schedule:
+    # Runs every 3 days at 12:00 UTC to prevent Supabase 7-day inactivity pause
+    - cron: '0 12 */3 * *'
+  workflow_dispatch:
+    # Allows manual trigger anytime from GitHub Actions tab
+
+jobs:
+  ping-supabase:
+    name: Ping AWS Supabase Cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Ping PostgreSQL Database
+        env:
+          DB_HOST: ${{ secrets.DB_HOST || 'aws-0-eu-west-2.pooler.supabase.com' }}
+          DB_PORT: ${{ secrets.DB_PORT || '6543' }}
+          DB_NAME: ${{ secrets.DB_NAME || 'postgres' }}
+          DB_USER: ${{ secrets.DB_USER || 'postgres.wulriexoojidlilizmps' }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD || 'f#_qApAc55qy54n' }}
+        run: |
+          node -e "
+            const { Pool } = require('pg');
+            const pool = new Pool({
+              host: process.env.DB_HOST,
+              port: parseInt(process.env.DB_PORT, 10),
+              database: process.env.DB_NAME,
+              user: process.env.DB_USER,
+              password: process.env.DB_PASSWORD,
+              ssl: { rejectUnauthorized: false },
+              connectionTimeoutMillis: 15000,
+            });
+
+            async function ping() {
+              try {
+                console.log('Connecting to AWS Supabase London cluster...');
+                const res = await pool.query('SELECT NOW() AS server_time, count(*) AS total_patients FROM patients;');
+                console.log('✅ Supabase activity refreshed successfully!');
+                console.log('Server Time:', res.rows[0].server_time);
+                console.log('Patient Count:', res.rows[0].total_patients);
+                await pool.end();
+                process.exit(0);
+              } catch (err) {
+                console.error('❌ Ping error:', err.message);
+                await pool.end();
+                process.exit(1);
+              }
+            }
+
+            ping();
+          "
+        working-directory: web
