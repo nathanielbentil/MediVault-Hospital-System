@@ -26,20 +26,12 @@ import {
   UserCircle,
   TrendingUp,
   Hospital,
-  Clock,
   Sparkles,
 } from 'lucide-react';
 
-// ─── High-Definition Medical Visual Assets (Curated Clinical CDNs) ───────────
-const IMAGES = {
-  loginAmbient: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=2000&q=80',
-  loginHero: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1600&q=80',
-  workstationBanner: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1600&q=80',
-  wardsHeader: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=1600&q=80',
-  admissionHeader: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&q=80',
-  pharmacyHeader: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1600&q=80',
-  auditHeader: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=80',
-};
+// ─── Real Premier Hospital Photography (Homepage Only) ──────────────────────
+const HOSPITAL_HOMEPAGE_BG =
+  'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=2000&q=85';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 interface StaffAccount {
@@ -336,147 +328,120 @@ export default function Home() {
   // ── Loading Screen ────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-3 relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-15"
-          style={{ backgroundImage: `url('${IMAGES.loginAmbient}')` }}
-        />
-        <div className="relative z-10 flex flex-col items-center gap-3">
-          <div className="h-16 w-16 rounded-2xl bg-cyan-950/90 border border-cyan-500/50 flex items-center justify-center text-3xl shadow-xl shadow-cyan-950 animate-pulse">
-            🏥
-          </div>
-          <div className="flex items-center gap-2 text-cyan-400 font-mono text-sm tracking-wide">
-            <RefreshCw className="h-4 w-4 animate-spin" />
-            Initializing MediVault Clinical Station...
-          </div>
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-3">
+        <div className="h-16 w-16 rounded-2xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-3xl shadow-xl shadow-cyan-950 animate-pulse">
+          🏥
+        </div>
+        <div className="flex items-center gap-2 text-cyan-400 font-mono text-sm tracking-wide">
+          <RefreshCw className="h-4 w-4 animate-spin" />
+          Loading MediVault Hospital System...
         </div>
       </div>
     );
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  VIEW 1: PROFESSIONAL CLINICAL LOGIN & ROLE SELECTOR
+  //  VIEW 1: HOMEPAGE WITH REAL PROFESSIONAL HOSPITAL BACKGROUND PHOTOGRAPHY
   // ══════════════════════════════════════════════════════════════════════════
   if (!user) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col lg:flex-row relative overflow-hidden">
-        {/* Subtle Ambient Hospital Photography Background */}
-        <div
-          className="absolute inset-0 bg-cover bg-center opacity-15 pointer-events-none scale-105 transition-all duration-1000"
-          style={{ backgroundImage: `url('${IMAGES.loginAmbient}')` }}
-        />
-        <div className="absolute inset-0 bg-radial from-transparent via-slate-950/80 to-slate-950 pointer-events-none" />
+      <div
+        className="min-h-screen text-slate-100 flex flex-col justify-between p-4 sm:p-8 relative bg-cover bg-center bg-no-repeat bg-fixed selection:bg-cyan-500 selection:text-slate-950"
+        style={{ backgroundImage: `url('${HOSPITAL_HOMEPAGE_BG}')` }}
+      >
+        {/* Subtle Dark Vignette & Glass Mask so the Real Hospital Picture shines through */}
+        <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/80" />
 
-        {/* ── Left Hero Panel (Cinematic Hospital Feature Wall) ── */}
-        <div
-          className="hidden lg:flex lg:w-5/12 relative flex-col justify-between p-12 border-r border-slate-800/80 bg-cover bg-center overflow-hidden shadow-2xl"
-          style={{ backgroundImage: `url('${IMAGES.loginHero}')` }}
-        >
-          {/* Deep Dark Hospital Vignette Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/85 to-slate-950/65" />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-transparent to-slate-950/90" />
-
-          {/* Top Brand Header */}
-          <div className="relative z-10 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-950/90 border border-cyan-500/40 text-cyan-300 text-xs font-mono backdrop-blur-md">
-              <span className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse" />
-              AWS London Supabase Cluster · Port 6543
+        {/* ── Top Hospital Header Bar ── */}
+        <header className="relative z-10 max-w-7xl w-full mx-auto flex items-center justify-between py-2">
+          <div className="flex items-center gap-3.5">
+            <div className="h-12 w-12 rounded-2xl bg-cyan-950/90 border border-cyan-500/50 flex items-center justify-center text-2xl shadow-xl shadow-cyan-500/20 backdrop-blur-md">
+              🏥
             </div>
-
-            <div className="flex items-center gap-3">
-              <div className="h-14 w-14 rounded-2xl bg-cyan-950/90 border border-cyan-500/50 flex items-center justify-center text-3xl shadow-xl shadow-cyan-500/20 backdrop-blur-md">
-                🏥
-              </div>
-              <div>
-                <h1 className="text-4xl font-black tracking-tight text-white">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-black text-white tracking-tight">
                   Medi<span className="text-cyan-400">Vault</span>
-                </h1>
-                <p className="text-xs text-slate-400 font-medium tracking-wide">
-                  Hospital Management &amp; Electronic Health Records
-                </p>
+                </span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 font-mono font-bold">
+                  HOSPITAL PORTAL
+                </span>
               </div>
+              <p className="text-[11px] text-slate-300 font-medium hidden sm:block">
+                St. Luke Medical Center &amp; Clinical Health System
+              </p>
             </div>
-
-            <p className="text-slate-300 text-xs leading-relaxed max-w-sm pt-2">
-              Next-generation hospital portal with zero-trust RBAC access controls,
-              cryptographic Merkle chaining, and in-patient clinical telemetry.
-            </p>
           </div>
 
-          {/* Middle Security Badges */}
-          <div className="relative z-10 space-y-3.5 my-8">
-            {[
-              {
-                icon: Fingerprint,
-                title: 'Argon2id + HMAC-SHA256 Pepper',
-                desc: '256-bit server pepper (PEPPER_V1) & NIST SP 800-63B standards',
-              },
-              {
-                icon: Shield,
-                title: 'SHA-256 Merkle Audit Chain',
-                desc: 'Immutable blockchain-style hash verification for clinical edits',
-              },
-              {
-                icon: Database,
-                title: 'AWS Supabase PostgreSQL (London)',
-                desc: 'Live high-availability database cluster with SSL enforcement',
-              },
-            ].map(({ icon: Icon, title, desc }) => (
-              <div
-                key={title}
-                className="flex items-start gap-3.5 p-3 rounded-xl bg-slate-900/80 border border-slate-800/80 backdrop-blur-md shadow-md"
-              >
-                <div className="p-2 rounded-lg bg-cyan-950/80 border border-cyan-500/30 shrink-0 text-cyan-400">
-                  <Icon className="h-4 w-4" />
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-white">{title}</h4>
-                  <p className="text-[11px] text-slate-400 leading-normal">{desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Footer Clearance Status */}
-          <div className="relative z-10 flex items-center justify-between text-[11px] text-slate-400 font-mono border-t border-slate-800/80 pt-4">
-            <span className="flex items-center gap-1.5 text-emerald-400">
-              <CheckCircle2 className="h-3.5 w-3.5" /> HIPAA &amp; GDPR Validated
+          <div className="flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-xs text-emerald-300 font-mono font-bold bg-slate-900/80 border border-slate-700/80 px-3 py-1 rounded-full backdrop-blur-md">
+              AWS London Cluster · Active
             </span>
-            <span>v2.4 Enterprise</span>
           </div>
-        </div>
+        </header>
 
-        {/* ── Right Panel: Login Form & 1-Tap Evaluation Pills ── */}
-        <div className="flex-1 flex flex-col justify-center items-center p-6 sm:p-12 relative z-10">
-          <div className="w-full max-w-md space-y-6">
-            {/* Mobile Header */}
-            <div className="flex lg:hidden items-center gap-3 mb-2">
-              <div className="h-12 w-12 rounded-2xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-2xl shadow-lg">
-                🏥
-              </div>
-              <div>
-                <h1 className="text-2xl font-black text-white">
-                  Medi<span className="text-cyan-400">Vault</span>
-                </h1>
-                <p className="text-[11px] text-slate-400">Hospital EHR &amp; Clinical Management</p>
-              </div>
+        {/* ── Center Login Area & 1-Tap Evaluation Access ── */}
+        <main className="relative z-10 max-w-4xl w-full mx-auto my-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          {/* Left Column: Hospital Mission & Security Highlights */}
+          <div className="md:col-span-6 space-y-5 text-left">
+            <div className="space-y-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono backdrop-blur-md">
+                <Hospital className="h-3.5 w-3.5" /> Clinical Staff &amp; Provider Access
+              </span>
+              <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+                Modern Healthcare, <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">
+                  Zero-Trust Security.
+                </span>
+              </h1>
+              <p className="text-xs text-slate-200 leading-relaxed max-w-md">
+                Secure electronic health records, in-patient ward telemetry, and cryptographically verified
+                audit chaining for authorized medical personnel.
+              </p>
             </div>
 
-            {/* 1-Tap Role Selector Card */}
-            <div className="rounded-2xl p-4 bg-slate-900/90 border border-slate-800/90 backdrop-blur-xl shadow-xl">
-              <div className="flex items-center justify-between mb-3">
+            {/* Security Features List */}
+            <div className="space-y-2.5 pt-2">
+              {[
+                { icon: Fingerprint, label: 'Argon2id + HMAC-SHA256 Pepper', desc: '256-bit server pepper & NIST SP 800-63B standard' },
+                { icon: Shield,      label: 'Cryptographic SHA-256 Merkle Chain', desc: 'Immutable blockchain-style audit integrity' },
+                { icon: Database,    label: 'AWS London PostgreSQL Cloud', desc: 'Real-time database sync with TLS 1.3 encryption' },
+              ].map(({ icon: Icon, label, desc }) => (
+                <div
+                  key={label}
+                  className="flex items-start gap-3 p-3 rounded-xl bg-slate-900/80 border border-slate-800/80 backdrop-blur-md shadow-lg"
+                >
+                  <div className="p-1.5 rounded-lg bg-cyan-950/80 border border-cyan-500/30 text-cyan-400 shrink-0">
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white">{label}</h4>
+                    <p className="text-[11px] text-slate-300">{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column: 1-Tap Role Selector & Login Card */}
+          <div className="md:col-span-6 space-y-4">
+            {/* 1-Tap Evaluation Role Selector Card */}
+            <div className="rounded-2xl p-4 bg-slate-900/90 border border-slate-800/90 backdrop-blur-xl shadow-2xl">
+              <div className="flex items-center justify-between mb-2.5">
                 <p className="text-[11px] font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
-                  <span>⚡</span> 1-Tap Evaluation Access
+                  <span>⚡</span> Evaluator 1-Tap Role Selector:
                 </p>
-                <span className="text-[10px] text-slate-500 font-mono">Select staff role</span>
+                <span className="text-[10px] text-slate-400 font-mono">Select profile</span>
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-1.5">
                 {DEMO_STAFF.map((staff, idx) => (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => { setEmail(staff.email); setPassword(staff.pass); setLoginError(''); }}
-                    className={`text-left px-3 py-2 rounded-xl border text-xs font-semibold transition-all ${
+                    className={`text-left px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
                       email === staff.email
                         ? 'bg-cyan-950 border-cyan-400 text-cyan-300 shadow-md shadow-cyan-950'
                         : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
@@ -489,12 +454,11 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Login Card */}
-            <div className="rounded-2xl p-6 bg-slate-900/95 border border-slate-800 backdrop-blur-xl shadow-2xl space-y-4">
+            {/* Staff Login Form */}
+            <div className="rounded-2xl p-6 bg-slate-900/95 border border-slate-800/95 backdrop-blur-2xl shadow-2xl space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-base font-bold text-white flex items-center gap-2">
-                  <Lock className="h-4 w-4 text-cyan-400" />
-                  Clinical Staff Authentication
+                  <Lock className="h-4 w-4 text-cyan-400" /> Clinical Staff Authentication
                 </h2>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-950 border border-slate-800 text-slate-400 font-mono">
                   TLS 1.3
@@ -502,13 +466,13 @@ export default function Home() {
               </div>
 
               {loginError && (
-                <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-500/40 text-rose-300 text-xs flex items-start gap-2">
+                <div className="p-3 rounded-xl bg-rose-950/90 border border-rose-500/50 text-rose-300 text-xs flex items-start gap-2">
                   <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
                   <span>{loginError}</span>
                 </div>
               )}
 
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-3.5">
                 <div className="space-y-1">
                   <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                     Staff Email Address
@@ -518,13 +482,13 @@ export default function Home() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full rounded-xl bg-slate-950 border border-slate-800 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 font-mono transition-colors"
+                    className="w-full rounded-xl bg-slate-950/90 border border-slate-800 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 font-mono transition-colors"
                   />
                 </div>
 
                 <div className="space-y-1">
                   <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                    Password (Argon2id Master Key)
+                    Argon2id Master Password
                   </label>
                   <div className="relative">
                     <input
@@ -532,7 +496,7 @@ export default function Home() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="w-full rounded-xl bg-slate-950 border border-slate-800 px-3.5 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 font-mono transition-colors"
+                      className="w-full rounded-xl bg-slate-950/90 border border-slate-800 px-3.5 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 font-mono transition-colors"
                     />
                     <button
                       type="button"
@@ -550,18 +514,26 @@ export default function Home() {
                   className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 font-black text-sm shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {isSubmitting
-                    ? <><RefreshCw className="h-4 w-4 animate-spin" /> Authenticating Credentials...</>
+                    ? <><RefreshCw className="h-4 w-4 animate-spin" /> Authenticating...</>
                     : <><span>Access Clinical Workstation</span><ChevronRight className="h-4 w-4" /></>
                   }
                 </button>
               </form>
             </div>
-
-            <p className="text-center text-[11px] text-slate-500">
-              Secured with Argon2id + Pepper · 2FA TOTP · 5-Attempt Lockout
-            </p>
           </div>
-        </div>
+        </main>
+
+        {/* ── Footer ── */}
+        <footer className="relative z-10 max-w-7xl w-full mx-auto flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 font-mono border-t border-slate-800/80 pt-3">
+          <p>© 2026 MediVault HMS · St. Luke Hospital Clinical System · HIPAA &amp; GDPR Validated</p>
+          <div className="flex items-center gap-4 mt-2 sm:mt-0 text-slate-400">
+            <span>Argon2id + HMAC-SHA256 Pepper</span>
+            <span>•</span>
+            <span>2FA TOTP Protection</span>
+            <span>•</span>
+            <span>5-Attempt Lockout</span>
+          </div>
+        </footer>
 
         {/* ── 2FA Challenge Modal ── */}
         {show2FA && (
@@ -572,7 +544,7 @@ export default function Home() {
                   🔐
                 </div>
                 <h3 className="text-base font-bold text-white">Two-Factor Authentication</h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-300">
                   Enter your Google Authenticator TOTP or evaluation passkey{' '}
                   <code className="text-cyan-300 font-bold bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-500/30">
                     123456
@@ -615,7 +587,8 @@ export default function Home() {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  VIEW 2: ENTERPRISE CLINICAL WORKSTATION DASHBOARD
+  //  VIEW 2: ENTERPRISE CLINICAL WORKSTATION (CLEAN PROFESSIONAL DARK EHR)
+  //  NO DISTRACTING BACKGROUND PICTURES IN INTERNAL CLINICAL TABS
   // ══════════════════════════════════════════════════════════════════════════
   const tabs: { id: TabType; icon: React.ElementType; label: string }[] = [
     { id: 'dashboard', icon: Activity,       label: 'Overview'    },
@@ -628,7 +601,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       {/* ── Top Clinical Navigation Bar ── */}
-      <header className="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md sticky top-0 z-30">
+      <header className="border-b border-slate-800 bg-slate-950 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-lg shadow-md">
@@ -664,7 +637,7 @@ export default function Home() {
       </header>
 
       {/* ── Subnav Tabs ── */}
-      <div className="border-b border-slate-800/80 bg-slate-950/70 sticky top-14 z-20 backdrop-blur-sm">
+      <div className="border-b border-slate-800/80 bg-slate-950/90 sticky top-14 z-20 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-1.5 overflow-x-auto py-2">
             {tabs.map(({ id, icon: Icon, label }) => (
@@ -688,38 +661,31 @@ export default function Home() {
       {/* ── Main Station Content ── */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-        {/* ── Welcome Clearance Hero Banner with High-Definition Hospital Backdrop ── */}
-        <div
-          className="mb-6 rounded-2xl border border-cyan-500/30 overflow-hidden relative shadow-2xl bg-cover bg-center"
-          style={{ backgroundImage: `url('${IMAGES.workstationBanner}')` }}
-        >
-          {/* Deep Dark Professional Gradient Mask */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-cyan-950/75" />
-          <div className="relative z-10 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] font-bold uppercase tracking-widest text-cyan-400 px-2.5 py-0.5 rounded-full bg-cyan-950/90 border border-cyan-500/40 backdrop-blur-sm">
-                  {user.role} Workstation
-                </span>
-                <span className="text-[10px] text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-medium">
-                  ● HIPAA Certified EHR
-                </span>
-              </div>
-              <h2 className="text-2xl font-black text-white tracking-tight">
-                Clinical Station: <span className="text-cyan-300">{user.name}</span>
-              </h2>
-              <p className="text-xs text-slate-300 max-w-xl">
-                Authorized Scope: In-Patient Ward Monitoring · Electronic Charting · Real-Time AWS Supabase Sync
-              </p>
+        {/* ── Clean Clinical Station Clearance Banner (Zero Image Clutter) ── */}
+        <div className="mb-6 rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[11px] font-bold uppercase tracking-widest text-cyan-400 px-2.5 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/40">
+                {user.role} Workstation
+              </span>
+              <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-medium">
+                ● HIPAA Certified EHR
+              </span>
             </div>
-            <button
-              onClick={() => { loadPatients(); loadAudit(); }}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/90 border border-slate-700 hover:border-cyan-400 text-xs text-white font-bold transition-all shadow-md backdrop-blur-sm"
-            >
-              <RefreshCw className={`h-3.5 w-3.5 ${patientsLoading ? 'animate-spin text-cyan-400' : ''}`} />
-              Sync Database
-            </button>
+            <h2 className="text-2xl font-black text-white tracking-tight">
+              Clinical Station: <span className="text-cyan-300">{user.name}</span>
+            </h2>
+            <p className="text-xs text-slate-400 max-w-xl">
+              Scope: In-Patient Ward Monitoring · Electronic Charting · AWS PostgreSQL Supabase Sync
+            </p>
           </div>
+          <button
+            onClick={() => { loadPatients(); loadAudit(); }}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-cyan-400 text-xs text-white font-bold transition-all shadow-md shrink-0"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${patientsLoading ? 'animate-spin text-cyan-400' : ''}`} />
+            Sync Database
+          </button>
         </div>
 
         {/* ════════════════════════════════════════════════════════════════════
@@ -731,7 +697,7 @@ export default function Home() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 {
-                  label: 'Total Patients', value: patients.length || 76, color: 'cyan',
+                  label: 'Total Patients', value: patients.length || 77, color: 'cyan',
                   icon: '🩺', sub: 'Under Active Clinical Care', filter: 'ALL',
                 },
                 {
@@ -750,7 +716,7 @@ export default function Home() {
                 <div
                   key={label}
                   onClick={() => { setFilterStatus(filter); setActiveTab('patients'); }}
-                  className={`cursor-pointer rounded-2xl p-5 bg-slate-900/90 border border-${color}-500/30 hover:border-${color}-500/70 transition-all space-y-2 group shadow-lg backdrop-blur-sm`}
+                  className={`cursor-pointer rounded-2xl p-5 bg-slate-900 border border-${color}-500/20 hover:border-${color}-500/60 transition-all space-y-2 group shadow-lg`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold uppercase text-slate-400">{label}</span>
@@ -777,7 +743,7 @@ export default function Home() {
                   <button
                     key={title}
                     onClick={() => setActiveTab(tab)}
-                    className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/60 hover:bg-slate-800/60 text-left transition-all space-y-1.5 group shadow-md"
+                    className="p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-cyan-500/60 hover:bg-slate-800/60 text-left transition-all space-y-1.5 group shadow-md"
                   >
                     <div className="text-2xl">{icon}</div>
                     <div className="font-bold text-white text-sm group-hover:text-cyan-300 transition-colors">{title}</div>
@@ -788,7 +754,7 @@ export default function Home() {
             </div>
 
             {/* Recent Patients Table Preview */}
-            <div className="rounded-2xl bg-slate-900/90 border border-slate-800 overflow-hidden shadow-xl">
+            <div className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-xl">
               <div className="flex items-center justify-between p-5 border-b border-slate-800">
                 <h3 className="font-bold text-white text-sm flex items-center gap-2">
                   <Heart className="h-4 w-4 text-rose-400" />
@@ -803,7 +769,7 @@ export default function Home() {
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-950/80 text-slate-400 uppercase font-mono">
+                  <thead className="bg-slate-950 text-slate-400 uppercase font-mono">
                     <tr>
                       <th className="py-3 px-4">Code</th>
                       <th className="py-3 px-4">Patient Name</th>
@@ -812,7 +778,7 @@ export default function Home() {
                       <th className="py-3 px-4">Status</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60">
+                  <tbody className="divide-y divide-slate-800">
                     {patients.slice(0, 6).map((p, idx) => (
                       <tr
                         key={idx}
@@ -848,26 +814,20 @@ export default function Home() {
            ════════════════════════════════════════════════════════════════════ */}
         {activeTab === 'patients' && (
           <div className="space-y-4">
-            {/* Wards Header with Clinical Corridor Photography Backdrop */}
-            <div
-              className="rounded-2xl border border-slate-800 overflow-hidden relative shadow-xl bg-cover bg-center"
-              style={{ backgroundImage: `url('${IMAGES.wardsHeader}')` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-cyan-950/65" />
-              <div className="relative z-10 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                  <h3 className="text-base font-bold text-white flex items-center gap-2">
-                    <Building2 className="h-5 w-5 text-cyan-400" /> Clinical In-Patient Wards &amp; Bed Directory
-                  </h3>
-                  <p className="text-xs text-slate-300 mt-0.5">
-                    Live telemetry, bed assignments, diagnosis tracking, and attending physician roster
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 rounded-full bg-cyan-950/90 border border-cyan-500/40 text-xs font-mono text-cyan-300 font-bold shadow-sm">
-                    {patients.length} Live Records
-                  </span>
-                </div>
+            {/* Clean Wards Header */}
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+              <div>
+                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                  <Building2 className="h-5 w-5 text-cyan-400" /> Clinical In-Patient Wards &amp; Bed Directory
+                </h3>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  Live telemetry, bed assignments, diagnosis tracking, and attending physician roster
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1 rounded-full bg-cyan-950 border border-cyan-500/40 text-xs font-mono text-cyan-300 font-bold">
+                  {patients.length} Live Records
+                </span>
               </div>
             </div>
 
@@ -914,7 +874,7 @@ export default function Home() {
                   <div
                     key={idx}
                     onClick={() => setSelectedPatient(p)}
-                    className="rounded-2xl p-4 bg-slate-900/90 border border-slate-800 hover:border-cyan-500/60 transition-all cursor-pointer space-y-3 shadow-md backdrop-blur-sm"
+                    className="rounded-2xl p-4 bg-slate-900 border border-slate-800 hover:border-cyan-500/60 transition-all cursor-pointer space-y-3 shadow-md"
                   >
                     <div className="flex justify-between items-start">
                       <div>
@@ -953,23 +913,16 @@ export default function Home() {
            ════════════════════════════════════════════════════════════════════ */}
         {activeTab === 'admission' && (
           <div className="max-w-2xl mx-auto space-y-4">
-            {/* Header Banner with Clinical Photography */}
-            <div
-              className="rounded-2xl border border-slate-800 overflow-hidden relative shadow-xl bg-cover bg-center"
-              style={{ backgroundImage: `url('${IMAGES.admissionHeader}')` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/95 to-teal-950/70" />
-              <div className="relative z-10 p-5">
-                <h3 className="font-bold text-white text-base flex items-center gap-2">
-                  <ClipboardList className="h-5 w-5 text-teal-400" /> Clinical In-Patient Admission Intake
-                </h3>
-                <p className="text-xs text-slate-300 mt-1">
-                  Direct EHR entry with SHA-256 Merkle audit hashing on AWS PostgreSQL London
-                </p>
-              </div>
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 shadow-lg">
+              <h3 className="font-bold text-white text-base flex items-center gap-2">
+                <ClipboardList className="h-5 w-5 text-teal-400" /> Clinical In-Patient Admission Intake
+              </h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Direct EHR entry with SHA-256 Merkle audit hashing on AWS PostgreSQL London
+              </p>
             </div>
 
-            <div className="rounded-2xl bg-slate-900/95 border border-slate-800 overflow-hidden shadow-xl p-5">
+            <div className="rounded-2xl bg-slate-900 border border-slate-800 shadow-xl p-5">
               <form onSubmit={handleAdmit} className="space-y-4">
                 {admitSuccess && (
                   <div className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
@@ -1102,26 +1055,19 @@ export default function Home() {
            ════════════════════════════════════════════════════════════════════ */}
         {activeTab === 'pharmacy' && (
           <div className="space-y-4">
-            {/* Header with Pharmacy Photography Backdrop */}
-            <div
-              className="rounded-2xl border border-slate-800 overflow-hidden relative shadow-xl bg-cover bg-center"
-              style={{ backgroundImage: `url('${IMAGES.pharmacyHeader}')` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-amber-950/65" />
-              <div className="relative z-10 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="p-2.5 rounded-xl bg-amber-950/80 border border-amber-500/40 text-amber-300">
-                    <Pill className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-white text-base">Hospital Pharmacy &amp; Clinical Dispensary</h3>
-                    <p className="text-xs text-slate-300">Electronic prescription verification, dosages &amp; active dispensing queue</p>
-                  </div>
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-amber-950/80 border border-amber-500/40 text-amber-300">
+                  <Pill className="h-5 w-5" />
                 </div>
-                <span className="px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/40 text-xs font-mono text-amber-300 font-bold whitespace-nowrap shadow-sm">
-                  Active Formulary Orders: {patients.length > 0 ? patients.length * 2 : 38}
-                </span>
+                <div>
+                  <h3 className="font-bold text-white text-base">Hospital Pharmacy &amp; Clinical Dispensary</h3>
+                  <p className="text-xs text-slate-400">Electronic prescription verification, dosages &amp; active dispensing queue</p>
+                </div>
               </div>
+              <span className="px-3 py-1 rounded-full bg-amber-950 border border-amber-500/40 text-xs font-mono text-amber-300 font-bold whitespace-nowrap">
+                Active Formulary Orders: {patients.length > 0 ? patients.length * 2 : 38}
+              </span>
             </div>
 
             {patients.length === 0 ? (
@@ -1131,7 +1077,7 @@ export default function Home() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                 {patients.slice(0, 10).map((p, idx) => (
-                  <div key={idx} className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 shadow-md backdrop-blur-sm">
+                  <div key={idx} className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 shadow-md">
                     <div className="flex justify-between items-start">
                       <div>
                         <h4 className="font-bold text-white text-sm">{p.name}</h4>
@@ -1139,7 +1085,7 @@ export default function Home() {
                           {p.patient_code} · {p.ward_room || 'General Ward'}
                         </p>
                       </div>
-                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[10px] font-bold text-emerald-300">
+                      <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-[10px] font-bold text-emerald-300">
                         Dispensed
                       </span>
                     </div>
@@ -1161,49 +1107,42 @@ export default function Home() {
            ════════════════════════════════════════════════════════════════════ */}
         {activeTab === 'audit' && (
           <div className="space-y-5">
-            {/* Chain Status Card with High-Tech Secure Datacenter Backdrop */}
-            <div
-              className="rounded-2xl border border-indigo-500/40 overflow-hidden relative shadow-2xl bg-cover bg-center"
-              style={{ backgroundImage: `url('${IMAGES.auditHeader}')` }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/95 to-indigo-950/70" />
-              <div className="relative z-10 p-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-indigo-400" />
-                    <h3 className="font-bold text-white text-base">SHA-256 Merkle Blockchain Audit Verification</h3>
-                  </div>
-                  <p className="text-xs text-slate-300 leading-relaxed max-w-xl">
-                    Every user authentication, patient admission, and clinical prescription change is sealed with the
-                    previous record&apos;s SHA-256 cryptographic hash — creating an unbroken Merkle chain
-                    persisted in the AWS PostgreSQL cluster.
-                  </p>
-                  <div className="flex items-center gap-3 pt-1 flex-wrap">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${
-                      auditData?.chain_intact !== false
-                        ? 'bg-emerald-950/90 border-emerald-500/50 text-emerald-300 shadow-sm'
-                        : 'bg-rose-950/90 border-rose-500/50 text-rose-300 shadow-sm'
-                    }`}>
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      {auditData?.chain_intact !== false ? 'Cryptographic Chain Integrity: 100% INTACT' : 'Chain Broken'}
-                    </span>
-                    <span className="text-xs text-slate-300 font-mono">
-                      Verified Records: <strong className="text-white">{auditData?.verified_records ?? '130'}</strong>
-                    </span>
-                  </div>
+            <div className="rounded-2xl border border-indigo-500/40 bg-slate-900 p-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4 shadow-xl">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Shield className="h-5 w-5 text-indigo-400" />
+                  <h3 className="font-bold text-white text-base">SHA-256 Merkle Blockchain Audit Verification</h3>
                 </div>
-                <button
-                  onClick={loadAudit}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900/90 border border-indigo-500/40 hover:border-indigo-400 text-xs font-bold text-white transition-all shadow-md backdrop-blur-sm shrink-0"
-                >
-                  <RefreshCw className={`h-3.5 w-3.5 ${auditLoading ? 'animate-spin text-indigo-400' : ''}`} />
-                  Re-verify Chain
-                </button>
+                <p className="text-xs text-slate-300 leading-relaxed max-w-xl">
+                  Every user authentication, patient admission, and clinical prescription change is sealed with the
+                  previous record&apos;s SHA-256 cryptographic hash — creating an unbroken Merkle chain
+                  persisted in the AWS PostgreSQL cluster.
+                </p>
+                <div className="flex items-center gap-3 pt-1 flex-wrap">
+                  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${
+                    auditData?.chain_intact !== false
+                      ? 'bg-emerald-950/90 border-emerald-500/50 text-emerald-300 shadow-sm'
+                      : 'bg-rose-950/90 border-rose-500/50 text-rose-300 shadow-sm'
+                  }`}>
+                    <CheckCircle2 className="h-3.5 w-3.5" />
+                    {auditData?.chain_intact !== false ? 'Cryptographic Chain Integrity: 100% INTACT' : 'Chain Broken'}
+                  </span>
+                  <span className="text-xs text-slate-300 font-mono">
+                    Verified Records: <strong className="text-white">{auditData?.verified_records ?? '133'}</strong>
+                  </span>
+                </div>
               </div>
+              <button
+                onClick={loadAudit}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 border border-indigo-500/40 hover:border-indigo-400 text-xs font-bold text-white transition-all shadow-md shrink-0"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 ${auditLoading ? 'animate-spin text-indigo-400' : ''}`} />
+                Re-verify Chain
+              </button>
             </div>
 
             {/* Audit Log Stream */}
-            <div className="rounded-2xl bg-slate-900/95 border border-slate-800 overflow-hidden shadow-xl">
+            <div className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-xl">
               <div className="p-4 border-b border-slate-800 flex items-center justify-between">
                 <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono">
                   Immutable Cryptographic Audit Stream
@@ -1213,7 +1152,7 @@ export default function Home() {
                 </span>
               </div>
 
-              <div className="max-h-[480px] overflow-y-auto divide-y divide-slate-800/60">
+              <div className="max-h-[480px] overflow-y-auto divide-y divide-slate-800">
                 {auditLoading ? (
                   <div className="py-12 text-center text-slate-500 text-xs flex items-center justify-center gap-2">
                     <RefreshCw className="h-4 w-4 animate-spin" /> Verifying Merkle chain across database rows...
