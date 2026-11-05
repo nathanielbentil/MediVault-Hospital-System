@@ -113,22 +113,24 @@ User Password ──▶ HMAC-SHA256(Password, Pepper) ──▶ Argon2id(m=65536
 
 ---
 
-## 👥 Evaluator & Demonstration Staff Accounts
+## 👥 Institutional Role Directory & Demonstration Accounts
 
-The portal features a **1-Tap Role Selector** on the homepage to auto-fill credentials for academic and institutional evaluation:
+In accordance with NIST SP 800-63B security principles and zero-trust documentation standards, production credentials are never published in plain text in public documentation.
 
-| Role | Staff Name | Email | Password |
+The portal features an integrated **1-Tap Role Selector** on the homepage login interface. Evaluators, professors, and examiners can click any role badge to auto-populate credentials for instant sandbox grading:
+
+| Role | Staff Name | Clinical Access Scope | Fast-Fill Login |
 | :--- | :--- | :--- | :--- |
-| 👑 **Chief Admin** | Dr. Prof. Nathaniel Bentil | `admin@medivault.cloud` | `Admin@MediVault2026!` |
-| 📋 **Medical Director** | MD Manager | `manager@medivault.cloud` | `Manager@MediVault2026!` |
-| 🩺 **Senior Physician** | Dr. Donkoh | `doctor@medivault.cloud` | `Doctor@MediVault2026!` |
-| 💉 **Ward Charge Nurse** | Nurse Beatrice | `nurse@medivault.cloud` | `Nurse@MediVault2026!` |
-| 💊 **Chief Pharmacist** | Pharm. Appiah | `pharmacist@medivault.cloud` | `Pharm@MediVault2026!` |
-| 🔍 **Compliance Auditor** | Auditor Osei | `auditor@medivault.cloud` | `Auditor@MediVault2026!` |
-| 🩺 **2FA Verification Doctor** | Dr. Judah | `juda@gmail.com` | `Doctor@MediVault2026!` |
+| 👑 **Chief Admin** | Dr. Prof. Nathaniel Bentil | System Administration, User Provisioning & Merkle Audit | 1-Tap on Portal |
+| 📋 **Medical Director** | MD Manager | Operational Bed Logistics, Admissions & Clinical Oversight | 1-Tap on Portal |
+| 🩺 **Senior Physician** | Dr. Donkoh | Diagnostic Charting, Patient Orders & Prescriptions | 1-Tap on Portal |
+| 💉 **Ward Charge Nurse** | Nurse Beatrice | Bedside Vital Signs Observations & Shift Handovers | 1-Tap on Portal |
+| 💊 **Chief Pharmacist** | Pharm. Appiah | Prescription Verification & Medication Fulfillment | 1-Tap on Portal |
+| 🔍 **Compliance Auditor** | Auditor Osei | Cryptographic SHA-256 Merkle Chain Integrity Verification | 1-Tap on Portal |
+| 🩺 **2FA Verification Doctor** | Dr. Judah | End-to-End TOTP Two-Factor Challenge Verification | 1-Tap on Portal |
 
 > [!NOTE]
-> **Evaluator 2FA Bypass Code:** When prompted for the 6-digit two-factor authentication code, evaluators can use the standard testing code **`123456`** or any valid Google Authenticator TOTP token.
+> **Two-Factor Authentication (2FA) Testing:** When prompted for the 6-digit TOTP challenge code, evaluators can enter standard RFC 6238 authenticator tokens or the evaluation bypass code **`123456`**.
 
 ---
 
