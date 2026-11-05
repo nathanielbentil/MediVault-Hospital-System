@@ -30,8 +30,7 @@ import {
 } from 'lucide-react';
 
 // ─── Real Premier Hospital Photography (Homepage Only) ──────────────────────
-const HOSPITAL_HOMEPAGE_BG =
-  'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=2000&q=85';
+const HOSPITAL_HOMEPAGE_BG = '/hospital-hero.jpg';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 interface StaffAccount {
