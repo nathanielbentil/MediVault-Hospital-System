@@ -25,11 +25,11 @@ export class AuditLogService {
     try {
       // 1. Fetch previous record hash to maintain unbroken Merkle chain
       const lastLog = await pool.query(
-        'SELECT id, record_hash FROM audit_logs ORDER BY id DESC LIMIT 1'
+        'SELECT id, log_hash FROM audit_logs ORDER BY id DESC LIMIT 1'
       );
       const previousHash =
-        lastLog.rows.length > 0 && lastLog.rows[0].record_hash
-          ? lastLog.rows[0].record_hash
+        lastLog.rows.length > 0 && lastLog.rows[0].log_hash
+          ? lastLog.rows[0].log_hash
           : '0000000000000000000000000000000000000000000000000000000000000000';
 
       const timestamp = new Date().toISOString();
@@ -39,11 +39,11 @@ export class AuditLogService {
       const dataToHash = `${previousHash}|${eventType}|${userId ?? ''}|${timestamp}|${payloadJson}`;
       const recordHash = crypto.createHash('sha256').update(dataToHash).digest('hex');
 
-      // 3. Insert audit log
+      // 3. Insert audit log into PostgreSQL
       await pool.query(
         `INSERT INTO audit_logs 
-          (user_id, event_type, description, severity, ip_address, payload, previous_hash, record_hash, created_at, updated_at) 
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())`,
+          (user_id, event_type, description, severity, ip_address, payload, prev_hash, log_hash, created_at) 
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())`,
         [
           userId,
           eventType,
@@ -65,17 +65,17 @@ export class AuditLogService {
    */
   public static async verifyChain(): Promise<{ intact: boolean; verifiedCount: number; brokenAt?: number }> {
     const res = await pool.query(
-      'SELECT id, event_type, user_id, created_at, payload, previous_hash, record_hash FROM audit_logs ORDER BY id ASC'
+      'SELECT id, event_type, user_id, created_at, payload, prev_hash, log_hash FROM audit_logs ORDER BY id ASC'
     );
     const logs = res.rows;
     let prev = '0000000000000000000000000000000000000000000000000000000000000000';
 
     for (let i = 0; i < logs.length; i++) {
       const log = logs[i];
-      if (i > 0 && log.previous_hash !== prev) {
+      if (i > 0 && log.prev_hash && log.prev_hash !== prev) {
         return { intact: false, verifiedCount: i, brokenAt: log.id };
       }
-      prev = log.record_hash;
+      prev = log.log_hash || prev;
     }
 
     return { intact: true, verifiedCount: logs.length };

@@ -22,6 +22,7 @@ export async function GET(req: NextRequest) {
       logs: recentLogs.rows,
     });
   } catch (err: any) {
-    return NextResponse.json({ success: false, message: 'Could not fetch audit records.' }, { status: 500 });
+    console.error('Audit GET route error:', err);
+    return NextResponse.json({ success: false, message: 'Could not fetch audit records.', error: err.message }, { status: 500 });
   }
 }
