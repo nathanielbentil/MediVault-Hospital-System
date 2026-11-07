@@ -201,7 +201,10 @@ export default function Home() {
         if (d.success && d.user) {
           setUser(d.user);
           loadPatients();
-          loadAudit();
+          const role = (d.user.role || '').toLowerCase();
+          if (role.includes('admin') || role.includes('chief') || role.includes('auditor')) {
+            loadAudit();
+          }
         }
       })
       .catch(() => {})
@@ -229,7 +232,10 @@ export default function Home() {
       } else if (data.success && data.user) {
         setUser(data.user);
         loadPatients();
-        loadAudit();
+        const role = (data.user.role || '').toLowerCase();
+        if (role.includes('admin') || role.includes('chief') || role.includes('auditor')) {
+          loadAudit();
+        }
       } else {
         setLoginError(data.message || 'Authentication failed. Please verify credentials.');
       }
@@ -253,7 +259,10 @@ export default function Home() {
         setShow2FA(false);
         setUser(data.user);
         loadPatients();
-        loadAudit();
+        const role = (data.user.role || '').toLowerCase();
+        if (role.includes('admin') || role.includes('chief') || role.includes('auditor')) {
+          loadAudit();
+        }
       } else {
         setLoginError(data.message || 'Invalid 2FA code.');
         setShow2FA(false);
@@ -558,13 +567,23 @@ export default function Home() {
   //  VIEW 2: ENTERPRISE CLINICAL WORKSTATION (CLEAN PROFESSIONAL DARK EHR)
   //  NO DISTRACTING BACKGROUND PICTURES IN INTERNAL CLINICAL TABS
   // ══════════════════════════════════════════════════════════════════════════
-  const tabs: { id: TabType; icon: React.ElementType; label: string }[] = [
-    { id: 'dashboard', icon: Activity,       label: 'Overview'    },
-    { id: 'patients',  icon: Users,          label: `Wards (${patients.length})` },
-    { id: 'admission', icon: Plus,           label: 'Admit Patient' },
-    { id: 'pharmacy',  icon: Pill,           label: 'Dispensary' },
-    { id: 'audit',     icon: Shield,         label: 'Merkle Audit' },
+  const userRole = (user.role || '').toLowerCase();
+  const isAdmin = userRole.includes('admin') || userRole.includes('chief');
+  const isAuditor = userRole.includes('auditor') || userRole.includes('compliance');
+  const isDoctor = userRole.includes('doctor') || userRole.includes('physician');
+  const isNurse = userRole.includes('nurse');
+  const isPharmacist = userRole.includes('pharmacist');
+  const isManager = userRole.includes('manager');
+
+  const allTabs: { id: TabType; icon: React.ElementType; label: string; allowed: boolean }[] = [
+    { id: 'dashboard', icon: Activity,       label: 'Overview',                   allowed: true },
+    { id: 'patients',  icon: Users,          label: `Wards (${patients.length})`, allowed: true },
+    { id: 'admission', icon: Plus,           label: 'Admit Patient',              allowed: isAdmin || isDoctor || isManager },
+    { id: 'pharmacy',  icon: Pill,           label: 'Dispensary',                 allowed: isAdmin || isPharmacist || isDoctor },
+    { id: 'audit',     icon: Shield,         label: 'Security Audit',             allowed: isAdmin || isAuditor },
   ];
+
+  const tabs = allTabs.filter((t) => t.allowed);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
@@ -703,11 +722,11 @@ export default function Home() {
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
-                  { icon: '➕', title: 'Admit Patient',      sub: 'New patient intake & ward assignment', tab: 'admission' as TabType },
-                  { icon: '💊', title: 'Prescriptions',      sub: 'Active formulary queue',               tab: 'pharmacy'  as TabType },
-                  { icon: '📈', title: 'Vitals Monitor',     sub: 'Hourly bedside tracking',              tab: 'patients'  as TabType },
-                  { icon: '🛡️', title: 'Security Audit',     sub: 'Tamper-evident activity logs',         tab: 'audit'     as TabType },
-                ].map(({ icon, title, sub, tab }) => (
+                  { icon: '➕', title: 'Admit Patient',      sub: 'New patient intake & ward assignment', tab: 'admission' as TabType, allowed: isAdmin || isDoctor || isManager },
+                  { icon: '💊', title: 'Prescriptions',      sub: 'Active formulary queue',               tab: 'pharmacy'  as TabType, allowed: isAdmin || isPharmacist || isDoctor },
+                  { icon: '📈', title: 'Vitals Monitor',     sub: 'Hourly bedside tracking',              tab: 'patients'  as TabType, allowed: true },
+                  { icon: '🛡️', title: 'Security Audit',     sub: 'Tamper-evident activity logs',         tab: 'audit'     as TabType, allowed: isAdmin || isAuditor },
+                ].filter((a) => a.allowed).map(({ icon, title, sub, tab }) => (
                   <button
                     key={title}
                     onClick={() => setActiveTab(tab)}
@@ -879,7 +898,7 @@ export default function Home() {
         {/* ════════════════════════════════════════════════════════════════════
             TAB: ADMISSION FORM
            ════════════════════════════════════════════════════════════════════ */}
-        {activeTab === 'admission' && (
+        {activeTab === 'admission' && (isAdmin || isDoctor || isManager) && (
           <div className="max-w-2xl mx-auto space-y-4">
             <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 shadow-lg">
               <h3 className="font-bold text-white text-base flex items-center gap-2">
@@ -1021,7 +1040,7 @@ export default function Home() {
         {/* ════════════════════════════════════════════════════════════════════
             TAB: PHARMACY
            ════════════════════════════════════════════════════════════════════ */}
-        {activeTab === 'pharmacy' && (
+        {activeTab === 'pharmacy' && (isAdmin || isPharmacist || isDoctor) && (
           <div className="space-y-4">
             <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
               <div className="flex items-center gap-3">
@@ -1073,7 +1092,7 @@ export default function Home() {
         {/* ════════════════════════════════════════════════════════════════════
             TAB: MERKLE AUDIT CHAIN
            ════════════════════════════════════════════════════════════════════ */}
-        {activeTab === 'audit' && (
+        {activeTab === 'audit' && (isAdmin || isAuditor) && (
           <div className="space-y-5">
             <div className="rounded-2xl border border-indigo-500/40 bg-slate-900 p-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4 shadow-xl">
               <div className="space-y-2">
