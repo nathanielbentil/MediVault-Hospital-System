@@ -340,198 +340,153 @@ export default function Home() {
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  //  VIEW 1: HOMEPAGE WITH REAL PROFESSIONAL HOSPITAL BACKGROUND PHOTOGRAPHY
+  //  VIEW 1: CLEAN PROFESSIONAL HOSPITAL PORTAL
   // ══════════════════════════════════════════════════════════════════════════
   if (!user) {
     return (
       <div
-        className="min-h-screen text-slate-100 flex flex-col justify-between p-4 sm:p-8 relative bg-cover bg-center bg-no-repeat bg-fixed selection:bg-cyan-500 selection:text-slate-950"
+        className="min-h-screen text-slate-100 flex flex-col justify-between p-4 sm:p-6 relative bg-cover bg-center bg-no-repeat bg-fixed selection:bg-cyan-500 selection:text-slate-950"
         style={{ backgroundImage: `url('${HOSPITAL_HOMEPAGE_BG}')` }}
       >
-        {/* Subtle Dark Vignette & Glass Mask so the Real Hospital Picture shines through */}
-        <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-[2px]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/80" />
+        {/* Soft Dark Vignette & Glass Mask so the Real Hospital Picture shines through cleanly */}
+        <div className="absolute inset-0 bg-slate-950/75 backdrop-blur-[2px]" />
 
         {/* ── Top Hospital Header Bar ── */}
-        <header className="relative z-10 max-w-7xl w-full mx-auto flex items-center justify-between py-2">
-          <div className="flex items-center gap-3.5">
-            <div className="h-12 w-12 rounded-2xl bg-cyan-950/90 border border-cyan-500/50 flex items-center justify-center text-2xl shadow-xl shadow-cyan-500/20 backdrop-blur-md">
+        <header className="relative z-10 max-w-5xl w-full mx-auto flex items-center justify-between py-3">
+          <div className="flex items-center gap-3">
+            <div className="h-11 w-11 rounded-xl bg-cyan-950/90 border border-cyan-500/40 flex items-center justify-center text-2xl shadow-lg shadow-cyan-950/50 backdrop-blur-md">
               🏥
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-black text-white tracking-tight">
+                <span className="text-xl font-bold text-white tracking-tight">
                   Medi<span className="text-cyan-400">Vault</span>
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 font-mono font-bold">
-                  HOSPITAL PORTAL
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 font-medium">
+                  Clinical Portal
                 </span>
               </div>
-              <p className="text-[11px] text-slate-300 font-medium hidden sm:block">
-                St. Luke Medical Center &amp; Clinical Health System
+              <p className="text-xs text-slate-300 hidden sm:block">
+                Hospital Management &amp; Electronic Health Records
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-800 text-xs text-slate-300 backdrop-blur-md">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs text-emerald-300 font-mono font-bold bg-slate-900/80 border border-slate-700/80 px-3 py-1 rounded-full backdrop-blur-md">
-              AWS London Cluster · Active
-            </span>
+            <span>Portal Online</span>
           </div>
         </header>
 
-        {/* ── Center Login Area & 1-Tap Evaluation Access ── */}
-        <main className="relative z-10 max-w-4xl w-full mx-auto my-6 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-          {/* Left Column: Hospital Mission & Security Highlights */}
-          <div className="md:col-span-6 space-y-5 text-left">
-            <div className="space-y-2">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 text-xs font-mono backdrop-blur-md">
-                <Hospital className="h-3.5 w-3.5" /> Clinical Staff &amp; Provider Access
-              </span>
-              <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight leading-tight">
-                Modern Healthcare, <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-300">
-                  Zero-Trust Security.
-                </span>
-              </h1>
-              <p className="text-xs text-slate-200 leading-relaxed max-w-md">
-                Secure electronic health records, in-patient ward telemetry, and cryptographically verified
-                audit chaining for authorized medical personnel.
+        {/* ── Centered Clean Hospital Sign-In Card ── */}
+        <main className="relative z-10 max-w-md w-full mx-auto my-auto py-6">
+          <div className="rounded-2xl p-6 sm:p-8 bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-2xl space-y-6">
+            <div className="text-center space-y-1.5">
+              <h2 className="text-2xl font-bold text-white">Staff Sign In</h2>
+              <p className="text-xs text-slate-300">
+                Please enter your credentials to access the clinical workstation.
               </p>
             </div>
 
-            {/* Security Features List */}
-            <div className="space-y-2.5 pt-2">
-              {[
-                { icon: Fingerprint, label: 'Argon2id + HMAC-SHA256 Pepper', desc: '256-bit server pepper & NIST SP 800-63B standard' },
-                { icon: Shield,      label: 'Cryptographic SHA-256 Merkle Chain', desc: 'Immutable blockchain-style audit integrity' },
-                { icon: Database,    label: 'AWS London PostgreSQL Cloud', desc: 'Real-time database sync with TLS 1.3 encryption' },
-              ].map(({ icon: Icon, label, desc }) => (
-                <div
-                  key={label}
-                  className="flex items-start gap-3 p-3 rounded-xl bg-slate-900/80 border border-slate-800/80 backdrop-blur-md shadow-lg"
-                >
-                  <div className="p-1.5 rounded-lg bg-cyan-950/80 border border-cyan-500/30 text-cyan-400 shrink-0">
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-white">{label}</h4>
-                    <p className="text-[11px] text-slate-300">{desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Column: 1-Tap Role Selector & Login Card */}
-          <div className="md:col-span-6 space-y-4">
-            {/* 1-Tap Evaluation Role Selector Card */}
-            <div className="rounded-2xl p-4 bg-slate-900/90 border border-slate-800/90 backdrop-blur-xl shadow-2xl">
-              <div className="flex items-center justify-between mb-2.5">
-                <p className="text-[11px] font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
-                  <span>⚡</span> Evaluator 1-Tap Role Selector:
-                </p>
-                <span className="text-[10px] text-slate-400 font-mono">Select profile</span>
+            {loginError && (
+              <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-500/40 text-rose-300 text-xs flex items-start gap-2">
+                <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-rose-400" />
+                <span>{loginError}</span>
               </div>
-              <div className="grid grid-cols-2 gap-1.5">
+            )}
+
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-medium text-slate-300">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@medivault.cloud"
+                  required
+                  className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-medium text-slate-300">
+                    Password
+                  </label>
+                </div>
+                <div className="relative">
+                  <input
+                    type={showPass ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••••••"
+                    required
+                    className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPass(!showPass)}
+                    className="absolute right-3 top-2.5 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                  >
+                    {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+              >
+                {isSubmitting ? (
+                  <>
+                    <RefreshCw className="h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  <>
+                    <span>Sign In to Workstation</span>
+                    <ChevronRight className="h-4 w-4" />
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* Quick Staff Role Fill (for evaluation / testing) */}
+            <div className="pt-4 border-t border-slate-800/80 space-y-2.5">
+              <p className="text-[11px] font-medium text-slate-400 text-center">
+                Quick Role Selector (Evaluation):
+              </p>
+              <div className="flex flex-wrap gap-1.5 justify-center">
                 {DEMO_STAFF.map((staff, idx) => (
                   <button
                     key={idx}
                     type="button"
-                    onClick={() => { setEmail(staff.email); setPassword(staff.pass); setLoginError(''); }}
-                    className={`text-left px-2.5 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
+                    onClick={() => {
+                      setEmail(staff.email);
+                      setPassword(staff.pass);
+                      setLoginError('');
+                    }}
+                    className={`px-2.5 py-1 rounded-lg border text-[11px] font-medium transition-all cursor-pointer ${
                       email === staff.email
-                        ? 'bg-cyan-950 border-cyan-400 text-cyan-300 shadow-md shadow-cyan-950'
-                        : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                        ? 'bg-cyan-950/90 border-cyan-400 text-cyan-300'
+                        : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700'
                     }`}
                   >
-                    <span className="mr-1.5">{staff.icon}</span>
+                    <span className="mr-1">{staff.icon}</span>
                     <span>{staff.label}</span>
                   </button>
                 ))}
               </div>
             </div>
-
-            {/* Staff Login Form */}
-            <div className="rounded-2xl p-6 bg-slate-900/95 border border-slate-800/95 backdrop-blur-2xl shadow-2xl space-y-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-base font-bold text-white flex items-center gap-2">
-                  <Lock className="h-4 w-4 text-cyan-400" /> Clinical Staff Authentication
-                </h2>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-950 border border-slate-800 text-slate-400 font-mono">
-                  TLS 1.3
-                </span>
-              </div>
-
-              {loginError && (
-                <div className="p-3 rounded-xl bg-rose-950/90 border border-rose-500/50 text-rose-300 text-xs flex items-start gap-2">
-                  <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
-                  <span>{loginError}</span>
-                </div>
-              )}
-
-              <form onSubmit={handleLogin} className="space-y-3.5">
-                <div className="space-y-1">
-                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                    Staff Email Address
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="w-full rounded-xl bg-slate-950/90 border border-slate-800 px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 font-mono transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                    Argon2id Master Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPass ? 'text' : 'password'}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      className="w-full rounded-xl bg-slate-950/90 border border-slate-800 px-3.5 py-2.5 pr-10 text-sm text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/20 font-mono transition-colors"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPass(!showPass)}
-                      className="absolute right-3 top-2.5 text-slate-500 hover:text-slate-300"
-                    >
-                      {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 font-black text-sm shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting
-                    ? <><RefreshCw className="h-4 w-4 animate-spin" /> Authenticating...</>
-                    : <><span>Access Clinical Workstation</span><ChevronRight className="h-4 w-4" /></>
-                  }
-                </button>
-              </form>
-            </div>
           </div>
         </main>
 
-        {/* ── Footer ── */}
-        <footer className="relative z-10 max-w-7xl w-full mx-auto flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-400 font-mono border-t border-slate-800/80 pt-3">
-          <p>© 2026 MediVault HMS · St. Luke Hospital Clinical System · HIPAA &amp; GDPR Validated</p>
-          <div className="flex items-center gap-4 mt-2 sm:mt-0 text-slate-400">
-            <span>Argon2id + HMAC-SHA256 Pepper</span>
-            <span>•</span>
-            <span>2FA TOTP Protection</span>
-            <span>•</span>
-            <span>5-Attempt Lockout</span>
-          </div>
+        {/* ── Simple Clean Hospital Footer ── */}
+        <footer className="relative z-10 max-w-5xl w-full mx-auto text-center text-xs text-slate-400 py-3">
+          <p>© 2026 MediVault Hospital Management System. All rights reserved.</p>
         </footer>
 
         {/* ── 2FA Challenge Modal ── */}
