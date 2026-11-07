@@ -3,8 +3,6 @@ import { AuditLogService } from '@/lib/audit';
 import { AuthService } from '@/lib/auth';
 import pool from '@/lib/db';
 
-export const dynamic = 'force-dynamic';
-
 function getAuthUser(req: NextRequest) {
   const authHeader = req.headers.get('authorization');
   let token = authHeader?.startsWith('Bearer ') ? authHeader.substring(7) : null;
