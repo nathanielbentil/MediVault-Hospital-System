@@ -49,6 +49,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: 'Unauthenticated.' }, { status: 401 });
     }
 
+    const role = (user.role || '').toLowerCase();
+    const canAdmit = role.includes('doctor') || role.includes('manager');
+    if (!canAdmit) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Access Denied: In-patient admission is strictly reserved for Attending Physicians and the Managing Director (MD). Administrators do not admit patients.',
+        },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
     const {
       patient_code,
@@ -106,6 +118,7 @@ export async function POST(req: NextRequest) {
       patient: insertRes.rows[0],
     });
   } catch (err: any) {
+    if (err?.digest?.startsWith('NEXT_')) throw err;
     console.error('POST /api/patients error:', err);
     return NextResponse.json({ success: false, message: 'Could not record admission.' }, { status: 500 });
   }

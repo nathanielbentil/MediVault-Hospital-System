@@ -42,10 +42,10 @@ import {
   Crown,
 } from 'lucide-react';
 
-// ─── Real Premier Hospital Photography (Homepage Only) ──────────────────────
+// â”€â”€â”€ Real Premier Hospital Photography (Homepage Only) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const HOSPITAL_HOMEPAGE_BG = '/hospital-hero.jpg';
 
-// ─── Types ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface StaffAccount {
   id: number;
   role: string;
@@ -105,16 +105,16 @@ interface AuthUser {
   two_factor_enabled: boolean;
 }
 
-type TabType = 'dashboard' | 'patients' | 'admission' | 'pharmacy' | 'audit';
+type TabType = 'dashboard' | 'patients' | 'admission' | 'pharmacy' | 'audit' | 'census' | 'operations' | 'staff' | 'backups';
 
-// ─── Full Clinical Leadership & Staff Directory (21 Personnel) ───────────────
+// â”€â”€â”€ Full Clinical Leadership & Staff Directory (21 Personnel) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const FULL_STAFF_DIRECTORY: StaffAccount[] = [
   // Executive Leadership
   {
     id: 1,
     role: 'Admin',
     category: 'Executive',
-    icon: '👑',
+    icon: 'ðŸ‘‘',
     name: 'Dr. Prof. Nathaniel Bentil',
     label: 'Chief Admin',
     email: 'admin@medivault.cloud',
@@ -127,7 +127,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 2,
     role: 'Manager',
     category: 'Executive',
-    icon: '📋',
+    icon: 'ðŸ“‹',
     name: 'Dr. Bright Ainoo (MD)',
     label: 'MD Manager',
     email: 'manager@medivault.cloud',
@@ -142,7 +142,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 3,
     role: 'Doctor',
     category: 'Medical',
-    icon: '🩺',
+    icon: 'ðŸ©º',
     name: 'Dr. Isaac Donkoh',
     label: 'Dr. Donkoh',
     email: 'doctor@medivault.cloud',
@@ -155,7 +155,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 13,
     role: 'Doctor',
     category: 'Medical',
-    icon: '🩺',
+    icon: 'ðŸ©º',
     name: 'Dr. Kofi Mensah',
     label: 'Dr. Kofi Mensah',
     email: 'doctor.kofi@medivault.cloud',
@@ -168,7 +168,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 14,
     role: 'Doctor',
     category: 'Medical',
-    icon: '🩺',
+    icon: 'ðŸ©º',
     name: 'Dr. Akua Boateng',
     label: 'Dr. Akua Boateng',
     email: 'doctor.akua@medivault.cloud',
@@ -181,7 +181,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 22,
     role: 'Doctor',
     category: 'Medical',
-    icon: '🩺',
+    icon: 'ðŸ©º',
     name: 'Dr. Judah',
     label: 'Dr. Judah',
     email: 'juda@gmail.com',
@@ -196,7 +196,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 4,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'ðŸ’‰',
     name: 'Nurse Beatrice Mensah, RN',
     label: 'Nurse Beatrice',
     email: 'nurse@medivault.cloud',
@@ -209,7 +209,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 15,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'ðŸ’‰',
     name: 'Nurse Abena Osei, RN',
     label: 'Nurse Abena Osei',
     email: 'nurse.abena@medivault.cloud',
@@ -222,7 +222,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 16,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'ðŸ’‰',
     name: 'Nurse Comfort Appiah, RN',
     label: 'Nurse Comfort',
     email: 'nurse.comfort@medivault.cloud',
@@ -235,7 +235,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 17,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'ðŸ’‰',
     name: 'Nurse Dorothy Ansah, RN',
     label: 'Nurse Dorothy',
     email: 'nurse.dorothy@medivault.cloud',
@@ -248,7 +248,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 18,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'ðŸ’‰',
     name: 'Nurse Emmanuel Tetteh, RN',
     label: 'Nurse Emmanuel',
     email: 'nurse.emmanuel@medivault.cloud',
@@ -261,7 +261,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 19,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'ðŸ’‰',
     name: 'Nurse Florence Danquah, RN',
     label: 'Nurse Florence',
     email: 'nurse.florence@medivault.cloud',
@@ -276,7 +276,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 5,
     role: 'Pharmacist',
     category: 'Pharmacy',
-    icon: '💊',
+    icon: 'ðŸ’Š',
     name: 'Pharm. Kwabena Appiah',
     label: 'Pharm. Appiah',
     email: 'pharmacist@medivault.cloud',
@@ -289,7 +289,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 20,
     role: 'Pharmacist',
     category: 'Pharmacy',
-    icon: '💊',
+    icon: 'ðŸ’Š',
     name: 'Pharm. Adwoa Kwarteng',
     label: 'Pharm. Adwoa',
     email: 'pharm.adwoa@medivault.cloud',
@@ -304,7 +304,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 6,
     role: 'Auditor',
     category: 'Audit',
-    icon: '🔍',
+    icon: 'ðŸ”',
     name: 'Auditor Samuel Osei',
     label: 'Auditor Osei',
     email: 'auditor@medivault.cloud',
@@ -317,7 +317,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 21,
     role: 'Auditor',
     category: 'Audit',
-    icon: '🔍',
+    icon: 'ðŸ”',
     name: 'Auditor Sarah Addo',
     label: 'Auditor Sarah Addo',
     email: 'auditor.sarah@medivault.cloud',
@@ -339,7 +339,7 @@ const DEMO_STAFF: StaffAccount[] = [
   FULL_STAFF_DIRECTORY[5], // Doctor (Dr. Judah)
 ];
 
-// ─── Status Badge ─────────────────────────────────────────────────────────────
+// â”€â”€â”€ Status Badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function StatusBadge({ status }: { status: string }) {
   const s = (status || '').toUpperCase();
   const styles: Record<string, string> = {
@@ -355,7 +355,7 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-// ─── Severity Badge ───────────────────────────────────────────────────────────
+// â”€â”€â”€ Severity Badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function SeverityBadge({ severity }: { severity: string }) {
   const s = (severity || '').toLowerCase();
   const styles: Record<string, string> = {
@@ -371,7 +371,7 @@ function SeverityBadge({ severity }: { severity: string }) {
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function Home() {
   const [user, setUser]       = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
@@ -434,6 +434,17 @@ export default function Home() {
   const [showCensusModal, setShowCensusModal]             = useState(false);
   const [liveToast, setLiveToast]                         = useState<string | null>(null);
 
+  // Managing Director: Branch Operations Customer & Staff Accounts
+  const [branchAccounts, setBranchAccounts] = useState([
+    { id: 101, name: 'Kwame Addo', email: 'k.addo@gh-health.org', failed: 5, status: 'LOCKED', lockout: '28 mins remaining' },
+    { id: 102, name: 'Dr. Kofi Mensah', email: 'doctor.kofi@medivault.cloud', failed: 5, status: 'LOCKED', lockout: '14 mins remaining' },
+    { id: 103, name: 'Abena Frimpong', email: 'a.frimpong@hospital.local', failed: 1, status: 'Active', lockout: 'None' },
+  ]);
+
+  // Admin 3-2-1 DR Drill State
+  const [drDrillRunning, setDrDrillRunning] = useState(false);
+  const [drDrillResult, setDrDrillResult] = useState<string | null>(null);
+
   // Admission Form
   const [admName, setAdmName]         = useState('');
   const [admAge, setAdmAge]           = useState('35');
@@ -441,19 +452,19 @@ export default function Home() {
   const [admBlood, setAdmBlood]       = useState('O+');
   const [admWard, setAdmWard]         = useState('Ward 2 - Bed B4');
   const [admDiagnosis, setAdmDiagnosis] = useState('');
-  const [admVitals, setAdmVitals]     = useState('BP 120/80 mmHg | HR 72 bpm | Temp 36.8°C | SpO2 99%');
+  const [admVitals, setAdmVitals]     = useState('BP 120/80 mmHg | HR 72 bpm | Temp 36.8Â°C | SpO2 99%');
   const [admRx, setAdmRx]             = useState('Amoxicillin 500mg TID + Paracetamol 1g PRN');
   const [admStatus, setAdmStatus]     = useState('Admitted');
   const [admitting, setAdmitting]     = useState(false);
   const [admitSuccess, setAdmitSuccess] = useState('');
 
-  // ── Show Toast Notification Helper ─────────────────────────────────────────
+  // â”€â”€ Show Toast Notification Helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const triggerToast = (msg: string) => {
     setLiveToast(msg);
     setTimeout(() => setLiveToast(null), 3500);
   };
 
-  // ── Drug Interaction Checker ───────────────────────────────────────────────
+  // â”€â”€ Drug Interaction Checker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const runDrugCheck = () => {
     if (drug1.includes('Warfarin') && drug2.includes('Aspirin')) {
       setDrugResult({
@@ -476,7 +487,7 @@ export default function Home() {
     }
   };
 
-  // ── Data Fetchers ────────────────────────────────────────────────────────
+  // â”€â”€ Data Fetchers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const loadPatients = useCallback(async () => {
     setPatientsLoading(true);
     try {
@@ -497,7 +508,7 @@ export default function Home() {
     finally { setAuditLoading(false); }
   }, []);
 
-  // ── Session Restore on Mount ─────────────────────────────────────────────
+  // â”€â”€ Session Restore on Mount â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   useEffect(() => {
     fetch('/api/auth/user')
       .then((r) => r.json())
@@ -515,7 +526,7 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, [loadPatients, loadAudit]);
 
-  // ── Auth Handlers ────────────────────────────────────────────────────────
+  // â”€â”€ Auth Handlers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setLoginError('');
@@ -610,15 +621,15 @@ export default function Home() {
       });
       const data = await res.json();
       if (data.success) {
-        setAdmitSuccess(`✓ ${admName} successfully admitted to ${admWard}`);
+        setAdmitSuccess(`âœ“ ${admName} successfully admitted to ${admWard}`);
         setAdmName(''); setAdmDiagnosis('');
         loadPatients();
         setTimeout(() => { setAdmitSuccess(''); setActiveTab('patients'); }, 2000);
       } else {
-        setAdmitSuccess('✗ ' + (data.message || 'Could not complete admission.'));
+        setAdmitSuccess('âœ— ' + (data.message || 'Could not complete admission.'));
       }
     } catch {
-      setAdmitSuccess('✗ Network error. Try again.');
+      setAdmitSuccess('âœ— Network error. Try again.');
     } finally {
       setAdmitting(false);
     }
@@ -627,11 +638,11 @@ export default function Home() {
   // Save Bedside Vitals (Nurse action)
   const handleSaveVitals = () => {
     if (!vitalsPatient) return;
-    const summary = `BP ${vitalsBp} mmHg | HR ${vitalsHr} bpm | Temp ${vitalsTemp}°C | SpO2 ${vitalsSpo2}% | Pain ${vitalsPain}/10`;
+    const summary = `BP ${vitalsBp} mmHg | HR ${vitalsHr} bpm | Temp ${vitalsTemp}Â°C | SpO2 ${vitalsSpo2}% | Pain ${vitalsPain}/10`;
     setPatients((prev) =>
       prev.map((p) => (p.id === vitalsPatient.id ? { ...p, vitals_summary: summary } : p))
     );
-    setVitalsSuccess(`✓ Bedside vitals recorded for ${vitalsPatient.name}`);
+    setVitalsSuccess(`âœ“ Bedside vitals recorded for ${vitalsPatient.name}`);
     setTimeout(() => {
       setVitalsSuccess('');
       setShowVitalsModal(false);
@@ -639,7 +650,30 @@ export default function Home() {
     }, 1500);
   };
 
-  // ── Derived State ────────────────────────────────────────────────────────
+  // Branch Account Unlock (Managing Director action - matches branch/dashboard.blade.php)
+  const handleUnlockBranchAccount = (id: number) => {
+    setBranchAccounts((prev) =>
+      prev.map((acc) =>
+        acc.id === id
+          ? { ...acc, status: 'Active', failed: 0, lockout: 'None' }
+          : acc
+      )
+    );
+    triggerToast('Account verified and unlocked. Sliding brute-force lockout window reset.');
+  };
+
+  // Run 3-2-1 DR Drill (Admin action - matches admin/backups.blade.php)
+  const handleRunDrill = () => {
+    setDrDrillRunning(true);
+    setDrDrillResult('Decrypting SQLite shadow mirror with local X25519 private key...');
+    setTimeout(() => {
+      setDrDrillResult('Disaster Recovery Drill PASSED: Recovery Time Objective (RTO) 4.2s (target < 60s), Recovery Point Objective (RPO) 0.0s. All 182 transaction ledger blocks consistent.');
+      setDrDrillRunning(false);
+      triggerToast('3-2-1 Disaster recovery drill verified. 0 ledger divergence.');
+    }, 1200);
+  };
+
+  // â”€â”€ Derived State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const filteredPatients = patients.filter((p) => {
     const q = searchQuery.toLowerCase();
     const matchSearch =
@@ -669,12 +703,12 @@ export default function Home() {
     return matchCat && matchQ;
   });
 
-  // ── Loading Screen ────────────────────────────────────────────────────────
+  // â”€â”€ Loading Screen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-3">
         <div className="h-16 w-16 rounded-2xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-3xl shadow-xl shadow-cyan-950 animate-pulse">
-          🏥
+          ðŸ¥
         </div>
         <div className="flex items-center gap-2 text-cyan-400 font-mono text-sm tracking-wide">
           <RefreshCw className="h-4 w-4 animate-spin" />
@@ -684,9 +718,9 @@ export default function Home() {
     );
   }
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   //  VIEW 1: CLEAN PROFESSIONAL HOSPITAL PORTAL
-  // ══════════════════════════════════════════════════════════════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   if (!user) {
     return (
       <div
@@ -696,11 +730,11 @@ export default function Home() {
         {/* Soft Dark Vignette & Glass Mask so the Real Hospital Picture shines through cleanly */}
         <div className="absolute inset-0 bg-slate-950/75 backdrop-blur-[2px]" />
 
-        {/* ── Top Hospital Header Bar ── */}
+        {/* â”€â”€ Top Hospital Header Bar â”€â”€ */}
         <header className="relative z-10 max-w-5xl w-full mx-auto flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
             <div className="h-11 w-11 rounded-xl bg-cyan-950/90 border border-cyan-500/40 flex items-center justify-center text-2xl shadow-lg shadow-cyan-950/50 backdrop-blur-md">
-              🏥
+              ðŸ¥
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -712,7 +746,7 @@ export default function Home() {
                 </span>
               </div>
               <p className="text-xs text-slate-300 hidden sm:block">
-                St. Luke Medical Center • Clinical Governance & Electronic Health Records
+                St. Luke Medical Center â€¢ Clinical Governance & Electronic Health Records
               </p>
             </div>
           </div>
@@ -723,7 +757,7 @@ export default function Home() {
           </div>
         </header>
 
-        {/* ── Centered Clean Hospital Sign-In Card ── */}
+        {/* â”€â”€ Centered Clean Hospital Sign-In Card â”€â”€ */}
         <main className="relative z-10 max-w-lg w-full mx-auto my-auto py-6">
           <div className="rounded-2xl p-6 sm:p-8 bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-2xl space-y-6">
             <div className="text-center space-y-1.5">
@@ -766,7 +800,7 @@ export default function Home() {
                     type={showPass ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••••••"
+                    placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                     required
                     className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
                   />
@@ -845,10 +879,10 @@ export default function Home() {
                 className="w-full flex items-center justify-between text-xs font-bold text-slate-300 hover:text-white py-1 transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-2">
-                  <span>👥</span>
+                  <span>ðŸ‘¥</span>
                   <span>Full Hospital Clinical Leadership & Staff Directory (21 Personnel)</span>
                 </div>
-                <span className="text-cyan-400 text-xs">{showFullDirectory ? 'Hide ▲' : 'Expand ▼'}</span>
+                <span className="text-cyan-400 text-xs">{showFullDirectory ? 'Hide â–²' : 'Expand â–¼'}</span>
               </button>
 
               {showFullDirectory && (
@@ -923,18 +957,18 @@ export default function Home() {
           </div>
         </main>
 
-        {/* ── Simple Clean Hospital Footer ── */}
+        {/* â”€â”€ Simple Clean Hospital Footer â”€â”€ */}
         <footer className="relative z-10 max-w-5xl w-full mx-auto text-center text-xs text-slate-400 py-3">
-          <p>© 2026 MediVault Hospital Management System • St. Luke Medical Center</p>
+          <p>Â© 2026 MediVault Hospital Management System â€¢ St. Luke Medical Center</p>
         </footer>
 
-        {/* ── 2FA Challenge Modal ── */}
+        {/* â”€â”€ 2FA Challenge Modal â”€â”€ */}
         {show2FA && (
           <div className="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
             <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-cyan-500/50 p-6 space-y-5 shadow-2xl">
               <div className="text-center space-y-2">
                 <div className="inline-flex h-12 w-12 rounded-xl bg-cyan-950 border border-cyan-500/40 items-center justify-center text-xl mx-auto shadow-md">
-                  🔐
+                  ðŸ”
                 </div>
                 <h3 className="text-base font-bold text-white">Two-Factor Authentication</h3>
                 {is2FAAdmin ? (
@@ -960,7 +994,7 @@ export default function Home() {
                 maxLength={6}
                 value={totpCode}
                 onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, ''))}
-                placeholder="••••••"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢"
                 autoFocus
                 className="w-full text-center text-3xl font-mono tracking-[0.5em] font-black py-3 rounded-xl bg-slate-950 border border-cyan-500/50 text-cyan-300 focus:outline-none focus:border-cyan-400"
               />
@@ -989,9 +1023,9 @@ export default function Home() {
     );
   }
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   //  VIEW 2: ENTERPRISE CLINICAL WORKSTATIONS (ROLE-TAILORED COLORS & ACTIONS)
-  // ══════════════════════════════════════════════════════════════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   const userRole = (user.role || '').toLowerCase();
   const isAdmin = userRole.includes('admin') || userRole.includes('chief');
   const isAuditor = userRole.includes('auditor') || userRole.includes('compliance');
@@ -1032,8 +1066,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-purple-400 text-purple-300',
       activeTab: 'bg-purple-600 text-white shadow-purple-500/20',
       stationTitle: 'SuperAdmin Command Center',
-      stationSub: 'Executive Hospital Governance • 3-2-1 Disaster Recovery Hub • RBAC Policy Authority',
-      icon: '👑',
+      stationSub: 'Executive Hospital Governance â€¢ 3-2-1 Disaster Recovery Hub â€¢ RBAC Policy Authority',
+      icon: 'ðŸ‘‘',
     },
     blue: {
       gradient: 'from-blue-950 via-slate-900 to-blue-950/40',
@@ -1045,8 +1079,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-blue-400 text-blue-300',
       activeTab: 'bg-blue-600 text-white shadow-blue-500/20',
       stationTitle: 'Hospital Operations & Bed Management Center',
-      stationSub: 'Practice Operations • Ward Bed Allocation • Staff Duty Roster & Clinical Flow',
-      icon: '📋',
+      stationSub: 'Practice Operations â€¢ Ward Bed Allocation â€¢ Staff Duty Roster & Clinical Flow',
+      icon: 'ðŸ“‹',
     },
     cyan: {
       gradient: 'from-cyan-950 via-slate-900 to-cyan-950/40',
@@ -1058,8 +1092,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-cyan-400 text-cyan-300',
       activeTab: 'bg-cyan-500 text-slate-950 shadow-cyan-500/20',
       stationTitle: 'Attending Physician Workstation',
-      stationSub: 'Clinical Examinations • Electronic Prescriptions • In-Patient Diagnostic Charting',
-      icon: '🩺',
+      stationSub: 'Clinical Examinations â€¢ Electronic Prescriptions â€¢ In-Patient Diagnostic Charting',
+      icon: 'ðŸ©º',
     },
     pink: {
       gradient: 'from-pink-950 via-slate-900 to-pink-950/40',
@@ -1071,8 +1105,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-pink-400 text-pink-300',
       activeTab: 'bg-pink-500 text-slate-950 shadow-pink-500/20',
       stationTitle: 'Shift Nursing Station',
-      stationSub: 'Bedside Observations • Hourly Vital Signs Record (MAR) • Shift Rounding Telemetry',
-      icon: '💉',
+      stationSub: 'Bedside Observations â€¢ Hourly Vital Signs Record (MAR) â€¢ Shift Rounding Telemetry',
+      icon: 'ðŸ’‰',
     },
     amber: {
       gradient: 'from-amber-950 via-slate-900 to-amber-950/40',
@@ -1084,8 +1118,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-amber-400 text-amber-300',
       activeTab: 'bg-amber-500 text-slate-950 shadow-amber-500/20',
       stationTitle: 'Hospital Central Dispensary',
-      stationSub: 'Prescription Verification • Controlled Substances Auditing • Barcode Dispensing',
-      icon: '💊',
+      stationSub: 'Prescription Verification â€¢ Controlled Substances Auditing â€¢ Barcode Dispensing',
+      icon: 'ðŸ’Š',
     },
     emerald: {
       gradient: 'from-emerald-950 via-slate-900 to-emerald-950/40',
@@ -1097,8 +1131,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-emerald-400 text-emerald-300',
       activeTab: 'bg-emerald-600 text-slate-950 shadow-emerald-500/20',
       stationTitle: 'Security Auditor Forensics Hub',
-      stationSub: 'Cryptographic SHA-256 Merkle Proof • Tamper Anomaly Alerts • Certified Forensic Audit Reports',
-      icon: '🔍',
+      stationSub: 'Cryptographic SHA-256 Merkle Proof â€¢ Tamper Anomaly Alerts â€¢ Certified Forensic Audit Reports',
+      icon: 'ðŸ”',
     },
   };
 
@@ -1106,18 +1140,22 @@ export default function Home() {
 
   // RBAC Filtered Tabs
   const allTabs: { id: TabType; icon: React.ElementType; label: string; allowed: boolean }[] = [
-    { id: 'dashboard', icon: Activity,       label: 'Overview',                   allowed: true },
-    { id: 'patients',  icon: Users,          label: `Wards (${patients.length})`, allowed: true },
-    { id: 'admission', icon: Plus,           label: 'Admit Patient',              allowed: isAdmin || isDoctor || isManager },
-    { id: 'pharmacy',  icon: Pill,           label: 'Dispensary',                 allowed: isAdmin || isPharmacist || isDoctor },
-    { id: 'audit',     icon: Shield,         label: 'Security Audit',             allowed: isAdmin || isAuditor },
+    { id: 'dashboard',  icon: Activity,    label: 'Overview',                   allowed: true },
+    { id: 'patients',   icon: Users,       label: `Wards (${patients.length})`, allowed: true },
+    { id: 'admission',  icon: Plus,        label: 'Admit Patient',              allowed: isDoctor || isManager },
+    { id: 'pharmacy',   icon: Pill,        label: 'Dispensary',                 allowed: isPharmacist || isDoctor },
+    { id: 'census',     icon: Building2,   label: 'Ward Bed Census',            allowed: isManager },
+    { id: 'operations', icon: Sliders,     label: 'Account Unlocks',            allowed: isManager },
+    { id: 'staff',      icon: Users,       label: 'Staff Governance',           allowed: isAdmin },
+    { id: 'backups',    icon: HardDrive,   label: '3-2-1 Cloud Backups',        allowed: isAdmin },
+    { id: 'audit',      icon: Shield,      label: 'Security Audit',             allowed: isAdmin || isAuditor },
   ];
 
   const tabs = allTabs.filter((t) => t.allowed);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-      {/* ── Toast Notification ── */}
+      {/* â”€â”€ Toast Notification â”€â”€ */}
       {liveToast && (
         <div className="fixed top-5 right-5 z-50 p-4 rounded-xl bg-slate-900 border border-cyan-400 text-white text-xs shadow-2xl flex items-center gap-2 animate-in slide-in-from-top-4">
           <Sparkles className="h-4 w-4 text-cyan-400 shrink-0" />
@@ -1125,7 +1163,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* ── Top Clinical Navigation Bar ── */}
+      {/* â”€â”€ Top Clinical Navigation Bar â”€â”€ */}
       <header className="border-b border-slate-800 bg-slate-950 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -1161,7 +1199,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ── Subnav Tabs (Role-Colored Glow) ── */}
+      {/* â”€â”€ Subnav Tabs (Role-Colored Glow) â”€â”€ */}
       <div className="border-b border-slate-800/80 bg-slate-950/90 sticky top-14 z-20 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-1.5 overflow-x-auto py-2">
@@ -1183,10 +1221,10 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── Main Station Content ── */}
+      {/* â”€â”€ Main Station Content â”€â”€ */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-        {/* ── Role-Customized Workstation Clearance Banner ── */}
+        {/* â”€â”€ Role-Customized Workstation Clearance Banner â”€â”€ */}
         <div className={`mb-6 rounded-2xl border ${roleStyles.border} bg-gradient-to-r ${roleStyles.gradient} p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6`}>
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
@@ -1194,7 +1232,7 @@ export default function Home() {
                 {user.role} Workstation
               </span>
               <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-medium">
-                ● HIPAA Certified EHR
+                â— HIPAA Certified EHR
               </span>
             </div>
             <h2 className="text-2xl font-black text-white tracking-tight flex items-center gap-2">
@@ -1215,8 +1253,8 @@ export default function Home() {
                   href="/doctor/prescriptions"
                   className="px-3.5 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black text-xs shadow-lg shadow-cyan-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
-                  <span>🔬</span>
-                  <span>Open Prescriptions Station →</span>
+                  <span>ðŸ”¬</span>
+                  <span>Open Prescriptions Station â†’</span>
                 </Link>
                 <button
                   onClick={() => setActiveTab('admission')}
@@ -1243,7 +1281,7 @@ export default function Home() {
                   className="px-3.5 py-2 rounded-xl bg-pink-500 hover:bg-pink-400 text-slate-950 font-black text-xs shadow-lg shadow-pink-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Thermometer className="h-3.5 w-3.5" />
-                  <span>Open Dedicated Vitals Station →</span>
+                  <span>Open Dedicated Vitals Station â†’</span>
                 </Link>
                 <button
                   onClick={() => setShowHandoverModal(true)}
@@ -1270,7 +1308,7 @@ export default function Home() {
                   className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <QrCode className="h-3.5 w-3.5" />
-                  <span>Open Central Dispensary Station →</span>
+                  <span>Open Central Dispensary Station â†’</span>
                 </Link>
                 <button
                   onClick={() => setActiveTab('pharmacy')}
@@ -1297,7 +1335,7 @@ export default function Home() {
                   className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Shield className="h-3.5 w-3.5" />
-                  <span>Open Security Forensics Hub →</span>
+                  <span>Open Security Forensics Hub â†’</span>
                 </Link>
                 <button
                   onClick={() => {
@@ -1327,7 +1365,7 @@ export default function Home() {
                   className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs shadow-lg shadow-blue-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Building2 className="h-3.5 w-3.5" />
-                  <span>Open Bed Census & Operations Console →</span>
+                  <span>Open Bed Census & Operations Console â†’</span>
                 </Link>
                 <button
                   onClick={() => setActiveTab('admission')}
@@ -1354,7 +1392,7 @@ export default function Home() {
                   className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-xs shadow-lg shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Crown className="h-3.5 w-3.5" />
-                  <span>Open SuperAdmin Governance Hub →</span>
+                  <span>Open SuperAdmin Governance Hub â†’</span>
                 </Link>
                 <button
                   onClick={() => setShowStaffModal(true)}
@@ -1388,9 +1426,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             TAB: OVERVIEW (ROLE-TAILORED KPIS & FAST ACTIONS)
-           ════════════════════════════════════════════════════════════════════ */}
+           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         {activeTab === 'dashboard' && (
           <div className="space-y-6">
             {/* KPI Stat Cards (Role Customized Colors) */}
@@ -1401,7 +1439,7 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('ALL'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Total Patients</span>
-                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">🩺</span>
+                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">ðŸ©º</span>
                     </div>
                     <div className="text-3xl font-black text-cyan-400">{patients.length || 82}</div>
                     <p className="text-[11px] text-cyan-400/80">Under Active Medical Care</p>
@@ -1409,7 +1447,7 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('ICU'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-rose-500/30 hover:border-rose-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">ICU / Critical</span>
-                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">🚨</span>
+                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">ðŸš¨</span>
                     </div>
                     <div className="text-3xl font-black text-rose-400">{icuCount || 8}</div>
                     <p className="text-[11px] text-rose-400/80">Immediate Rounding Req.</p>
@@ -1417,7 +1455,7 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('ADMITTED'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-teal-500/30 hover:border-teal-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Admitted (Wards)</span>
-                      <span className="text-xl p-2 rounded-xl bg-teal-950/80 border border-teal-500/30">🛌</span>
+                      <span className="text-xl p-2 rounded-xl bg-teal-950/80 border border-teal-500/30">ðŸ›Œ</span>
                     </div>
                     <div className="text-3xl font-black text-teal-400">{admittedCount || 28}</div>
                     <p className="text-[11px] text-teal-400/80">Active Bed Occupancy</p>
@@ -1425,7 +1463,7 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('OUTPATIENT'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Outpatients</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">📋</span>
+                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">ðŸ“‹</span>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">{outpatientCount || 16}</div>
                     <p className="text-[11px] text-emerald-400/80">Consultations Scheduled</p>
@@ -1439,7 +1477,7 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('ADMITTED'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-pink-500/30 hover:border-pink-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">In-Patient Beds</span>
-                      <span className="text-xl p-2 rounded-xl bg-pink-950/80 border border-pink-500/30">🛏️</span>
+                      <span className="text-xl p-2 rounded-xl bg-pink-950/80 border border-pink-500/30">ðŸ›ï¸</span>
                     </div>
                     <div className="text-3xl font-black text-pink-400">{admittedCount || 28} Beds</div>
                     <p className="text-[11px] text-pink-400/80">General & Surgical Wards</p>
@@ -1447,7 +1485,7 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('ICU'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-rose-500/30 hover:border-rose-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">ICU Cases</span>
-                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">🚨</span>
+                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">ðŸš¨</span>
                     </div>
                     <div className="text-3xl font-black text-rose-400">{icuCount || 8} Patients</div>
                     <p className="text-[11px] text-rose-400/80">Continuous Pulse Oximetry</p>
@@ -1455,7 +1493,7 @@ export default function Home() {
                   <div onClick={() => setShowVitalsModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-amber-500/30 hover:border-amber-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Vitals Checks Due</span>
-                      <span className="text-xl p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">⏱️</span>
+                      <span className="text-xl p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">â±ï¸</span>
                     </div>
                     <div className="text-3xl font-black text-amber-400">7 Due Now</div>
                     <p className="text-[11px] text-amber-400/80">Current Hourly Round</p>
@@ -1463,7 +1501,7 @@ export default function Home() {
                   <div onClick={() => setShowHandoverModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Shift Completion</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">✅</span>
+                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">âœ…</span>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">92% Done</div>
                     <p className="text-[11px] text-emerald-400/80">Day Shift Ward Roster</p>
@@ -1477,7 +1515,7 @@ export default function Home() {
                   <div onClick={() => setActiveTab('pharmacy')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-amber-500/30 hover:border-amber-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Pending Orders</span>
-                      <span className="text-xl p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">⏳</span>
+                      <span className="text-xl p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">â³</span>
                     </div>
                     <div className="text-3xl font-black text-amber-400">14 Orders</div>
                     <p className="text-[11px] text-amber-400/80">Awaiting Pharmacist Check</p>
@@ -1485,7 +1523,7 @@ export default function Home() {
                   <div onClick={() => setActiveTab('pharmacy')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Dispensed Today</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">✅</span>
+                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">âœ…</span>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">38 Batches</div>
                     <p className="text-[11px] text-emerald-400/80">Dispatched to Nursing Wards</p>
@@ -1493,7 +1531,7 @@ export default function Home() {
                   <div onClick={() => triggerToast('Formulary: 186 drug lines active and verified.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Active Formulary</span>
-                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">💊</span>
+                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">ðŸ’Š</span>
                     </div>
                     <div className="text-3xl font-black text-cyan-400">186 Regimens</div>
                     <p className="text-[11px] text-cyan-400/80">Hospital Stock Verified</p>
@@ -1501,7 +1539,7 @@ export default function Home() {
                   <div onClick={() => triggerToast('Narcotics safe: 100% sealed, logbook verified.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-rose-500/30 hover:border-rose-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Narcotics Vault</span>
-                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">🔒</span>
+                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">ðŸ”’</span>
                     </div>
                     <div className="text-3xl font-black text-rose-400">100% Sealed</div>
                     <p className="text-[11px] text-rose-400/80">Controlled Substances OK</p>
@@ -1515,7 +1553,7 @@ export default function Home() {
                   <div onClick={() => { loadAudit(); setShowChainModal(true); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Chained Blocks</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">⛓️</span>
+                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">â›“ï¸</span>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">{auditData?.verified_records || 182} Blocks</div>
                     <p className="text-[11px] text-emerald-400/80">SHA-256 Validated</p>
@@ -1523,7 +1561,7 @@ export default function Home() {
                   <div onClick={() => setActiveTab('audit')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-teal-500/30 hover:border-teal-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Chain Integrity</span>
-                      <span className="text-xl p-2 rounded-xl bg-teal-950/80 border border-teal-500/30">🛡️</span>
+                      <span className="text-xl p-2 rounded-xl bg-teal-950/80 border border-teal-500/30">ðŸ›¡ï¸</span>
                     </div>
                     <div className="text-3xl font-black text-teal-400">100% INTACT</div>
                     <p className="text-[11px] text-teal-400/80">Genesis Hash Anchored</p>
@@ -1531,7 +1569,7 @@ export default function Home() {
                   <div onClick={() => triggerToast('Threat log: 0 active attacks, 5 lockout defenses recorded.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-rose-500/30 hover:border-rose-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Threat Alerts</span>
-                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">🚨</span>
+                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">ðŸš¨</span>
                     </div>
                     <div className="text-3xl font-black text-rose-400">0 Active</div>
                     <p className="text-[11px] text-rose-400/80">Zero-Breach Tolerance</p>
@@ -1539,7 +1577,7 @@ export default function Home() {
                   <div onClick={() => triggerToast('Compliance: HIPAA Security Rule & NIST SP 800-63B certified.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">HIPAA Score</span>
-                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">📑</span>
+                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">ðŸ“‘</span>
                     </div>
                     <div className="text-3xl font-black text-cyan-400">100% Grade A</div>
                     <p className="text-[11px] text-cyan-400/80">Audit Certificate Ready</p>
@@ -1553,7 +1591,7 @@ export default function Home() {
                   <div onClick={() => setShowCensusModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-blue-500/30 hover:border-blue-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Bed Occupancy</span>
-                      <span className="text-xl p-2 rounded-xl bg-blue-950/80 border border-blue-500/30">🛏️</span>
+                      <span className="text-xl p-2 rounded-xl bg-blue-950/80 border border-blue-500/30">ðŸ›ï¸</span>
                     </div>
                     <div className="text-3xl font-black text-blue-400">88% Utilization</div>
                     <p className="text-[11px] text-blue-400/80">48 / 55 Total Capacity</p>
@@ -1561,7 +1599,7 @@ export default function Home() {
                   <div onClick={() => setShowCensusModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Available Beds</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">✅</span>
+                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">âœ…</span>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">7 Ready</div>
                     <p className="text-[11px] text-emerald-400/80">Emergency Triage Ready</p>
@@ -1569,7 +1607,7 @@ export default function Home() {
                   <div onClick={() => triggerToast('Clinical roster: 18 medical personnel on active shift.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-indigo-500/30 hover:border-indigo-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">On-Duty Staff</span>
-                      <span className="text-xl p-2 rounded-xl bg-indigo-950/80 border border-indigo-500/30">👥</span>
+                      <span className="text-xl p-2 rounded-xl bg-indigo-950/80 border border-indigo-500/30">ðŸ‘¥</span>
                     </div>
                     <div className="text-3xl font-black text-indigo-400">18 Personnel</div>
                     <p className="text-[11px] text-indigo-400/80">Doctors, Nurses, Pharmacy</p>
@@ -1577,7 +1615,7 @@ export default function Home() {
                   <div onClick={() => setActiveTab('patients')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Daily Census</span>
-                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">📊</span>
+                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">ðŸ“Š</span>
                     </div>
                     <div className="text-3xl font-black text-cyan-400">12 Discharges</div>
                     <p className="text-[11px] text-cyan-400/80">Turnover Rate Balanced</p>
@@ -1591,7 +1629,7 @@ export default function Home() {
                   <div onClick={() => setShowStaffModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-purple-500/30 hover:border-purple-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Registered Staff</span>
-                      <span className="text-xl p-2 rounded-xl bg-purple-950/80 border border-purple-500/30">👥</span>
+                      <span className="text-xl p-2 rounded-xl bg-purple-950/80 border border-purple-500/30">ðŸ‘¥</span>
                     </div>
                     <div className="text-3xl font-black text-purple-400">21 Personnel</div>
                     <p className="text-[11px] text-purple-400/80">Role-Based Access Control</p>
@@ -1599,7 +1637,7 @@ export default function Home() {
                   <div onClick={() => setActiveTab('audit')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Active Accounts</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">🔐</span>
+                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">ðŸ”</span>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">100% Secured</div>
                     <p className="text-[11px] text-emerald-400/80">Argon2id + 2FA Protected</p>
@@ -1607,7 +1645,7 @@ export default function Home() {
                   <div onClick={() => triggerToast('Defense status: 0 accounts locked. Sliding lockout active.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-amber-500/30 hover:border-amber-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Defense Lockouts</span>
-                      <span className="text-xl p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">🛡️</span>
+                      <span className="text-xl p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">ðŸ›¡ï¸</span>
                     </div>
                     <div className="text-3xl font-black text-amber-400">0 Locked</div>
                     <p className="text-[11px] text-amber-400/80">Sliding Lockout Active</p>
@@ -1615,7 +1653,7 @@ export default function Home() {
                   <div onClick={() => setShowBackupModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">3-2-1 Backups</span>
-                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">💾</span>
+                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">ðŸ’¾</span>
                     </div>
                     <div className="text-3xl font-black text-cyan-400">Synced Active</div>
                     <p className="text-[11px] text-cyan-400/80">Disaster Recovery Ready</p>
@@ -1635,7 +1673,7 @@ export default function Home() {
                   onClick={() => setActiveTab('patients')}
                   className="text-xs text-cyan-400 hover:text-cyan-300 font-bold transition-colors cursor-pointer"
                 >
-                  View all ({patients.length}) →
+                  View all ({patients.length}) â†’
                 </button>
               </div>
               <div className="overflow-x-auto">
@@ -1670,9 +1708,9 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             TAB: WARDS & PATIENT DIRECTORY
-           ════════════════════════════════════════════════════════════════════ */}
+           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         {activeTab === 'patients' && (
           <div className="space-y-4">
             {/* Search and Status Filters */}
@@ -1725,7 +1763,7 @@ export default function Home() {
                       <div>
                         <h4 className="font-bold text-white text-sm leading-snug">{p.name}</h4>
                         <p className="text-[11px] text-slate-400 font-mono mt-0.5">
-                          {p.patient_code} · {p.age}y · {p.gender} · {p.blood_group}
+                          {p.patient_code} Â· {p.age}y Â· {p.gender} Â· {p.blood_group}
                         </p>
                       </div>
                       <StatusBadge status={p.admission_status} />
@@ -1743,7 +1781,7 @@ export default function Home() {
 
                     {p.vitals_summary && (
                       <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-[10px] font-mono text-emerald-400 leading-relaxed">
-                        📊 {p.vitals_summary}
+                        ðŸ“Š {p.vitals_summary}
                       </div>
                     )}
                   </div>
@@ -1753,10 +1791,10 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             TAB: ADMISSION FORM (DOCTORS / MANAGERS / ADMINS)
-           ════════════════════════════════════════════════════════════════════ */}
-        {activeTab === 'admission' && (isAdmin || isDoctor || isManager) && (
+           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+        {activeTab === 'admission' && (isDoctor || isManager) && (
           <div className="max-w-2xl mx-auto space-y-4">
             <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 shadow-lg">
               <h3 className="font-bold text-white text-base flex items-center gap-2">
@@ -1771,7 +1809,7 @@ export default function Home() {
               <form onSubmit={handleAdmit} className="space-y-4">
                 {admitSuccess && (
                   <div className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
-                    admitSuccess.startsWith('✓')
+                    admitSuccess.startsWith('âœ“')
                       ? 'bg-emerald-950/80 border-emerald-500/40 text-emerald-300'
                       : 'bg-rose-950/80 border-rose-500/40 text-rose-300'
                   }`}>
@@ -1897,10 +1935,10 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             TAB: PHARMACY DISPENSARY (PHARMACISTS / DOCTORS / ADMINS)
-           ════════════════════════════════════════════════════════════════════ */}
-        {activeTab === 'pharmacy' && (isAdmin || isPharmacist || isDoctor) && (
+           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+        {activeTab === 'pharmacy' && (isPharmacist || isDoctor) && (
           <div className="space-y-4">
             <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
               <div className="flex items-center gap-3">
@@ -1929,7 +1967,7 @@ export default function Home() {
                       <div>
                         <h4 className="font-bold text-white text-sm">{p.name}</h4>
                         <p className="text-[11px] text-slate-400 font-mono">
-                          {p.patient_code} · {p.ward_room || 'General Ward'}
+                          {p.patient_code} Â· {p.ward_room || 'General Ward'}
                         </p>
                       </div>
                       <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-[10px] font-bold text-emerald-300">
@@ -1937,7 +1975,7 @@ export default function Home() {
                       </span>
                     </div>
                     <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-amber-300 leading-relaxed">
-                      Rx: {p.prescription || 'Amoxicillin 500mg TID · IV Fluids 0.9% Normal Saline · Paracetamol 1g PRN'}
+                      Rx: {p.prescription || 'Amoxicillin 500mg TID Â· IV Fluids 0.9% Normal Saline Â· Paracetamol 1g PRN'}
                     </div>
                     <p className="text-[11px] text-slate-400">
                       Attending Physician: {p.attending_doctor || 'Dr. Isaac Donkoh, MD'}
@@ -1949,9 +1987,9 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             TAB: SECURITY AUDIT (AUDITOR & CHIEF ADMIN ONLY)
-           ════════════════════════════════════════════════════════════════════ */}
+           â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         {activeTab === 'audit' && (isAdmin || isAuditor) && (
           <div className="space-y-5">
             <div className="rounded-2xl border border-indigo-500/40 bg-slate-900 p-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4 shadow-xl">
@@ -1962,7 +2000,7 @@ export default function Home() {
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed max-w-xl">
                   Every user authentication, patient admission, and clinical prescription change is sealed with the
-                  previous record&apos;s SHA-256 cryptographic hash — creating an unbroken, tamper-evident audit trail
+                  previous record&apos;s SHA-256 cryptographic hash â€” creating an unbroken, tamper-evident audit trail
                   across all clinical workstations.
                 </p>
                 <div className="flex items-center gap-3 pt-1 flex-wrap">
@@ -2046,11 +2084,357 @@ export default function Home() {
             </div>
           </div>
         )}
+
+        {/* ════════════════════════════════════════════════════════════════════
+            TAB: WARD BED CENSUS & OPERATIONS (MANAGING DIRECTOR - MD ONLY)
+           ════════════════════════════════════════════════════════════════════ */}
+        {activeTab === 'census' && isManager && (
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-blue-500/30 bg-gradient-to-r from-blue-950/60 via-slate-900 to-slate-950 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-950 px-2.5 py-0.5 rounded-full border border-blue-800">
+                    MD Operations Suite
+                  </span>
+                  <span className="text-[11px] text-slate-400 font-mono">Real-Time Ward Telemetry</span>
+                </div>
+                <h3 className="text-xl font-black text-white mt-1">Ward Bed Allocation & Capacity Control</h3>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Directing bed assignments, tracking occupancy thresholds, and releasing emergency reserve beds.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 shrink-0">
+                <Link
+                  href="/manager/census"
+                  className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Building2 className="h-4 w-4" />
+                  <span>Open Dedicated Census Console →</span>
+                </Link>
+                <button
+                  onClick={() => triggerToast('Emergency surge buffer beds unlocked. +10 capacity added to ICU & ER.')}
+                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-blue-400 text-blue-300 font-bold text-xs transition-all cursor-pointer"
+                >
+                  Unlock Surge Beds (+10)
+                </button>
+              </div>
+            </div>
+
+            {/* Ward Bed Progress Meters */}
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-4">
+              <h4 className="text-sm font-bold text-white flex items-center justify-between">
+                <span>In-Patient Floor Occupancy Ratios</span>
+                <span className="text-xs font-mono text-blue-400">Total: 101 / 114 Beds (88%)</span>
+              </h4>
+
+              <div className="space-y-4 pt-2">
+                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="font-bold text-white">General Medical Ward (Floor 2)</span>
+                    <span className="font-mono text-slate-300"><strong>38</strong> / 45 Beds (84%)</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-slate-900 overflow-hidden">
+                    <div className="h-full bg-blue-500 rounded-full" style={{ width: '84%' }} />
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="font-bold text-white">Surgical Post-Op Ward (Floor 3)</span>
+                    <span className="font-mono text-amber-300"><strong>22</strong> / 24 Beds (92% - ELEVATED)</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-slate-900 overflow-hidden">
+                    <div className="h-full bg-amber-500 rounded-full" style={{ width: '92%' }} />
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-950 border border-rose-500/30 space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="font-bold text-rose-300">Intensive Care Unit - ICU (Floor 4)</span>
+                    <span className="font-mono text-rose-400 font-bold"><strong>9</strong> / 10 Beds (90% - CRITICAL)</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-slate-900 overflow-hidden">
+                    <div className="h-full bg-rose-500 rounded-full" style={{ width: '90%' }} />
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="font-bold text-white">Pediatric Care Unit (Floor 1)</span>
+                    <span className="font-mono text-emerald-300"><strong>18</strong> / 25 Beds (72% - OPTIMAL)</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-slate-900 overflow-hidden">
+                    <div className="h-full bg-emerald-500 rounded-full" style={{ width: '72%' }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ════════════════════════════════════════════════════════════════════
+            TAB: PRACTICE ACCOUNT UNLOCKS (MANAGING DIRECTOR - MD ONLY)
+            Faithfully reproducing backend/resources/views/branch/dashboard.blade.php
+           ════════════════════════════════════════════════════════════════════ */}
+        {activeTab === 'operations' && isManager && (
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-blue-500/30 bg-slate-900 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-blue-400 bg-blue-950 px-2.5 py-0.5 rounded-full border border-blue-800">
+                    Practice Operations Portal
+                  </span>
+                  <span className="text-[11px] text-slate-400 font-mono">Sliding Lockout Defense</span>
+                </div>
+                <h3 className="text-xl font-black text-white mt-1">Branch Customer & Staff Account Verification</h3>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Managing Director authority to inspect failed login attempts, review authentication lockouts, and execute security unlocks.
+                </p>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
+              <h4 className="text-sm font-bold text-white flex items-center gap-2">
+                <Sliders className="h-4 w-4 text-blue-400" />
+                <span>Registered Personnel & Customer Accounts (Branch Directory)</span>
+              </h4>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="border-b border-slate-800 text-slate-400 uppercase font-mono">
+                    <tr>
+                      <th className="py-2.5 px-3">Name</th>
+                      <th className="py-2.5 px-3">Email Address</th>
+                      <th className="py-2.5 px-3">Failed Attempts</th>
+                      <th className="py-2.5 px-3">Account Status</th>
+                      <th className="py-2.5 px-3">Lockout Window</th>
+                      <th className="py-2.5 px-3 text-right">Branch Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                    {branchAccounts.map((acc) => (
+                      <tr key={acc.id} className="hover:bg-slate-900/50">
+                        <td className="py-3 px-3 font-bold text-white">{acc.name}</td>
+                        <td className="py-3 px-3 font-mono text-slate-400">{acc.email}</td>
+                        <td className="py-3 px-3">
+                          <span className={`font-mono font-bold ${acc.failed >= 5 ? 'text-red-400' : 'text-slate-300'}`}>
+                            {acc.failed} / 5
+                          </span>
+                        </td>
+                        <td className="py-3 px-3">
+                          {acc.status === 'LOCKED' ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-red-950 text-red-400 border border-red-500/40">
+                              <span className="h-1.5 w-1.5 rounded-full bg-red-400 animate-pulse" /> LOCKED (DEFENSE)
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-950 text-emerald-400 border border-emerald-500/30">
+                              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Active
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-3 px-3 font-mono text-slate-400">{acc.lockout}</td>
+                        <td className="py-3 px-3 text-right">
+                          {acc.status === 'LOCKED' ? (
+                            <button
+                              onClick={() => handleUnlockBranchAccount(acc.id)}
+                              className="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-bold transition-all cursor-pointer shadow-sm"
+                            >
+                              Verify & Unlock
+                            </button>
+                          ) : (
+                            <span className="text-[11px] text-slate-500 font-mono">Clear</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ════════════════════════════════════════════════════════════════════
+            TAB: STAFF & RBAC GOVERNANCE (CHIEF ADMIN ONLY)
+            Faithfully reproducing backend/resources/views/admin/dashboard.blade.php
+           ════════════════════════════════════════════════════════════════════ */}
+        {activeTab === 'staff' && isAdmin && (
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-950/60 via-slate-900 to-slate-950 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-950 px-2.5 py-0.5 rounded-full border border-purple-800">
+                    Chief Administrator Suite
+                  </span>
+                  <span className="text-[11px] text-slate-400 font-mono">Root Credential Authority</span>
+                </div>
+                <h3 className="text-xl font-black text-white mt-1">SuperAdmin Staff & RBAC Policy Governance</h3>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Authorizing clinical department personnel, provisioning roles, and enforcing zero-trust Argon2id & 2FA security.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 shrink-0">
+                <Link
+                  href="/admin"
+                  className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Crown className="h-4 w-4" />
+                  <span>Open Dedicated Admin Hub →</span>
+                </Link>
+                <button
+                  onClick={() => setShowStaffModal(true)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-purple-400 text-purple-300 font-bold text-xs transition-all cursor-pointer"
+                >
+                  View Directory Modal
+                </button>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
+              <h4 className="text-sm font-bold text-white flex items-center justify-between">
+                <span>Active Hospital Personnel (All 21 Officers)</span>
+                <span className="text-xs font-mono text-purple-400">100% 2FA Enforced</span>
+              </h4>
+
+              <div className="overflow-x-auto max-h-[460px]">
+                <table className="w-full text-left text-xs">
+                  <thead className="sticky top-0 bg-slate-950 border-b border-slate-800 text-slate-400 uppercase font-mono z-10">
+                    <tr>
+                      <th className="py-2.5 px-3">Role</th>
+                      <th className="py-2.5 px-3">Staff Name</th>
+                      <th className="py-2.5 px-3">Email Address</th>
+                      <th className="py-2.5 px-3">Leadership Scope</th>
+                      <th className="py-2.5 px-3">2FA</th>
+                      <th className="py-2.5 px-3">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                    {FULL_STAFF_DIRECTORY.map((s) => (
+                      <tr key={s.id} className="hover:bg-slate-900/50">
+                        <td className="py-2.5 px-3 font-bold font-mono">
+                          <span className="mr-1">{s.icon}</span>
+                          <span className={
+                            s.role === 'Admin' ? 'text-purple-400' :
+                            s.role === 'Manager' ? 'text-blue-400' :
+                            s.role === 'Doctor' ? 'text-cyan-400' :
+                            s.role === 'Nurse' ? 'text-pink-400' :
+                            s.role === 'Pharmacist' ? 'text-amber-400' : 'text-emerald-400'
+                          }>
+                            {s.role}
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-3 text-white font-medium">{s.name}</td>
+                        <td className="py-2.5 px-3 font-mono text-purple-300">{s.email}</td>
+                        <td className="py-2.5 px-3 text-slate-400 text-[11px]">{s.leadership}</td>
+                        <td className="py-2.5 px-3">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
+                            ENFORCED
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-3">
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-500/30">
+                            {s.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ════════════════════════════════════════════════════════════════════
+            TAB: 3-2-1 CLOUD BACKUP & DR (CHIEF ADMIN ONLY)
+            Faithfully reproducing backend/resources/views/admin/backups.blade.php
+           ════════════════════════════════════════════════════════════════════ */}
+        {activeTab === 'backups' && isAdmin && (
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-purple-500/30 bg-slate-900 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-950 px-2.5 py-0.5 rounded-full border border-purple-800">
+                    Disaster Recovery Command
+                  </span>
+                  <span className="text-[11px] text-slate-400 font-mono">X25519 Asymmetric age Cipher</span>
+                </div>
+                <h3 className="text-xl font-black text-white mt-1">3-2-1 Backup & Business Continuity Engine</h3>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Three copies, two local media formats, one zero-knowledge offsite cloud replica with automated RTO drills.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 shrink-0">
+                <button
+                  onClick={() => triggerToast('Immutable WORM snapshot generated and replicated to offsite cloud.')}
+                  className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <HardDrive className="h-4 w-4" />
+                  <span>Create Encrypted Backup</span>
+                </button>
+                <button
+                  onClick={handleRunDrill}
+                  disabled={drDrillRunning}
+                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-purple-400 text-purple-300 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                >
+                  <RefreshCw className={`h-4 w-4 ${drDrillRunning ? 'animate-spin' : ''}`} />
+                  <span>{drDrillRunning ? 'Executing Drill...' : 'Run DR Restore Drill'}</span>
+                </button>
+              </div>
+            </div>
+
+            {drDrillResult && (
+              <div className="p-4 rounded-xl border border-purple-500/40 bg-purple-950/30 text-xs text-purple-200 flex items-center justify-between animate-in slide-in-from-top-2">
+                <span>{drDrillResult}</span>
+                <button onClick={() => setDrDrillResult(null)} className="text-slate-400 hover:text-white px-2 py-0.5 font-bold">✕</button>
+              </div>
+            )}
+
+            {/* 3-2-1 Architecture Visual Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-2">
+                <div className="flex items-center justify-between text-xs font-semibold text-emerald-400">
+                  <span>3 Copies • 2 Media</span>
+                  <span className="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-[10px] uppercase">Active</span>
+                </div>
+                <h4 className="text-sm font-bold text-white">Local Encrypted Volume</h4>
+                <p className="text-xs text-slate-400">
+                  Real-time database records encrypted using server-side public key <span className="font-mono text-purple-300">age1ql4y...</span> with 7-day automated pruning.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-2">
+                <div className="flex items-center justify-between text-xs font-semibold text-cyan-400">
+                  <span>1 Offsite Cloud S3</span>
+                  <span className="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-500/30 text-[10px] uppercase">Zero-Knowledge</span>
+                </div>
+                <h4 className="text-sm font-bold text-white">Supabase Cloud S3 Mirror</h4>
+                <p className="text-xs text-slate-400">
+                  Replicated offsite as raw ciphertext. Neither host nor third parties hold the offline private keys.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-2">
+                <div className="flex items-center justify-between text-xs font-semibold text-purple-400">
+                  <span>Continuity Guarantee</span>
+                  <span className="px-2 py-0.5 rounded bg-purple-950 border border-purple-500/30 text-[10px] uppercase">VERIFIED</span>
+                </div>
+                <h4 className="text-sm font-bold text-white">RTO &lt; 10s • RPO 0.0s</h4>
+                <p className="text-xs text-slate-400">
+                  Automated failover integrity tests execute periodically to guarantee zero patient data loss during incidents.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
 
-      {/* ══════════════════════════════════════════════════════════════════════
+      {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
           ROLE-SPECIFIC INTERACTIVE CUSTOM MODALS
-         ══════════════════════════════════════════════════════════════════════ */}
+         â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
 
       {/* 1. Doctor: Drug Interaction Lab Modal */}
       {showDrugLabModal && (
@@ -2058,7 +2442,7 @@ export default function Home() {
           <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-cyan-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🔬</span>
+                <span className="text-2xl">ðŸ”¬</span>
                 <div>
                   <h3 className="font-bold text-white text-base">Physician Drug Interaction Lab</h3>
                   <p className="text-xs text-slate-400">Pharmacology cross-check engine for co-administered therapies</p>
@@ -2130,7 +2514,7 @@ export default function Home() {
           <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-pink-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">💉</span>
+                <span className="text-2xl">ðŸ’‰</span>
                 <div>
                   <h3 className="font-bold text-white text-base">Bedside Vital Signs Charting</h3>
                   <p className="text-xs text-slate-400">Live nursing telemetry entry directly to hospital chart</p>
@@ -2189,7 +2573,7 @@ export default function Home() {
 
               <div className="grid grid-cols-3 gap-2">
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-300">Temp (°C)</label>
+                  <label className="text-xs font-semibold text-slate-300">Temp (Â°C)</label>
                   <input
                     type="text"
                     value={vitalsTemp}
@@ -2237,7 +2621,7 @@ export default function Home() {
           <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-pink-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">📝</span>
+                <span className="text-2xl">ðŸ“</span>
                 <div>
                   <h3 className="font-bold text-white text-base">Nurse Shift Handover Log</h3>
                   <p className="text-xs text-slate-400">Shift changeover documentation & ward alerts</p>
@@ -2278,7 +2662,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => {
-                  setHandoverSuccess('✓ Shift handover digitally sealed and broadcast to incoming nursing team.');
+                  setHandoverSuccess('âœ“ Shift handover digitally sealed and broadcast to incoming nursing team.');
                   setTimeout(() => {
                     setHandoverSuccess('');
                     setShowHandoverModal(false);
@@ -2300,7 +2684,7 @@ export default function Home() {
           <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-amber-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🔍</span>
+                <span className="text-2xl">ðŸ”</span>
                 <div>
                   <h3 className="font-bold text-white text-base">Pharmacy Barcode Scanner</h3>
                   <p className="text-xs text-slate-400">GS1-128 barcode verification & lot release</p>
@@ -2334,7 +2718,7 @@ export default function Home() {
 
               {barcodeResult && (
                 <div className="p-3.5 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs space-y-2">
-                  <div className="font-bold">✓ Prescription Verified Intact</div>
+                  <div className="font-bold">âœ“ Prescription Verified Intact</div>
                   <p className="text-[11px] opacity-90 font-mono">{barcodeResult}</p>
                   <button
                     onClick={() => {
@@ -2358,7 +2742,7 @@ export default function Home() {
           <div className="w-full max-w-4xl rounded-2xl bg-slate-900 border border-purple-500/50 p-6 space-y-4 shadow-2xl max-h-[85vh] flex flex-col">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">👥</span>
+                <span className="text-2xl">ðŸ‘¥</span>
                 <div>
                   <h3 className="font-bold text-white text-base">Hospital Staff Directory & RBAC Governance</h3>
                   <p className="text-xs text-slate-400">All 21 authorized clinical officers, roles & HIPAA credentials</p>
@@ -2427,7 +2811,7 @@ export default function Home() {
           <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-purple-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">💾</span>
+                <span className="text-2xl">ðŸ’¾</span>
                 <div>
                   <h3 className="font-bold text-white text-base">3-2-1 Backup & Disaster Recovery (DR) Hub</h3>
                   <p className="text-xs text-slate-400">Cryptographically sealed cloud snapshots & local replicas</p>
@@ -2442,15 +2826,15 @@ export default function Home() {
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-white">Tier 1: Primary AWS London PostgreSQL</span>
-                  <span className="text-emerald-400 font-bold">● Active Online</span>
+                  <span className="text-emerald-400 font-bold">â— Active Online</span>
                 </div>
-                <p className="text-[11px] text-slate-400">Pooler: aws-0-eu-west-2 • Real-time patient telemetry replication</p>
+                <p className="text-[11px] text-slate-400">Pooler: aws-0-eu-west-2 â€¢ Real-time patient telemetry replication</p>
               </div>
 
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-white">Tier 2: Encrypted Local SQLite Mirror</span>
-                  <span className="text-cyan-400 font-bold">● 100% Synced</span>
+                  <span className="text-cyan-400 font-bold">â— 100% Synced</span>
                 </div>
                 <p className="text-[11px] text-slate-400">Asymmetric X25519 encrypted snapshot on on-premise hardware</p>
               </div>
@@ -2458,7 +2842,7 @@ export default function Home() {
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-white">Tier 3: Offsite Immutable WORM Cloud Archive</span>
-                  <span className="text-purple-400 font-bold">● Sealed</span>
+                  <span className="text-purple-400 font-bold">â— Sealed</span>
                 </div>
                 <p className="text-[11px] text-slate-400">Write-Once-Read-Many anti-ransomware backup vault</p>
               </div>
@@ -2495,7 +2879,7 @@ export default function Home() {
           <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-emerald-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🛡️</span>
+                <span className="text-2xl">ðŸ›¡ï¸</span>
                 <div>
                   <h3 className="font-bold text-white text-base">SHA-256 Merkle Chain Verification</h3>
                   <p className="text-xs text-slate-400">Forensic blockchain integrity test against genesis block</p>
@@ -2537,7 +2921,7 @@ export default function Home() {
           <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-blue-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🛏️</span>
+                <span className="text-2xl">ðŸ›ï¸</span>
                 <div>
                   <h3 className="font-bold text-white text-base">Ward Bed Allocation & Census</h3>
                   <p className="text-xs text-slate-400">Real-time occupancy rates across hospital departments</p>
@@ -2591,7 +2975,7 @@ export default function Home() {
               <div>
                 <h3 className="font-bold text-white text-base">{selectedPatient.name}</h3>
                 <p className="text-xs text-slate-400 font-mono">
-                  {selectedPatient.patient_code} • {selectedPatient.gender} • {selectedPatient.age} years old
+                  {selectedPatient.patient_code} â€¢ {selectedPatient.gender} â€¢ {selectedPatient.age} years old
                 </p>
               </div>
               <button onClick={() => setSelectedPatient(null)} className="text-slate-400 hover:text-white cursor-pointer">
