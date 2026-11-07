@@ -2,8 +2,9 @@ import crypto from 'crypto';
 import * as argon2 from '@node-rs/argon2';
 
 export class PasswordService {
-  private static readonly PEPPER_V1 =
-    process.env.PEPPER_V1 || '58ccdb65b61dfa1586e00d6cf4268f24d09d0c4ad69e7cfb555184c3fc02f91e';
+  private static readonly PEPPER_V1 = (process.env.PEPPER_V1 || '58ccdb65b61dfa1586e00d6cf4268f24d09d0c4ad69e7cfb555184c3fc02f91e')
+    .trim()
+    .replace(/^["']|["']$/g, '');
 
   /**
    * Layer 1: Apply server-side HMAC Pepper (256-bit entropy)
