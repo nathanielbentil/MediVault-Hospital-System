@@ -12,7 +12,11 @@ if (!globalThis._pgPool) {
   if (user === 'postgres' || !user.includes('.')) {
     user = 'postgres.wulriexoojidlilizmps';
   }
-  const password = sanitize(process.env.DB_PASSWORD) || 'f#_qApAc55qy54n';
+  let password = sanitize(process.env.DB_PASSWORD);
+  // Guard against .env parsers truncating at '#' character
+  if (!password || password === 'f' || password.length <= 1) {
+    password = 'f#_qApAc55qy54n';
+  }
 
   globalThis._pgPool = new Pool({
     host,
