@@ -2280,8 +2280,8 @@ export default function Home() {
                   href="/admin"
                   className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Crown className="h-4 w-4" />
-                  <span>Open Dedicated Admin Hub →</span>
+                  <Plus className="h-4 w-4" />
+                  <span>Register New Staff Worker →</span>
                 </Link>
                 <button
                   onClick={() => setShowStaffModal(true)}
@@ -2748,9 +2748,18 @@ export default function Home() {
                   <p className="text-xs text-slate-400">All 21 authorized clinical officers, roles & HIPAA credentials</p>
                 </div>
               </div>
-              <button onClick={() => setShowStaffModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
-                <X className="h-5 w-5" />
-              </button>
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/admin"
+                  className="px-3 py-1.5 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs flex items-center gap-1.5 transition-all"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  <span>Register Worker</span>
+                </Link>
+                <button onClick={() => setShowStaffModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
 
             <div className="overflow-x-auto flex-1">

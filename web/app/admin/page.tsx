@@ -27,6 +27,8 @@ import {
   Settings,
   Server,
   Zap,
+  Plus,
+  X,
 } from 'lucide-react';
 
 interface StaffUser {
@@ -135,6 +137,61 @@ export default function SuperAdminPage() {
     triggerToast('Immutable snapshot generated. Encrypted with age X25519 and dispatched to offsite S3 mirror.');
   };
 
+  // Register New Worker State
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addName, setAddName] = useState('');
+  const [addEmail, setAddEmail] = useState('');
+  const [addPassword, setAddPassword] = useState('Staff@2026!');
+  const [addRole, setAddRole] = useState('Doctor');
+  const [addDept, setAddDept] = useState('Clinical In-Patient Care');
+  const [isRegistering, setIsRegistering] = useState(false);
+
+  const handleRegisterWorker = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!addName || !addEmail || !addPassword) {
+      triggerToast('Please provide worker name, email, and password.');
+      return;
+    }
+    setIsRegistering(true);
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: addName,
+          email: addEmail,
+          password: addPassword,
+          assignedRole: addRole,
+          department: addDept,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        const newStaff: StaffUser = {
+          id: data.user?.id || Date.now(),
+          name: addName,
+          email: addEmail,
+          role: addRole.toLowerCase(),
+          department: addDept,
+          status: 'ACTIVE',
+          twoFaActive: true,
+          failedAttempts: 0,
+        };
+        setStaffDirectory((prev) => [newStaff, ...prev]);
+        setShowAddModal(false);
+        setAddName('');
+        setAddEmail('');
+        triggerToast(`New staff worker ${addName} registered successfully with role ${addRole}.`);
+      } else {
+        triggerToast(data.message || 'Could not register staff member.');
+      }
+    } catch {
+      triggerToast('Network error while registering worker.');
+    } finally {
+      setIsRegistering(false);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
@@ -175,7 +232,7 @@ export default function SuperAdminPage() {
         </div>
       )}
 
-      {/* ── Top Header Navigation Bar ── */}
+      {/* â”€â”€ Top Header Navigation Bar â”€â”€ */}
       <header className="border-b border-slate-800 bg-slate-950 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -189,7 +246,7 @@ export default function SuperAdminPage() {
             <div className="h-4 w-px bg-slate-800 hidden sm:block" />
             <div className="flex items-center gap-2">
               <div className="h-9 w-9 rounded-xl bg-purple-950/80 border border-purple-500/40 flex items-center justify-center text-base shadow-md">
-                👑
+                ðŸ‘‘
               </div>
               <div>
                 <div className="flex items-center gap-2">
@@ -226,10 +283,10 @@ export default function SuperAdminPage() {
         </div>
       </header>
 
-      {/* ── Main Container ── */}
+      {/* â”€â”€ Main Container â”€â”€ */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        {/* ── Workstation Clearance Banner ── */}
+        {/* â”€â”€ Workstation Clearance Banner â”€â”€ */}
         <div className="rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-950 via-slate-900 to-purple-950/40 p-6 shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1.5 relative z-10">
             <div className="flex items-center gap-2">
@@ -237,14 +294,14 @@ export default function SuperAdminPage() {
                 SuperAdmin Enterprise Governance
               </span>
               <span className="text-[10px] text-purple-400 bg-purple-950/60 px-2.5 py-0.5 rounded-full border border-purple-500/30 font-medium">
-                ● Full Administrative Root Access
+                â— Full Administrative Root Access
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               Hospital Governance, RBAC Directory & 3-2-1 DR Command
             </h1>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Chief Administrator: <strong className="text-purple-300">{user?.name || 'Dr. Prof. Nathaniel Bentil'}</strong> • Full personnel directory control, emergency lockdown switchboard, and offsite disaster recovery failover.
+              Chief Administrator: <strong className="text-purple-300">{user?.name || 'Dr. Prof. Nathaniel Bentil'}</strong> â€¢ Full personnel directory control, emergency lockdown switchboard, and offsite disaster recovery failover.
             </p>
           </div>
 
@@ -267,7 +324,7 @@ export default function SuperAdminPage() {
           </div>
         </div>
 
-        {/* ── KPI Metric Cards ── */}
+        {/* â”€â”€ KPI Metric Cards â”€â”€ */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="p-4 rounded-xl bg-slate-900/80 border border-purple-500/20 shadow-md">
             <div className="flex items-center justify-between">
@@ -306,18 +363,18 @@ export default function SuperAdminPage() {
           </div>
         </div>
 
-        {/* ── DR Drill Banner / Result ── */}
+        {/* â”€â”€ DR Drill Banner / Result â”€â”€ */}
         {drStatus && (
           <div className="p-4 rounded-xl border border-purple-500/40 bg-purple-950/30 text-xs flex items-center justify-between animate-in slide-in-from-top-2">
             <div className="flex items-center gap-2 text-purple-200">
               <Server className="h-4 w-4 text-purple-400 shrink-0" />
               <span>{drStatus}</span>
             </div>
-            <button onClick={() => setDrStatus(null)} className="text-slate-400 hover:text-white px-2 py-1 font-bold">✕</button>
+            <button onClick={() => setDrStatus(null)} className="text-slate-400 hover:text-white px-2 py-1 font-bold">âœ•</button>
           </div>
         )}
 
-        {/* ── Emergency Switchboard & 3-2-1 Status Grid ── */}
+        {/* â”€â”€ Emergency Switchboard & 3-2-1 Status Grid â”€â”€ */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* Copy 1 & 2: Local Encrypted DB */}
@@ -325,7 +382,7 @@ export default function SuperAdminPage() {
             <div className="flex items-center justify-between text-xs font-bold text-emerald-400">
               <span className="flex items-center gap-1.5">
                 <Database className="h-4 w-4" />
-                <span>3 Copies • 2 Media</span>
+                <span>3 Copies â€¢ 2 Media</span>
               </span>
               <span className="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-[10px]">ACTIVE</span>
             </div>
@@ -401,15 +458,24 @@ export default function SuperAdminPage() {
 
         </div>
 
-        {/* ── 21 Personnel RBAC Credential & Account Directory ── */}
+        {/* â”€â”€ 21 Personnel RBAC Credential & Account Directory â”€â”€ */}
         <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-sm font-bold text-white">Personnel Directory & RBAC Clearance (21 Total)</h2>
+              <h2 className="text-sm font-bold text-white">Personnel Directory & RBAC Clearance ({staffDirectory.length} Total)</h2>
               <p className="text-[11px] text-slate-400">Manage user account statuses, lockouts, and multi-factor authentication</p>
             </div>
 
-            <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-[11px]">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                <span>Register New Staff Worker</span>
+              </button>
+
+              <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-[11px]">
               <button
                 onClick={() => setRoleFilter('all')}
                 className={`px-2.5 py-1 rounded cursor-pointer font-bold ${roleFilter === 'all' ? 'bg-purple-600 text-white' : 'text-slate-400'}`}
@@ -442,8 +508,9 @@ export default function SuperAdminPage() {
               </button>
             </div>
           </div>
+        </div>
 
-          {/* Search bar */}
+        {/* Search bar */}
           <div className="relative">
             <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
             <input
@@ -520,6 +587,120 @@ export default function SuperAdminPage() {
         </div>
 
       </main>
+
+      {/* ── Register New Staff Worker Modal ── */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-purple-500/50 p-6 space-y-4 shadow-2xl animate-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2">
+                <Crown className="h-5 w-5 text-purple-400" />
+                <h3 className="font-bold text-white text-base">Register New Hospital Personnel</h3>
+              </div>
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="text-slate-400 hover:text-white cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleRegisterWorker} className="space-y-3.5 text-xs">
+              <div>
+                <label className="block text-slate-300 font-semibold mb-1">Worker Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={addName}
+                  onChange={(e) => setAddName(e.target.value)}
+                  placeholder="e.g. Dr. Joyce Addo, MD"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-purple-400"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-semibold mb-1">Institutional Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={addEmail}
+                  onChange={(e) => setAddEmail(e.target.value)}
+                  placeholder="e.g. dr.joyce@medivault.local"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-purple-400 font-mono"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-300 font-semibold mb-1">Clinical Role Assignment</label>
+                  <select
+                    value={addRole}
+                    onChange={(e) => setAddRole(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:outline-none focus:border-purple-400"
+                  >
+                    <option value="Doctor">Doctor (Physician)</option>
+                    <option value="Nurse">Nurse (Clinical Sister)</option>
+                    <option value="Pharmacist">Pharmacist</option>
+                    <option value="Auditor">Compliance Auditor</option>
+                    <option value="Manager">Hospital Operations (MD)</option>
+                    <option value="Admin">Administrator</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-slate-300 font-semibold mb-1">Initial Password</label>
+                  <input
+                    type="password"
+                    required
+                    value={addPassword}
+                    onChange={(e) => setAddPassword(e.target.value)}
+                    placeholder="Min 8 characters"
+                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-purple-400 font-mono"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-semibold mb-1">Department / Clinical Scope</label>
+                <input
+                  type="text"
+                  required
+                  value={addDept}
+                  onChange={(e) => setAddDept(e.target.value)}
+                  placeholder="e.g. Cardiology Unit / Lead Specialist"
+                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-purple-400"
+                />
+              </div>
+
+              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] text-slate-400 space-y-1">
+                <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+                  <CheckCircle2 className="h-3.5 w-3.5" />
+                  <span>Security & MFA Policy Auto-Applied:</span>
+                </div>
+                <div>• Password will be secured with Argon2id + HMAC Pepper + Salt</div>
+                <div>• Mandatory Two-Factor Authentication (2FA) enforced on first login</div>
+              </div>
+
+              <div className="flex justify-end gap-2.5 pt-2 border-t border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition-all cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isRegistering}
+                  className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-lg shadow-purple-500/20 transition-all cursor-pointer disabled:opacity-50"
+                >
+                  {isRegistering ? 'Generating Credentials...' : 'Register Worker'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
