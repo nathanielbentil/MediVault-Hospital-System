@@ -4,6 +4,8 @@
 # Environment & Secret Configurations
 .env
 .env.*
+vercel.env
+*.env
 !.env.example
 
 # Database Dumps & Backups
