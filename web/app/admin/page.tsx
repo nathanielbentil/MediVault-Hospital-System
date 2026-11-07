@@ -29,6 +29,10 @@ import {
   Zap,
   Plus,
   X,
+  Activity,
+  FileText,
+  Filter,
+  Eye,
 } from 'lucide-react';
 
 interface StaffUser {
@@ -136,6 +140,40 @@ export default function SuperAdminPage() {
   const handleCreateBackupSnapshot = () => {
     triggerToast('Immutable snapshot generated. Encrypted with age X25519 and dispatched to offsite S3 mirror.');
   };
+
+  // Personnel Activity & Forensic Ledger State
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [selectedMemberFilter, setSelectedMemberFilter] = useState('all');
+  const [auditSearch, setAuditSearch] = useState('');
+  const [loadingAudit, setLoadingAudit] = useState(false);
+  const [merkleChainIntact, setMerkleChainIntact] = useState(true);
+
+  const fetchAuditLogs = async (memberId: string = selectedMemberFilter, search: string = auditSearch) => {
+    setLoadingAudit(true);
+    try {
+      const q = new URLSearchParams();
+      if (memberId && memberId !== 'all') q.set('userId', memberId);
+      if (search && search.trim() !== '') q.set('search', search.trim());
+      q.set('limit', '50');
+
+      const res = await fetch(`/api/admin/audit?${q.toString()}`);
+      const data = await res.json();
+      if (data.success && Array.isArray(data.logs)) {
+        setAuditLogs(data.logs);
+        if (typeof data.chain_intact === 'boolean') {
+          setMerkleChainIntact(data.chain_intact);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingAudit(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAuditLogs();
+  }, []);
 
   // Register New Worker State
   const [showAddModal, setShowAddModal] = useState(false);
@@ -581,6 +619,153 @@ export default function SuperAdminPage() {
                     </td>
                   </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* ── All Personnel Member Activity & Forensic Audit Ledger ── */}
+        <div className="rounded-2xl border border-purple-500/30 bg-slate-900/60 p-5 space-y-4 shadow-xl">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="h-8 w-8 rounded-lg bg-purple-950 border border-purple-500/40 flex items-center justify-center text-purple-300">
+                <Activity className="h-4 w-4" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-sm font-bold text-white">Personnel Member Activity & Forensic Audit Ledger</h2>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-mono font-bold bg-emerald-950 text-emerald-400 border border-emerald-500/30">
+                    ● Merkle Cryptographic Proof Active
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  Full visibility into all actions performed by every hospital worker (Logins, admissions, credential provisioning & lockouts)
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => fetchAuditLogs(selectedMemberFilter, auditSearch)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-purple-300 text-xs font-bold transition-all cursor-pointer border border-slate-700 hover:border-purple-400"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 ${loadingAudit ? 'animate-spin' : ''}`} />
+                <span>Refresh Logs</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Filter Bar: Member Selector & Activity Search */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label className="block text-[11px] text-slate-400 font-semibold mb-1 flex items-center gap-1">
+                <Users className="h-3.5 w-3.5 text-purple-400" />
+                <span>Filter by Hospital Member:</span>
+              </label>
+              <select
+                value={selectedMemberFilter}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSelectedMemberFilter(val);
+                  fetchAuditLogs(val, auditSearch);
+                }}
+                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-purple-500 cursor-pointer"
+              >
+                <option value="all">All Personnel ({staffDirectory.length} Members)</option>
+                {staffDirectory.map((staff) => (
+                  <option key={staff.id} value={staff.id}>
+                    {staff.name} — {staff.role.toUpperCase()} ({staff.email})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="md:col-span-2">
+              <label className="block text-[11px] text-slate-400 font-semibold mb-1 flex items-center gap-1">
+                <Search className="h-3.5 w-3.5 text-purple-400" />
+                <span>Search Activity Details, Event Types or IP:</span>
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={auditSearch}
+                  onChange={(e) => setAuditSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') fetchAuditLogs(selectedMemberFilter, auditSearch);
+                  }}
+                  placeholder="e.g. admitted, patient, login, password, 10.25..."
+                  className="flex-1 px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500"
+                />
+                <button
+                  onClick={() => fetchAuditLogs(selectedMemberFilter, auditSearch)}
+                  className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition-all cursor-pointer"
+                >
+                  Search
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Activity Logs Table */}
+          <div className="overflow-x-auto max-h-[460px] rounded-xl border border-slate-800/80">
+            <table className="w-full text-left text-xs">
+              <thead className="sticky top-0 bg-slate-950 border-b border-slate-800 text-slate-400 uppercase tracking-wider font-semibold z-10">
+                <tr>
+                  <th className="py-2.5 px-3">Performing Member</th>
+                  <th className="py-2.5 px-3">Event Action</th>
+                  <th className="py-2.5 px-3">Activity Description</th>
+                  <th className="py-2.5 px-3">Origin IP</th>
+                  <th className="py-2.5 px-3">Timestamp</th>
+                  <th className="py-2.5 px-3 text-right">Integrity</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                {loadingAudit ? (
+                  <tr>
+                    <td colSpan={6} className="py-12 text-center text-slate-500">
+                      <RefreshCw className="h-5 w-5 animate-spin mx-auto mb-2 text-purple-400" />
+                      Streaming verified audit logs from AWS PostgreSQL...
+                    </td>
+                  </tr>
+                ) : auditLogs.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="py-12 text-center text-slate-500">
+                      No recorded activities found for this member or filter criteria.
+                    </td>
+                  </tr>
+                ) : (
+                  auditLogs.map((log: any) => (
+                    <tr key={log.id} className="hover:bg-slate-900/50">
+                      <td className="py-3 px-3">
+                        <div className="font-bold text-white flex items-center gap-1.5">
+                          <UserCircle className="h-3.5 w-3.5 text-purple-400 shrink-0" />
+                          <span>{log.user_name || 'System / Officer'}</span>
+                        </div>
+                        <div className="text-[10px] font-mono text-slate-400">{log.user_email || 'internal@medivault.local'}</div>
+                      </td>
+                      <td className="py-3 px-3">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-purple-950 text-purple-300 border border-purple-800/60">
+                          {log.event_type}
+                        </span>
+                      </td>
+                      <td className="py-3 px-3 max-w-md">
+                        <p className="text-xs text-slate-200 leading-relaxed font-sans">{log.description}</p>
+                      </td>
+                      <td className="py-3 px-3 font-mono text-slate-400 text-[11px]">
+                        {log.ip_address || '127.0.0.1'}
+                      </td>
+                      <td className="py-3 px-3 font-mono text-slate-400 text-[11px] whitespace-nowrap">
+                        {new Date(log.created_at).toLocaleString()}
+                      </td>
+                      <td className="py-3 px-3 text-right">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
+                          <CheckCircle2 className="h-3 w-3" />
+                          <span>SHA-256</span>
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

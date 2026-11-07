@@ -21,23 +21,48 @@ export async function GET(req: NextRequest) {
     }
 
     const role = (user.role || '').toLowerCase();
-    const isAuthorized = role.includes('admin') || role.includes('chief') || role.includes('auditor');
+    const isAuthorized = role.includes('admin') || role.includes('chief') || role.includes('auditor') || role.includes('manager');
     if (!isAuthorized) {
       return NextResponse.json(
-        { success: false, message: 'Access Denied: Security Audit is restricted to Auditors and Administrators.' },
+        { success: false, message: 'Access Denied: Security Audit is restricted to Executives, Auditors, and Administrators.' },
         { status: 403 }
       );
     }
 
+    const url = new URL(req.url);
+    const userId = url.searchParams.get('userId');
+    const search = url.searchParams.get('search');
+    const limit = parseInt(url.searchParams.get('limit') || '50', 10);
+
     const verification = await AuditLogService.verifyChain();
-    const recentLogs = await pool.query(
-      `SELECT a.id, a.event_type, a.description, a.severity, a.ip_address, a.created_at,
-              u.name as user_name, u.email as user_email
-       FROM audit_logs a
-       LEFT JOIN users u ON u.id = a.user_id
-       ORDER BY a.id DESC
-       LIMIT 25`
-    );
+
+    let query = `
+      SELECT a.id, a.event_type, a.description, a.severity, a.ip_address, a.created_at,
+             u.name as user_name, u.email as user_email, u.id as user_id
+      FROM audit_logs a
+      LEFT JOIN users u ON u.id = a.user_id
+    `;
+    const params: any[] = [];
+    const conditions: string[] = [];
+
+    if (userId && userId !== 'all') {
+      params.push(userId);
+      conditions.push(`a.user_id = $${params.length}`);
+    }
+
+    if (search && search.trim() !== '') {
+      params.push(`%${search.trim()}%`);
+      conditions.push(`(u.name ILIKE $${params.length} OR u.email ILIKE $${params.length} OR a.description ILIKE $${params.length} OR a.event_type ILIKE $${params.length})`);
+    }
+
+    if (conditions.length > 0) {
+      query += ` WHERE ` + conditions.join(' AND ');
+    }
+
+    query += ` ORDER BY a.id DESC LIMIT $${params.length + 1}`;
+    params.push(limit);
+
+    const recentLogs = await pool.query(query, params);
 
     return NextResponse.json({
       success: true,

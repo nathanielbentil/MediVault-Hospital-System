@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { AuthService } from '@/lib/auth';
+import { AuditLogService } from '@/lib/audit';
 
 function getAuthUser(req: NextRequest) {
   const authHeader = req.headers.get('authorization');
@@ -111,6 +112,15 @@ export async function POST(req: NextRequest) {
         assigned_nurse,
       ]
     );
+
+    // Record immutable audit event for patient admission
+    await AuditLogService.record({
+      userId: user.userId,
+      eventType: 'patient.admitted',
+      description: `Attending Physician [${user.email}] admitted patient [${name} (${code})] into [${ward_room}] with diagnosis: [${diagnosis}]. Attending Doctor: [${doctor}]. Assigned Nurse: [${assigned_nurse}].`,
+      severity: 'info',
+      ipAddress: req.headers.get('x-forwarded-for') || '127.0.0.1',
+    });
 
     return NextResponse.json({
       success: true,

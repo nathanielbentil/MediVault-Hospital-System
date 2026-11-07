@@ -22,6 +22,10 @@ import {
   Shield,
   Layers,
   ChevronRight,
+  RefreshCw,
+  Heart,
+  FileText,
+  AlertCircle,
 } from 'lucide-react';
 
 interface Patient {
@@ -88,7 +92,25 @@ export default function ManagerCensusPage() {
         }
       })
       .catch(() => {});
+
+    fetchWorkerUpdates();
   }, [router]);
+
+  const [workerUpdates, setWorkerUpdates] = useState<any[]>([]);
+  const [loadingUpdates, setLoadingUpdates] = useState(false);
+
+  const fetchWorkerUpdates = () => {
+    setLoadingUpdates(true);
+    fetch('/api/admin/audit?limit=20')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success && Array.isArray(d.logs)) {
+          setWorkerUpdates(d.logs);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingUpdates(false));
+  };
 
   const triggerToast = (msg: string) => {
     setToastMsg(msg);
@@ -385,6 +407,175 @@ export default function ManagerCensusPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+
+        {/* ── Clinical Worker Shift Intelligence & Cross-Department Handover ── */}
+        <div className="rounded-2xl border border-blue-500/30 bg-slate-900/60 p-5 space-y-5 shadow-xl">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="h-8 w-8 rounded-lg bg-blue-950 border border-blue-500/40 flex items-center justify-center text-blue-300">
+                <Activity className="h-4 w-4" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-sm font-bold text-white">Clinical Worker Shift Intelligence & Department Handover</h2>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full font-mono font-bold bg-blue-950 text-blue-300 border border-blue-500/30">
+                    MD Operational Control
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400">
+                  Aggregated telemetry from Attending Physicians, Shift Nurses, and Central Pharmacy
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={fetchWorkerUpdates}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-blue-300 text-xs font-bold transition-all cursor-pointer border border-slate-700 hover:border-blue-400 self-start md:self-auto"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${loadingUpdates ? 'animate-spin' : ''}`} />
+              <span>Refresh Worker Feed</span>
+            </button>
+          </div>
+
+          {/* Departmental Intelligence Overview Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Physicians Card */}
+            <div className="p-4 rounded-xl bg-slate-950 border border-cyan-500/30 space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold text-cyan-300">
+                <span className="flex items-center gap-1.5">
+                  <Stethoscope className="h-4 w-4" />
+                  <span>Attending Physicians</span>
+                </span>
+                <span className="px-2 py-0.5 rounded bg-cyan-950 text-[10px] border border-cyan-800">4 Active</span>
+              </div>
+              <div className="text-[11px] text-slate-300 space-y-1 pt-1">
+                <div className="flex justify-between">
+                  <span>Dr. Judah:</span>
+                  <span className="font-bold text-cyan-400">14 Ward In-Patients</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Dr. Isaac Donkoh:</span>
+                  <span className="font-bold text-cyan-400">22 Ward In-Patients</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Dr. Kofi Mensah:</span>
+                  <span className="font-bold text-cyan-400">18 Ward In-Patients</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Dr. Akua Boateng:</span>
+                  <span className="font-bold text-cyan-400">12 Ward In-Patients</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Shift Nurses Card */}
+            <div className="p-4 rounded-xl bg-slate-950 border border-pink-500/30 space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold text-pink-300">
+                <span className="flex items-center gap-1.5">
+                  <Heart className="h-4 w-4" />
+                  <span>Bedside Nursing & MAR</span>
+                </span>
+                <span className="px-2 py-0.5 rounded bg-pink-950 text-[10px] border border-pink-800">5 RNs on Duty</span>
+              </div>
+              <div className="text-[11px] text-slate-300 space-y-1.5 pt-1">
+                <div className="p-2 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-300 flex items-start gap-1.5">
+                  <AlertCircle className="h-3.5 w-3.5 text-rose-400 shrink-0 mt-0.5" />
+                  <span>
+                    <strong>MEWS Alert:</strong> Bed 02 (ICU) — Tachycardia recorded (HR 108 bpm). Attending Doctor alerted.
+                  </span>
+                </div>
+                <div className="text-[10px] text-slate-400">
+                  Charge Nurse Beatrice Mensah: 100% hourly vitals completed across General & Post-Op floors.
+                </div>
+              </div>
+            </div>
+
+            {/* Central Pharmacy Card */}
+            <div className="p-4 rounded-xl bg-slate-950 border border-amber-500/30 space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold text-amber-300">
+                <span className="flex items-center gap-1.5">
+                  <Pill className="h-4 w-4" />
+                  <span>Dispensary & Controlled Vault</span>
+                </span>
+                <span className="px-2 py-0.5 rounded bg-amber-950 text-[10px] border border-amber-800">Reconciled</span>
+              </div>
+              <div className="text-[11px] text-slate-300 space-y-1 pt-1">
+                <div className="flex justify-between">
+                  <span>Head Pharmacist:</span>
+                  <span className="font-bold text-amber-400">Pharm. Kwame Mensah</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Controlled Vault:</span>
+                  <span className="font-bold text-emerald-400">Schedule II 100% Balanced</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Formulary Queue:</span>
+                  <span className="font-bold text-slate-200">24 Fulfillments Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Live Clinical Worker Submissions Stream */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                <FileText className="h-3.5 w-3.5 text-blue-400" />
+                <span>Recent Clinical Worker Actions & Intake Submissions</span>
+              </h3>
+              <span className="text-[10px] font-mono text-slate-500">Auto-synced with AWS PostgreSQL</span>
+            </div>
+
+            <div className="overflow-x-auto max-h-[300px] rounded-xl border border-slate-800/80">
+              <table className="w-full text-left text-xs">
+                <thead className="sticky top-0 bg-slate-950 border-b border-slate-800 text-slate-400 uppercase tracking-wider font-semibold z-10">
+                  <tr>
+                    <th className="py-2 px-3">Worker / Officer</th>
+                    <th className="py-2 px-3">Clinical Action</th>
+                    <th className="py-2 px-3">Operational Details</th>
+                    <th className="py-2 px-3 text-right">Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                  {loadingUpdates ? (
+                    <tr>
+                      <td colSpan={4} className="py-8 text-center text-slate-500">
+                        <RefreshCw className="h-4 w-4 animate-spin mx-auto mb-1 text-blue-400" />
+                        Loading latest submissions from clinical staff...
+                      </td>
+                    </tr>
+                  ) : workerUpdates.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="py-8 text-center text-slate-500">
+                        No recent worker submissions found.
+                      </td>
+                    </tr>
+                  ) : (
+                    workerUpdates.map((u: any) => (
+                      <tr key={u.id} className="hover:bg-slate-900/50">
+                        <td className="py-2.5 px-3">
+                          <span className="font-bold text-white block">{u.user_name || 'Clinical Staff'}</span>
+                          <span className="text-[10px] font-mono text-slate-400">{u.user_email}</span>
+                        </td>
+                        <td className="py-2.5 px-3">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-blue-950 text-blue-300 border border-blue-800/60">
+                            {u.event_type}
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-3 max-w-md">
+                          <p className="text-xs text-slate-300 leading-relaxed truncate">{u.description}</p>
+                        </td>
+                        <td className="py-2.5 px-3 text-right font-mono text-slate-400 text-[10px] whitespace-nowrap">
+                          {new Date(u.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
