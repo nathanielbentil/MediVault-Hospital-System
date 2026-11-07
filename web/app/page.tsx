@@ -144,9 +144,10 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // 2FA Modal
-  const [show2FA, setShow2FA]     = useState(false);
-  const [tempToken, setTempToken] = useState('');
-  const [totpCode, setTotpCode]   = useState('123456');
+  const [show2FA, setShow2FA]         = useState(false);
+  const [tempToken, setTempToken]     = useState('');
+  const [totpCode, setTotpCode]       = useState('');
+  const [is2FAAdmin, setIs2FAAdmin]   = useState(false);
 
   // Dashboard Data
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
@@ -221,7 +222,9 @@ export default function Home() {
       const data = await res.json();
       if (data.two_factor_required) {
         setTempToken(data.temp_token);
-        setTotpCode('123456');
+        const isAdmin = Boolean(data.is_admin || email.toLowerCase().includes('admin'));
+        setIs2FAAdmin(isAdmin);
+        setTotpCode(isAdmin ? '123456' : ''); // Auto-fill 123456 for Admin ONLY, blank for other staff
         setShow2FA(true);
       } else if (data.success && data.user) {
         setUser(data.user);
@@ -499,12 +502,22 @@ export default function Home() {
                   🔐
                 </div>
                 <h3 className="text-base font-bold text-white">Two-Factor Authentication</h3>
-                <p className="text-xs text-slate-300">
-                  Enter your Google Authenticator TOTP or evaluation passkey{' '}
-                  <code className="text-cyan-300 font-bold bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-500/30">
-                    123456
-                  </code>
-                </p>
+                {is2FAAdmin ? (
+                  <p className="text-xs text-slate-300">
+                    Chief Admin evaluation passkey pre-filled:{' '}
+                    <code className="text-cyan-300 font-bold bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-500/30">
+                      123456
+                    </code>
+                  </p>
+                ) : (
+                  <p className="text-xs text-slate-300">
+                    Enter your 6-digit TOTP code (evaluation passkey:{' '}
+                    <code className="text-cyan-300 font-bold bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-500/30">
+                      123456
+                    </code>
+                    )
+                  </p>
+                )}
               </div>
 
               <input
@@ -512,7 +525,7 @@ export default function Home() {
                 maxLength={6}
                 value={totpCode}
                 onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, ''))}
-                placeholder="000000"
+                placeholder="••••••"
                 autoFocus
                 className="w-full text-center text-3xl font-mono tracking-[0.5em] font-black py-3 rounded-xl bg-slate-950 border border-cyan-500/50 text-cyan-300 focus:outline-none focus:border-cyan-400"
               />
