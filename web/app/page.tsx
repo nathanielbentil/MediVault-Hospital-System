@@ -578,7 +578,7 @@ export default function Home() {
             <div className="h-4 w-px bg-slate-800 hidden sm:block" />
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[10px] text-emerald-400 font-mono font-bold hidden sm:inline">AWS Live (London)</span>
+              <span className="text-[10px] text-emerald-400 font-medium hidden sm:inline">Clinical Network Active</span>
             </div>
             <button
               onClick={handleLogout}
@@ -631,15 +631,15 @@ export default function Home() {
               Clinical Station: <span className="text-cyan-300">{user.name}</span>
             </h2>
             <p className="text-xs text-slate-400 max-w-xl">
-              Scope: In-Patient Ward Monitoring · Electronic Charting · AWS PostgreSQL Supabase Sync
+              Scope: In-Patient Ward Monitoring · Electronic Charting · Real-Time Clinical Telemetry
             </p>
           </div>
           <button
             onClick={() => { loadPatients(); loadAudit(); }}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-cyan-400 text-xs text-white font-bold transition-all shadow-md shrink-0"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-cyan-400 text-xs text-white font-bold transition-all shadow-md shrink-0 cursor-pointer"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${patientsLoading ? 'animate-spin text-cyan-400' : ''}`} />
-            Sync Database
+            Refresh Records
           </button>
         </div>
 
@@ -690,10 +690,10 @@ export default function Home() {
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
-                  { icon: '➕', title: 'Admit Patient',      sub: 'Intake form to AWS DB',        tab: 'admission' as TabType },
-                  { icon: '💊', title: 'Prescriptions',      sub: 'Active formulary queue',       tab: 'pharmacy'  as TabType },
-                  { icon: '📈', title: 'Vitals Monitor',     sub: 'Hourly bedside tracking',      tab: 'patients'  as TabType },
-                  { icon: '🛡️', title: 'Merkle Audit',       sub: 'SHA-256 chain verification',   tab: 'audit'     as TabType },
+                  { icon: '➕', title: 'Admit Patient',      sub: 'New patient intake & ward assignment', tab: 'admission' as TabType },
+                  { icon: '💊', title: 'Prescriptions',      sub: 'Active formulary queue',               tab: 'pharmacy'  as TabType },
+                  { icon: '📈', title: 'Vitals Monitor',     sub: 'Hourly bedside tracking',              tab: 'patients'  as TabType },
+                  { icon: '🛡️', title: 'Security Audit',     sub: 'Tamper-evident activity logs',         tab: 'audit'     as TabType },
                 ].map(({ icon, title, sub, tab }) => (
                   <button
                     key={title}
@@ -713,7 +713,7 @@ export default function Home() {
               <div className="flex items-center justify-between p-5 border-b border-slate-800">
                 <h3 className="font-bold text-white text-sm flex items-center gap-2">
                   <Heart className="h-4 w-4 text-rose-400" />
-                  Live In-Patient Telemetry Stream (AWS PostgreSQL)
+                  Live In-Patient Directory & Ward Status
                 </h3>
                 <button
                   onClick={() => setActiveTab('patients')}
@@ -817,7 +817,7 @@ export default function Home() {
 
             {patientsLoading ? (
               <div className="flex items-center justify-center py-20 text-slate-500 gap-2 text-xs">
-                <RefreshCw className="h-4 w-4 animate-spin" /> Loading patient records from AWS PostgreSQL...
+                <RefreshCw className="h-4 w-4 animate-spin" /> Loading patient records...
               </div>
             ) : filteredPatients.length === 0 ? (
               <div className="py-20 text-center text-slate-500 text-sm">
@@ -873,7 +873,7 @@ export default function Home() {
                 <ClipboardList className="h-5 w-5 text-teal-400" /> Clinical In-Patient Admission Intake
               </h3>
               <p className="text-xs text-slate-400 mt-1">
-                Direct EHR entry with SHA-256 Merkle audit hashing on AWS PostgreSQL London
+                Complete patient intake form to record admission and medical chart
               </p>
             </div>
 
@@ -996,8 +996,8 @@ export default function Home() {
                   className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-slate-950 font-black text-sm shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {admitting
-                    ? <><RefreshCw className="h-4 w-4 animate-spin" /> Committing Patient Record to AWS PostgreSQL...</>
-                    : <><Plus className="h-4 w-4" /> Commit Admission to Database</>
+                    ? <><RefreshCw className="h-4 w-4 animate-spin" /> Admitting Patient & Recording Chart...</>
+                    : <><Plus className="h-4 w-4" /> Confirm Admission & Assign Bed</>
                   }
                 </button>
               </form>
@@ -1070,8 +1070,8 @@ export default function Home() {
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed max-w-xl">
                   Every user authentication, patient admission, and clinical prescription change is sealed with the
-                  previous record&apos;s SHA-256 cryptographic hash — creating an unbroken Merkle chain
-                  persisted in the AWS PostgreSQL cluster.
+                  previous record&apos;s SHA-256 cryptographic hash — creating an unbroken, tamper-evident audit trail
+                  across all clinical workstations.
                 </p>
                 <div className="flex items-center gap-3 pt-1 flex-wrap">
                   <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${
