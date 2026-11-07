@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
 import {
   Activity,
   Shield,
@@ -38,6 +39,7 @@ import {
   AlertCircle,
   Bed,
   CheckSquare,
+  Crown,
 } from 'lucide-react';
 
 // ─── Real Premier Hospital Photography (Homepage Only) ──────────────────────
@@ -1209,26 +1211,26 @@ export default function Home() {
             {/* DOCTOR Permitted Action Buttons */}
             {isDoctor && (
               <>
+                <Link
+                  href="/doctor/prescriptions"
+                  className="px-3.5 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black text-xs shadow-lg shadow-cyan-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <span>🔬</span>
+                  <span>Open Prescriptions Station →</span>
+                </Link>
                 <button
                   onClick={() => setActiveTab('admission')}
-                  className="px-3.5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-cyan-400 text-cyan-300 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   <span>Admit Patient</span>
                 </button>
                 <button
                   onClick={() => setActiveTab('pharmacy')}
-                  className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-cyan-400 text-cyan-300 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-cyan-400 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Pill className="h-3.5 w-3.5" />
                   <span>Draft Prescription</span>
-                </button>
-                <button
-                  onClick={() => { setShowDrugLabModal(true); runDrugCheck(); }}
-                  className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-cyan-400 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
-                >
-                  <span>🔬</span>
-                  <span>Drug Interaction Lab</span>
                 </button>
               </>
             )}
@@ -1236,16 +1238,13 @@ export default function Home() {
             {/* NURSE Permitted Action Buttons */}
             {isNurse && (
               <>
-                <button
-                  onClick={() => {
-                    if (patients.length > 0) setVitalsPatient(patients[0]);
-                    setShowVitalsModal(true);
-                  }}
-                  className="px-3.5 py-2 rounded-xl bg-pink-500 hover:bg-pink-400 text-slate-950 font-bold text-xs shadow-md shadow-pink-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                <Link
+                  href="/nurse/vitals"
+                  className="px-3.5 py-2 rounded-xl bg-pink-500 hover:bg-pink-400 text-slate-950 font-black text-xs shadow-lg shadow-pink-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Thermometer className="h-3.5 w-3.5" />
-                  <span>Record Bedside Vitals</span>
-                </button>
+                  <span>Open Dedicated Vitals Station →</span>
+                </Link>
                 <button
                   onClick={() => setShowHandoverModal(true)}
                   className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-pink-400 text-pink-300 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
@@ -1266,17 +1265,13 @@ export default function Home() {
             {/* PHARMACIST Permitted Action Buttons */}
             {isPharmacist && (
               <>
-                <button
-                  onClick={() => {
-                    setBarcodeInput('RX-88294-GH');
-                    setBarcodeResult(null);
-                    setShowBarcodeModal(true);
-                  }}
-                  className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                <Link
+                  href="/pharmacy/dispensary"
+                  className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <QrCode className="h-3.5 w-3.5" />
-                  <span>Scan Rx Barcode</span>
-                </button>
+                  <span>Open Central Dispensary Station →</span>
+                </Link>
                 <button
                   onClick={() => setActiveTab('pharmacy')}
                   className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-amber-400 text-amber-300 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
@@ -1297,22 +1292,22 @@ export default function Home() {
             {/* AUDITOR Permitted Action Buttons */}
             {isAuditor && (
               <>
+                <Link
+                  href="/audit"
+                  className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Shield className="h-3.5 w-3.5" />
+                  <span>Open Security Forensics Hub →</span>
+                </Link>
                 <button
                   onClick={() => {
                     loadAudit();
                     setShowChainModal(true);
                   }}
-                  className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs shadow-md shadow-emerald-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
-                >
-                  <Shield className="h-3.5 w-3.5" />
-                  <span>Verify SHA-256 Chain</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('audit')}
                   className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-emerald-400 text-emerald-300 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <FileText className="h-3.5 w-3.5" />
-                  <span>HIPAA Audit Trail</span>
+                  <span>Verify SHA-256 Chain</span>
                 </button>
                 <button
                   onClick={() => triggerToast('Forensic anomaly deep-scan complete: 0 hash collisions, 0 tampering vectors.')}
@@ -1327,13 +1322,13 @@ export default function Home() {
             {/* MANAGER Permitted Action Buttons */}
             {isManager && (
               <>
-                <button
-                  onClick={() => setShowCensusModal(true)}
-                  className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                <Link
+                  href="/manager/census"
+                  className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs shadow-lg shadow-blue-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Building2 className="h-3.5 w-3.5" />
-                  <span>Ward Bed Allocation</span>
-                </button>
+                  <span>Open Bed Census & Operations Console →</span>
+                </Link>
                 <button
                   onClick={() => setActiveTab('admission')}
                   className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-blue-400 text-blue-300 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
@@ -1354,19 +1349,19 @@ export default function Home() {
             {/* ADMIN Permitted Action Buttons */}
             {isAdmin && (
               <>
+                <Link
+                  href="/admin"
+                  className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-xs shadow-lg shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Crown className="h-3.5 w-3.5" />
+                  <span>Open SuperAdmin Governance Hub →</span>
+                </Link>
                 <button
                   onClick={() => setShowStaffModal(true)}
-                  className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-purple-400 text-purple-300 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Users className="h-3.5 w-3.5" />
                   <span>Manage Staff & Roles</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('audit')}
-                  className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-purple-400 text-purple-300 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
-                >
-                  <Shield className="h-3.5 w-3.5" />
-                  <span>Merkle Audit Trail</span>
                 </button>
                 <button
                   onClick={() => setShowBackupModal(true)}

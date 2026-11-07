@@ -47,6 +47,7 @@ export async function GET(req: NextRequest) {
       logs: recentLogs.rows,
     });
   } catch (err: any) {
+    if (err?.digest?.startsWith('NEXT_')) throw err;
     console.error('Audit GET route error:', err);
     return NextResponse.json({ success: false, message: 'Could not fetch audit records.', error: err.message }, { status: 500 });
   }
