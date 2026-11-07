@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     console.error('API /api/auth/login error:', err);
     return NextResponse.json(
-      { success: false, message: 'Server authentication error.' },
+      { success: false, message: 'Server authentication error.', error_detail: err.message },
       { status: 500 }
     );
   }
