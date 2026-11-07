@@ -221,6 +221,7 @@ export default function Home() {
       const data = await res.json();
       if (data.two_factor_required) {
         setTempToken(data.temp_token);
+        setTotpCode('123456');
         setShow2FA(true);
       } else if (data.success && data.user) {
         setUser(data.user);

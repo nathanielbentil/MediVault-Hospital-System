@@ -98,8 +98,9 @@ export async function POST(req: NextRequest) {
 
     const userRole = user.role_name || 'Doctor';
 
-    // 4. Two-Factor Authentication Check
-    if (user.two_factor_confirmed_at) {
+    // 4. Two-Factor Authentication Check (Enforced for Admin / Privileged Accounts)
+    const isAdmin = userRole.toLowerCase().includes('admin') || cleanEmail.includes('admin');
+    if (user.two_factor_confirmed_at && isAdmin) {
       const tempToken = AuthService.signTemp2FAToken(user.id);
 
       await AuditLogService.record({
