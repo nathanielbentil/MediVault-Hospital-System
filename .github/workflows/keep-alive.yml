@@ -20,6 +20,10 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install PostgreSQL Client
+        run: npm install pg --no-audit --no-fund
+        working-directory: web
+
       - name: Ping PostgreSQL Database
         env:
           DB_HOST: ${{ secrets.DB_HOST || 'aws-0-eu-west-2.pooler.supabase.com' }}
