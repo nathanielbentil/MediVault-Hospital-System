@@ -40,6 +40,9 @@ import {
   Bed,
   CheckSquare,
   Crown,
+  Microscope,
+  ArrowRight,
+  Syringe,
 } from 'lucide-react';
 
 // ─── Real Premier Hospital Photography (Homepage Only) ──────────────────────
@@ -106,6 +109,17 @@ interface AuthUser {
 }
 
 type TabType = 'dashboard' | 'patients' | 'admission' | 'pharmacy' | 'audit' | 'census' | 'operations' | 'staff' | 'backups';
+
+function getRoleIcon(role: string, className = "h-3.5 w-3.5 inline shrink-0") {
+  const r = (role || '').toLowerCase();
+  if (r.includes('admin') || r.includes('chief')) return <Crown className={className} />;
+  if (r.includes('manager') || r.includes('director')) return <Building2 className={className} />;
+  if (r.includes('doctor') || r.includes('physician')) return <Stethoscope className={className} />;
+  if (r.includes('nurse')) return <Syringe className={className} />;
+  if (r.includes('pharm')) return <Pill className={className} />;
+  if (r.includes('audit')) return <Shield className={className} />;
+  return <UserCircle className={className} />;
+}
 
 // ─── Full Clinical Leadership & Staff Directory (21 Personnel) ───────────────
 const FULL_STAFF_DIRECTORY: StaffAccount[] = [
@@ -863,7 +877,7 @@ export default function Home() {
                           : 'bg-slate-950/60 ' + (borderColors[staff.color] || 'border-slate-800 text-slate-300')
                       }`}
                     >
-                      <span className="mr-1">{staff.icon}</span>
+                      <span className="mr-1">{getRoleIcon(staff.role)}</span>
                       <span>{staff.label}</span>
                     </button>
                   );
@@ -931,7 +945,7 @@ export default function Home() {
                         className="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-cyan-500/50 transition-all flex items-center justify-between cursor-pointer group"
                       >
                         <div className="flex items-center gap-2.5 min-w-0">
-                          <span className="text-xl shrink-0 p-1 rounded-lg bg-slate-900 border border-slate-800">{m.icon}</span>
+                          <span className="shrink-0 p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-cyan-400">{getRoleIcon(m.role, "h-4 w-4")}</span>
                           <div className="min-w-0">
                             <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
                               {m.name}
@@ -1054,7 +1068,7 @@ export default function Home() {
     activeTab: string;
     stationTitle: string;
     stationSub: string;
-    icon: string;
+    iconComponent: React.ElementType;
   }> = {
     purple: {
       gradient: 'from-purple-950 via-slate-900 to-purple-950/40',
@@ -1066,8 +1080,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-purple-400 text-purple-300',
       activeTab: 'bg-purple-600 text-white shadow-purple-500/20',
       stationTitle: 'SuperAdmin Command Center',
-      stationSub: 'Executive Hospital Governance • 3-2-1 Disaster Recovery Hub • RBAC Policy Authority',
-      icon: '👑',
+      stationSub: 'Executive Hospital Governance | 3-2-1 Disaster Recovery Hub | RBAC Policy Authority',
+      iconComponent: Crown,
     },
     blue: {
       gradient: 'from-blue-950 via-slate-900 to-blue-950/40',
@@ -1079,8 +1093,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-blue-400 text-blue-300',
       activeTab: 'bg-blue-600 text-white shadow-blue-500/20',
       stationTitle: 'Hospital Operations & Bed Management Center',
-      stationSub: 'Practice Operations • Ward Bed Allocation • Staff Duty Roster & Clinical Flow',
-      icon: '📋',
+      stationSub: 'Practice Operations | Ward Bed Allocation | Staff Duty Roster & Clinical Flow',
+      iconComponent: Building2,
     },
     cyan: {
       gradient: 'from-cyan-950 via-slate-900 to-cyan-950/40',
@@ -1092,8 +1106,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-cyan-400 text-cyan-300',
       activeTab: 'bg-cyan-500 text-slate-950 shadow-cyan-500/20',
       stationTitle: 'Attending Physician Workstation',
-      stationSub: 'Clinical Examinations • Electronic Prescriptions • In-Patient Diagnostic Charting',
-      icon: '🩺',
+      stationSub: 'Clinical Examinations | Electronic Prescriptions | In-Patient Diagnostic Charting',
+      iconComponent: Stethoscope,
     },
     pink: {
       gradient: 'from-pink-950 via-slate-900 to-pink-950/40',
@@ -1105,8 +1119,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-pink-400 text-pink-300',
       activeTab: 'bg-pink-500 text-slate-950 shadow-pink-500/20',
       stationTitle: 'Shift Nursing Station',
-      stationSub: 'Bedside Observations • Hourly Vital Signs Record (MAR) • Shift Rounding Telemetry',
-      icon: '💉',
+      stationSub: 'Bedside Observations | Hourly Vital Signs Record (MAR) | Shift Rounding Telemetry',
+      iconComponent: Syringe,
     },
     amber: {
       gradient: 'from-amber-950 via-slate-900 to-amber-950/40',
@@ -1118,8 +1132,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-amber-400 text-amber-300',
       activeTab: 'bg-amber-500 text-slate-950 shadow-amber-500/20',
       stationTitle: 'Hospital Central Dispensary',
-      stationSub: 'Prescription Verification • Controlled Substances Auditing • Barcode Dispensing',
-      icon: '💊',
+      stationSub: 'Prescription Verification | Controlled Substances Auditing | Barcode Dispensing',
+      iconComponent: Pill,
     },
     emerald: {
       gradient: 'from-emerald-950 via-slate-900 to-emerald-950/40',
@@ -1131,8 +1145,8 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-emerald-400 text-emerald-300',
       activeTab: 'bg-emerald-600 text-slate-950 shadow-emerald-500/20',
       stationTitle: 'Security Auditor Forensics Hub',
-      stationSub: 'Cryptographic SHA-256 Merkle Proof • Tamper Anomaly Alerts • Certified Forensic Audit Reports',
-      icon: '🔍',
+      stationSub: 'Cryptographic SHA-256 Merkle Proof | Tamper Anomaly Alerts | Certified Forensic Audit Reports',
+      iconComponent: Shield,
     },
   };
 
@@ -1168,7 +1182,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className={`h-9 w-9 rounded-xl bg-slate-900 border ${roleStyles.border} flex items-center justify-center text-lg shadow-md`}>
-              {roleStyles.icon}
+              <roleStyles.iconComponent className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2">
               <span className="font-black text-white text-base">Medi<span className="text-cyan-400">Vault</span></span>
@@ -1231,8 +1245,9 @@ export default function Home() {
               <span className={`text-[11px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full border ${roleStyles.badge}`}>
                 {user.role} Workstation
               </span>
-              <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-medium">
-                ● HIPAA Certified EHR
+              <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-medium flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
+                <span>HIPAA Certified EHR</span>
               </span>
             </div>
             <h2 className="text-2xl font-black text-white tracking-tight flex items-center gap-2">
@@ -1253,8 +1268,9 @@ export default function Home() {
                   href="/doctor/prescriptions"
                   className="px-3.5 py-2 rounded-xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black text-xs shadow-lg shadow-cyan-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
-                  <span>🔬</span>
-                  <span>Open Prescriptions Station →</span>
+                  <Microscope className="h-3.5 w-3.5" />
+                  <span>Open Prescriptions Station</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <button
                   onClick={() => setActiveTab('admission')}
@@ -1281,7 +1297,8 @@ export default function Home() {
                   className="px-3.5 py-2 rounded-xl bg-pink-500 hover:bg-pink-400 text-slate-950 font-black text-xs shadow-lg shadow-pink-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Thermometer className="h-3.5 w-3.5" />
-                  <span>Open Dedicated Vitals Station →</span>
+                  <span>Open Dedicated Vitals Station</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <button
                   onClick={() => setShowHandoverModal(true)}
@@ -1308,7 +1325,8 @@ export default function Home() {
                   className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <QrCode className="h-3.5 w-3.5" />
-                  <span>Open Central Dispensary Station →</span>
+                  <span>Open Central Dispensary Station</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <button
                   onClick={() => setActiveTab('pharmacy')}
@@ -1335,7 +1353,8 @@ export default function Home() {
                   className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Shield className="h-3.5 w-3.5" />
-                  <span>Open Security Forensics Hub →</span>
+                  <span>Open Security Forensics Hub</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <button
                   onClick={() => {
@@ -1365,7 +1384,8 @@ export default function Home() {
                   className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs shadow-lg shadow-blue-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Building2 className="h-3.5 w-3.5" />
-                  <span>Open Bed Census & Operations Console →</span>
+                  <span>Open Bed Census & Operations Console</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <button
                   onClick={() => setActiveTab('admission')}
@@ -1392,7 +1412,8 @@ export default function Home() {
                   className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-xs shadow-lg shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Crown className="h-3.5 w-3.5" />
-                  <span>Open SuperAdmin Governance Hub →</span>
+                  <span>Open SuperAdmin Governance Hub</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <button
                   onClick={() => setShowStaffModal(true)}
@@ -1439,7 +1460,9 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('ALL'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Total Patients</span>
-                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">🩺</span>
+                      <div className="p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">
+                        <Stethoscope className="h-5 w-5 text-cyan-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-cyan-400">{patients.length || 82}</div>
                     <p className="text-[11px] text-cyan-400/80">Under Active Medical Care</p>
@@ -1447,7 +1470,9 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('ICU'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-rose-500/30 hover:border-rose-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">ICU / Critical</span>
-                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">🚨</span>
+                      <div className="p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">
+                        <AlertTriangle className="h-5 w-5 text-rose-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-rose-400">{icuCount || 8}</div>
                     <p className="text-[11px] text-rose-400/80">Immediate Rounding Req.</p>
@@ -1455,7 +1480,9 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('ADMITTED'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-teal-500/30 hover:border-teal-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Admitted (Wards)</span>
-                      <span className="text-xl p-2 rounded-xl bg-teal-950/80 border border-teal-500/30">🛏️</span>
+                      <div className="p-2 rounded-xl bg-teal-950/80 border border-teal-500/30">
+                        <Bed className="h-5 w-5 text-teal-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-teal-400">{admittedCount || 28}</div>
                     <p className="text-[11px] text-teal-400/80">Active Bed Occupancy</p>
@@ -1463,7 +1490,9 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('OUTPATIENT'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Outpatients</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">📋</span>
+                      <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">
+                        <ClipboardList className="h-5 w-5 text-emerald-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">{outpatientCount || 16}</div>
                     <p className="text-[11px] text-emerald-400/80">Consultations Scheduled</p>
@@ -1477,7 +1506,9 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('ADMITTED'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-pink-500/30 hover:border-pink-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">In-Patient Beds</span>
-                      <span className="text-xl p-2 rounded-xl bg-pink-950/80 border border-pink-500/30">🛏️</span>
+                      <div className="p-2 rounded-xl bg-pink-950/80 border border-pink-500/30">
+                        <Bed className="h-5 w-5 text-pink-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-pink-400">{admittedCount || 28} Beds</div>
                     <p className="text-[11px] text-pink-400/80">General & Surgical Wards</p>
@@ -1485,7 +1516,9 @@ export default function Home() {
                   <div onClick={() => { setFilterStatus('ICU'); setActiveTab('patients'); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-rose-500/30 hover:border-rose-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">ICU Cases</span>
-                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">🚨</span>
+                      <div className="p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">
+                        <AlertTriangle className="h-5 w-5 text-rose-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-rose-400">{icuCount || 8} Patients</div>
                     <p className="text-[11px] text-rose-400/80">Continuous Pulse Oximetry</p>
@@ -1493,7 +1526,9 @@ export default function Home() {
                   <div onClick={() => setShowVitalsModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-amber-500/30 hover:border-amber-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Vitals Checks Due</span>
-                      <span className="text-xl p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">⏱️</span>
+                      <div className="p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">
+                        <Clock className="h-5 w-5 text-amber-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-amber-400">7 Due Now</div>
                     <p className="text-[11px] text-amber-400/80">Current Hourly Round</p>
@@ -1501,7 +1536,9 @@ export default function Home() {
                   <div onClick={() => setShowHandoverModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Shift Completion</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">✅</span>
+                      <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">
+                        <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">92% Done</div>
                     <p className="text-[11px] text-emerald-400/80">Day Shift Ward Roster</p>
@@ -1515,7 +1552,9 @@ export default function Home() {
                   <div onClick={() => setActiveTab('pharmacy')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-amber-500/30 hover:border-amber-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Pending Orders</span>
-                      <span className="text-xl p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">⏱️</span>
+                      <div className="p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">
+                        <Clock className="h-5 w-5 text-amber-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-amber-400">14 Orders</div>
                     <p className="text-[11px] text-amber-400/80">Awaiting Pharmacist Check</p>
@@ -1523,7 +1562,9 @@ export default function Home() {
                   <div onClick={() => setActiveTab('pharmacy')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Dispensed Today</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">✅</span>
+                      <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">
+                        <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">38 Batches</div>
                     <p className="text-[11px] text-emerald-400/80">Dispatched to Nursing Wards</p>
@@ -1531,7 +1572,9 @@ export default function Home() {
                   <div onClick={() => triggerToast('Formulary: 186 drug lines active and verified.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Active Formulary</span>
-                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">💊</span>
+                      <div className="p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">
+                        <Pill className="h-5 w-5 text-cyan-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-cyan-400">186 Regimens</div>
                     <p className="text-[11px] text-cyan-400/80">Hospital Stock Verified</p>
@@ -1539,7 +1582,9 @@ export default function Home() {
                   <div onClick={() => triggerToast('Narcotics safe: 100% sealed, logbook verified.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-rose-500/30 hover:border-rose-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Narcotics Vault</span>
-                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">🔒</span>
+                      <div className="p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">
+                        <Lock className="h-5 w-5 text-rose-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-rose-400">100% Sealed</div>
                     <p className="text-[11px] text-rose-400/80">Controlled Substances OK</p>
@@ -1553,7 +1598,9 @@ export default function Home() {
                   <div onClick={() => { loadAudit(); setShowChainModal(true); }} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Chained Blocks</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">⛓️</span>
+                      <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">
+                        <Activity className="h-5 w-5 text-emerald-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">{auditData?.verified_records || 182} Blocks</div>
                     <p className="text-[11px] text-emerald-400/80">SHA-256 Validated</p>
@@ -1561,7 +1608,9 @@ export default function Home() {
                   <div onClick={() => setActiveTab('audit')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-teal-500/30 hover:border-teal-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Chain Integrity</span>
-                      <span className="text-xl p-2 rounded-xl bg-teal-950/80 border border-teal-500/30">🛡️</span>
+                      <div className="p-2 rounded-xl bg-teal-950/80 border border-teal-500/30">
+                        <Shield className="h-5 w-5 text-teal-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-teal-400">100% INTACT</div>
                     <p className="text-[11px] text-teal-400/80">Genesis Hash Anchored</p>
@@ -1569,7 +1618,9 @@ export default function Home() {
                   <div onClick={() => triggerToast('Threat log: 0 active attacks, 5 lockout defenses recorded.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-rose-500/30 hover:border-rose-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Threat Alerts</span>
-                      <span className="text-xl p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">🚨</span>
+                      <div className="p-2 rounded-xl bg-rose-950/80 border border-rose-500/30">
+                        <AlertTriangle className="h-5 w-5 text-rose-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-rose-400">0 Active</div>
                     <p className="text-[11px] text-rose-400/80">Zero-Breach Tolerance</p>
@@ -1577,7 +1628,9 @@ export default function Home() {
                   <div onClick={() => triggerToast('Compliance: HIPAA Security Rule & NIST SP 800-63B certified.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">HIPAA Score</span>
-                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">📑</span>
+                      <div className="p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">
+                        <FileText className="h-5 w-5 text-cyan-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-cyan-400">100% Grade A</div>
                     <p className="text-[11px] text-cyan-400/80">Audit Certificate Ready</p>
@@ -1591,7 +1644,9 @@ export default function Home() {
                   <div onClick={() => setShowCensusModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-blue-500/30 hover:border-blue-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Bed Occupancy</span>
-                      <span className="text-xl p-2 rounded-xl bg-blue-950/80 border border-blue-500/30">🛏️</span>
+                      <div className="p-2 rounded-xl bg-blue-950/80 border border-blue-500/30">
+                        <Bed className="h-5 w-5 text-blue-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-blue-400">88% Utilization</div>
                     <p className="text-[11px] text-blue-400/80">48 / 55 Total Capacity</p>
@@ -1599,7 +1654,9 @@ export default function Home() {
                   <div onClick={() => setShowCensusModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Available Beds</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">✅</span>
+                      <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">
+                        <CheckCircle2 className="h-5 w-5 text-emerald-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">7 Ready</div>
                     <p className="text-[11px] text-emerald-400/80">Emergency Triage Ready</p>
@@ -1607,7 +1664,9 @@ export default function Home() {
                   <div onClick={() => triggerToast('Clinical roster: 18 medical personnel on active shift.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-indigo-500/30 hover:border-indigo-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">On-Duty Staff</span>
-                      <span className="text-xl p-2 rounded-xl bg-indigo-950/80 border border-indigo-500/30">👥</span>
+                      <div className="p-2 rounded-xl bg-indigo-950/80 border border-indigo-500/30">
+                        <Users className="h-5 w-5 text-indigo-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-indigo-400">18 Personnel</div>
                     <p className="text-[11px] text-indigo-400/80">Doctors, Nurses, Pharmacy</p>
@@ -1615,7 +1674,9 @@ export default function Home() {
                   <div onClick={() => setActiveTab('patients')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Daily Census</span>
-                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">📊</span>
+                      <div className="p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">
+                        <TrendingUp className="h-5 w-5 text-cyan-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-cyan-400">12 Discharges</div>
                     <p className="text-[11px] text-cyan-400/80">Turnover Rate Balanced</p>
@@ -1629,7 +1690,9 @@ export default function Home() {
                   <div onClick={() => setShowStaffModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-purple-500/30 hover:border-purple-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Registered Staff</span>
-                      <span className="text-xl p-2 rounded-xl bg-purple-950/80 border border-purple-500/30">👥</span>
+                      <div className="p-2 rounded-xl bg-purple-950/80 border border-purple-500/30">
+                        <Users className="h-5 w-5 text-purple-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-purple-400">21 Personnel</div>
                     <p className="text-[11px] text-purple-400/80">Role-Based Access Control</p>
@@ -1637,7 +1700,9 @@ export default function Home() {
                   <div onClick={() => setActiveTab('audit')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Active Accounts</span>
-                      <span className="text-xl p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">🔐</span>
+                      <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">
+                        <Key className="h-5 w-5 text-emerald-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-emerald-400">100% Secured</div>
                     <p className="text-[11px] text-emerald-400/80">Argon2id + 2FA Protected</p>
@@ -1645,7 +1710,9 @@ export default function Home() {
                   <div onClick={() => triggerToast('Defense status: 0 accounts locked. Sliding lockout active.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-amber-500/30 hover:border-amber-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Defense Lockouts</span>
-                      <span className="text-xl p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">🛡️</span>
+                      <div className="p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">
+                        <Shield className="h-5 w-5 text-amber-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-amber-400">0 Locked</div>
                     <p className="text-[11px] text-amber-400/80">Sliding Lockout Active</p>
@@ -1653,7 +1720,9 @@ export default function Home() {
                   <div onClick={() => setShowBackupModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">3-2-1 Backups</span>
-                      <span className="text-xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">💾</span>
+                      <div className="p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">
+                        <Database className="h-5 w-5 text-cyan-400" />
+                      </div>
                     </div>
                     <div className="text-3xl font-black text-cyan-400">Synced Active</div>
                     <p className="text-[11px] text-cyan-400/80">Disaster Recovery Ready</p>
@@ -2281,7 +2350,8 @@ export default function Home() {
                   className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Plus className="h-4 w-4" />
-                  <span>Register New Staff Worker →</span>
+                  <span>Register New Staff Worker</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <button
                   onClick={() => setShowStaffModal(true)}
@@ -2314,7 +2384,7 @@ export default function Home() {
                     {FULL_STAFF_DIRECTORY.map((s) => (
                       <tr key={s.id} className="hover:bg-slate-900/50">
                         <td className="py-2.5 px-3 font-bold font-mono">
-                          <span className="mr-1">{s.icon}</span>
+                          <span className="mr-1 inline-flex">{getRoleIcon(s.role)}</span>
                           <span className={
                             s.role === 'Admin' ? 'text-purple-400' :
                             s.role === 'Manager' ? 'text-blue-400' :
@@ -2777,7 +2847,7 @@ export default function Home() {
                   {FULL_STAFF_DIRECTORY.map((s) => (
                     <tr key={s.id} className="hover:bg-slate-800/40">
                       <td className="py-2.5 px-3 font-bold font-mono">
-                        <span className="mr-1">{s.icon}</span>
+                        <span className="mr-1 inline-flex">{getRoleIcon(s.role)}</span>
                         <span className={
                           s.role === 'Admin' ? 'text-purple-400' :
                           s.role === 'Manager' ? 'text-blue-400' :

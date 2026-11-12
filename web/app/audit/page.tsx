@@ -191,7 +191,7 @@ export default function SecurityAuditPage() {
             <div className="h-4 w-px bg-slate-800 hidden sm:block" />
             <div className="flex items-center gap-2">
               <div className="h-9 w-9 rounded-xl bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-base shadow-md">
-                🛡️
+                <Shield className="h-4 w-4 text-emerald-300" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
@@ -238,15 +238,16 @@ export default function SecurityAuditPage() {
               <span className="text-[11px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-950 text-emerald-300">
                 Security Auditor Forensics Hub
               </span>
-              <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-medium">
-                ● 256-Bit Cryptographic Hash Integrity
+              <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-medium flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
+                <span>256-Bit Cryptographic Hash Integrity</span>
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               Cryptographic Audit Trail & Forensic Merkle Verification
             </h1>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Certified Compliance Auditor: <strong className="text-emerald-300">{user?.name || 'Auditor Samuel Osei'}</strong> • Immutable audit log verification, automated threat interception telemetry, and forensic HIPAA certification.
+              Certified Compliance Auditor: <strong className="text-emerald-300">{user?.name || 'Auditor Samuel Osei'}</strong> | Immutable audit log verification, automated threat interception telemetry, and forensic HIPAA certification.
             </p>
           </div>
 

@@ -221,7 +221,7 @@ export default function PharmacyDispensaryPage() {
             <div className="h-4 w-px bg-slate-800 hidden sm:block" />
             <div className="flex items-center gap-2">
               <div className="h-9 w-9 rounded-xl bg-amber-950/80 border border-amber-500/40 flex items-center justify-center text-base shadow-md">
-                💊
+                <Pill className="h-4 w-4 text-amber-300" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
@@ -269,14 +269,14 @@ export default function PharmacyDispensaryPage() {
                 Hospital Central Dispensary
               </span>
               <span className="text-[10px] text-amber-400 bg-amber-950/60 px-2.5 py-0.5 rounded-full border border-amber-500/30 font-medium">
-                ● Narcotics Vault Locked & Monitored
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse inline-block mr-1.5" /> Narcotics Vault Locked & Monitored
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               Dispensary Fulfillment & Medication Verification
             </h1>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Licensed Pharmacist: <strong className="text-amber-300">{user?.name || 'Pharm. Kwame Appiah'} (RPh)</strong> • Prescription validation, GS1 barcode batch lot inspection, and double-signed controlled substances auditing.
+              Licensed Pharmacist: <strong className="text-amber-300">{user?.name || 'Pharm. Kwame Appiah'} (RPh)</strong> | Prescription validation, GS1 barcode batch lot inspection, and double-signed controlled substances auditing.
             </p>
           </div>
 
@@ -513,7 +513,7 @@ export default function PharmacyDispensaryPage() {
                             : 'bg-amber-950/80 text-amber-300 border-amber-500/40 animate-pulse'
                         }`}
                       >
-                        {isDispensed ? '● DISPENSED' : '⏳ AWAITING RELEASE'}
+                        {isDispensed ? 'DISPENSED' : 'AWAITING RELEASE'}
                       </span>
                     </div>
 
@@ -579,7 +579,7 @@ export default function PharmacyDispensaryPage() {
                         )}
                       </div>
                       <div className="text-[10px] font-mono text-slate-400 mt-0.5">
-                        NDC: {item.ndc} • {item.batch}
+                        NDC: {item.ndc} | {item.batch}
                       </div>
                     </div>
 

@@ -186,7 +186,7 @@ export default function ManagerCensusPage() {
             <div className="h-4 w-px bg-slate-800 hidden sm:block" />
             <div className="flex items-center gap-2">
               <div className="h-9 w-9 rounded-xl bg-blue-950/80 border border-blue-500/40 flex items-center justify-center text-base shadow-md">
-                🏢
+                <Building2 className="h-4 w-4 text-blue-300" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
@@ -234,14 +234,14 @@ export default function ManagerCensusPage() {
                 Hospital Operations Command
               </span>
               <span className="text-[10px] text-blue-400 bg-blue-950/60 px-2.5 py-0.5 rounded-full border border-blue-500/30 font-medium">
-                ● Live Census Telemetry
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse inline-block mr-1.5" /> Live Census Telemetry
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               Hospital Ward Bed Census & Capacity Allocation
             </h1>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Medical Director: <strong className="text-blue-300">{user?.name || 'Dr. Bright Ainoo (MD)'}</strong> • Real-time bed occupancy monitoring, clinical department resource routing, and emergency surge capacity control.
+              Medical Director: <strong className="text-blue-300">{user?.name || 'Dr. Bright Ainoo (MD)'}</strong> | Real-time bed occupancy monitoring, clinical department resource routing, and emergency surge capacity control.
             </p>
           </div>
 
@@ -483,7 +483,7 @@ export default function ManagerCensusPage() {
                 <div className="p-2 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-300 flex items-start gap-1.5">
                   <AlertCircle className="h-3.5 w-3.5 text-rose-400 shrink-0 mt-0.5" />
                   <span>
-                    <strong>MEWS Alert:</strong> Bed 02 (ICU) — Tachycardia recorded (HR 108 bpm). Attending Doctor alerted.
+                    <strong>MEWS Alert:</strong> Bed 02 (ICU) - Tachycardia recorded (HR 108 bpm). Attending Doctor alerted.
                   </span>
                 </div>
                 <div className="text-[10px] text-slate-400">

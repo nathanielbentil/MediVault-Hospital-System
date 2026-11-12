@@ -20,6 +20,7 @@ import {
   ChevronRight,
   ShieldAlert,
   Sparkles,
+  Microscope,
 } from 'lucide-react';
 
 interface Patient {
@@ -111,7 +112,7 @@ export default function DoctorPrescriptionsPage() {
   const handleCommitPrescription = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedPatient) return;
-    const newRx = `${rxDrug} (${rxDuration}) • ${rxNotes}`;
+    const newRx = `${rxDrug} (${rxDuration}) | ${rxNotes}`;
     setPatients((prev) =>
       prev.map((p) => (p.id === selectedPatient.id ? { ...p, prescription: newRx } : p))
     );
@@ -193,7 +194,7 @@ export default function DoctorPrescriptionsPage() {
               Physician Electronic Prescriptions & Clinical Orders
             </h1>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Attending Officer: <strong className="text-cyan-300">{user?.name}</strong> • Direct Hospital Dispensary Bridge • Real-Time Drug Interaction Checking
+              Attending Officer: <strong className="text-cyan-300">{user?.name}</strong> | Direct Hospital Dispensary Bridge | Real-Time Drug Interaction Checking
             </p>
           </div>
 
@@ -219,7 +220,9 @@ export default function DoctorPrescriptionsPage() {
           {/* 1. Drug Interaction Lab */}
           <div className="rounded-2xl bg-slate-900 border border-cyan-500/30 p-6 space-y-4 shadow-xl">
             <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-              <span className="text-2xl p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">🔬</span>
+              <div className="p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30">
+                <Microscope className="h-5 w-5 text-cyan-400" />
+              </div>
               <div>
                 <h3 className="font-bold text-white text-base">Drug Interaction Analysis Lab</h3>
                 <p className="text-xs text-slate-400">Pharmacological cross-check against metabolic antagonism & hemorrhagic contraindications</p>
@@ -288,7 +291,9 @@ export default function DoctorPrescriptionsPage() {
           {/* 2. E-Prescribing Composer */}
           <div className="rounded-2xl bg-slate-900 border border-slate-800 p-6 space-y-4 shadow-xl">
             <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-              <span className="text-2xl p-2 rounded-xl bg-slate-950 border border-slate-800">💊</span>
+              <div className="p-2 rounded-xl bg-slate-950 border border-slate-800">
+                <Pill className="h-5 w-5 text-cyan-400" />
+              </div>
               <div>
                 <h3 className="font-bold text-white text-base">E-Prescription Order Composer</h3>
                 <p className="text-xs text-slate-400">Direct transmission to Hospital Central Dispensary & Nursing MAR</p>
@@ -315,7 +320,7 @@ export default function DoctorPrescriptionsPage() {
                 >
                   {patients.slice(0, 20).map((p) => (
                     <option key={p.id} value={p.id}>
-                      {p.name} ({p.patient_code} • {p.ward_room || 'General Ward'})
+                      {p.name} ({p.patient_code} | {p.ward_room || 'General Ward'})
                     </option>
                   ))}
                 </select>

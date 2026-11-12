@@ -33,6 +33,8 @@ import {
   FileText,
   Filter,
   Eye,
+  Sliders,
+  Trash2,
 } from 'lucide-react';
 
 interface StaffUser {
@@ -41,7 +43,7 @@ interface StaffUser {
   email: string;
   role: string;
   department: string;
-  status: 'ACTIVE' | 'LOCKED';
+  status: 'ACTIVE' | 'LOCKED' | 'DELETED';
   twoFaActive: boolean;
   failedAttempts: number;
 }
@@ -139,6 +141,81 @@ export default function SuperAdminPage() {
 
   const handleCreateBackupSnapshot = () => {
     triggerToast('Immutable snapshot generated. Encrypted with age X25519 and dispatched to offsite S3 mirror.');
+  };
+
+  // Requirement 7: Soft-Delete Personnel with Permanent Audit Retention
+  const handleSoftDelete = async (staffId: number, staffName: string) => {
+    if (
+      !confirm(
+        `Confirm decommissioning ${staffName}? The user will be soft-deleted and permanently retained in the audit database (deleted_at set) for compliance.`
+      )
+    ) {
+      return;
+    }
+    try {
+      const res = await fetch(`/api/admin/users?id=${staffId}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setStaffDirectory((prev) =>
+          prev.map((s) => (s.id === staffId ? { ...s, status: 'DELETED' as any } : s))
+        );
+        triggerToast(`User ${staffName} soft-deleted. Permanent audit record retained in database.`);
+        fetchAuditLogs();
+      } else {
+        triggerToast(data.message || 'Could not soft-delete user.');
+      }
+    } catch {
+      triggerToast('Network error while soft-deleting.');
+    }
+  };
+
+  // Requirement 9: Configuration Restore Point & Data Independence State
+  const [configProof, setConfigProof] = useState<string | null>(null);
+  const [configRunning, setConfigRunning] = useState(false);
+
+  const handleSaveConfigRestorePoint = async () => {
+    try {
+      const res = await fetch('/api/admin/backups', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'save_restore_point',
+          newConfig: { maintenanceMode, systemLockdown },
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        triggerToast('Configuration Restore Point created. System configuration snapshotted.');
+        setConfigProof(`Restore Point ${data.restorePoint?.restorePointId} active. Security state captured.`);
+      }
+    } catch {
+      triggerToast('Could not save restore point.');
+    }
+  };
+
+  const handleRollbackConfig = async () => {
+    setConfigRunning(true);
+    try {
+      const res = await fetch('/api/admin/backups', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'rollback_config' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setMaintenanceMode(data.restoredConfig?.maintenanceMode || false);
+        setSystemLockdown(data.restoredConfig?.systemLockdown || false);
+        setConfigProof(
+          `✓ Configuration reverted to baseline. Proof: ${data.dataPreservationProof?.patientsPreserved} patient records and ${data.dataPreservationProof?.auditLogsPreserved} audit blocks remained 100% intact (zero data lost).`
+        );
+        triggerToast('Configuration reverted. All database records preserved!');
+        fetchAuditLogs();
+      }
+    } catch {
+      triggerToast('Rollback failed.');
+    } finally {
+      setConfigRunning(false);
+    }
   };
 
   // Personnel Activity & Forensic Ledger State
@@ -284,7 +361,7 @@ export default function SuperAdminPage() {
             <div className="h-4 w-px bg-slate-800 hidden sm:block" />
             <div className="flex items-center gap-2">
               <div className="h-9 w-9 rounded-xl bg-purple-950/80 border border-purple-500/40 flex items-center justify-center text-base shadow-md">
-                👑
+                <Crown className="h-4 w-4 text-purple-300" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
@@ -332,14 +409,14 @@ export default function SuperAdminPage() {
                 SuperAdmin Enterprise Governance
               </span>
               <span className="text-[10px] text-purple-400 bg-purple-950/60 px-2.5 py-0.5 rounded-full border border-purple-500/30 font-medium">
-                ● Full Administrative Root Access
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse inline-block mr-1.5" /> Full Administrative Root Access
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               Hospital Governance, RBAC Directory & 3-2-1 DR Command
             </h1>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Chief Administrator: <strong className="text-purple-300">{user?.name || 'Dr. Prof. Nathaniel Bentil'}</strong> • Full personnel directory control, emergency lockdown switchboard, and offsite disaster recovery failover.
+              Chief Administrator: <strong className="text-purple-300">{user?.name || 'Dr. Prof. Nathaniel Bentil'}</strong> | Full personnel directory control, emergency lockdown switchboard, and offsite disaster recovery failover.
             </p>
           </div>
 
@@ -412,89 +489,149 @@ export default function SuperAdminPage() {
           </div>
         )}
 
-        {/* ── Emergency Switchboard & 3-2-1 Status Grid ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* ── Emergency Switchboard & 3-2-1 Status Grid (Requirement 4 & 9) ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
           {/* Copy 1 & 2: Local Encrypted DB */}
-          <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-2.5">
-            <div className="flex items-center justify-between text-xs font-bold text-emerald-400">
-              <span className="flex items-center gap-1.5">
-                <Database className="h-4 w-4" />
-                <span>3 Copies • 2 Media</span>
-              </span>
-              <span className="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-[10px]">ACTIVE</span>
+          <div className="p-4 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-2 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between text-xs font-bold text-emerald-400 mb-1.5">
+                <span className="flex items-center gap-1.5">
+                  <Database className="h-4 w-4" />
+                  <span>3 Copies | 2 Media</span>
+                </span>
+                <span className="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-[10px]">ACTIVE</span>
+              </div>
+              <h2 className="text-sm font-bold text-white">Local Encrypted Volume</h2>
+              <p className="text-[11px] text-slate-400 leading-relaxed mt-1">
+                Real-time transaction log encrypted via server-side public key <span className="font-mono text-purple-300">age1ql4y...</span> with automated 7-day retention pruning.
+              </p>
             </div>
-            <h2 className="text-sm font-bold text-white">Local Encrypted Volume</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Real-time transaction log encrypted via server-side public key <span className="font-mono text-purple-300">age1ql4y...</span> with automated 7-day retention pruning.
-            </p>
+            <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+              <span>Integrity:</span>
+              <span className="text-emerald-400 font-mono font-bold">100% SHA-256</span>
+            </div>
           </div>
 
           {/* Copy 3: Offsite S3 Cloud Mirror */}
-          <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-2.5">
-            <div className="flex items-center justify-between text-xs font-bold text-cyan-400">
-              <span className="flex items-center gap-1.5">
-                <Cloud className="h-4 w-4" />
-                <span>1 Offsite Cloud S3</span>
-              </span>
-              <span className="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-500/30 text-[10px]">ZERO-KNOWLEDGE</span>
+          <div className="p-4 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-2 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between text-xs font-bold text-cyan-400 mb-1.5">
+                <span className="flex items-center gap-1.5">
+                  <Cloud className="h-4 w-4" />
+                  <span>1 Offsite Cloud S3</span>
+                </span>
+                <span className="px-2 py-0.5 rounded bg-cyan-950 border border-cyan-500/30 text-[10px]">ZERO-KNOWLEDGE</span>
+              </div>
+              <h2 className="text-sm font-bold text-white">Cloud Storage Mirror</h2>
+              <p className="text-[11px] text-slate-400 leading-relaxed mt-1">
+                Replicated to offsite London cloud cluster as raw ciphertext. Neither host nor third parties possess offline recovery private keys.
+              </p>
             </div>
-            <h2 className="text-sm font-bold text-white">Cloud Storage Mirror</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Replicated to offsite London cloud cluster as raw ciphertext. Neither host nor third parties possess offline recovery private keys.
-            </p>
+            <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+              <span>Destination:</span>
+              <span className="text-cyan-400 font-mono font-bold">AWS London S3</span>
+            </div>
+          </div>
+
+          {/* Requirement 9: Configuration Restore Point & Data Independence */}
+          <div className="p-4 rounded-2xl border border-purple-500/30 bg-purple-950/20 space-y-2 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between text-xs font-bold text-purple-400 mb-1.5">
+                <span className="flex items-center gap-1.5">
+                  <Sliders className="h-4 w-4" />
+                  <span>Config Restore Point</span>
+                </span>
+                <span className="px-2 py-0.5 rounded bg-purple-950 border border-purple-500/30 text-[10px]">REQ #9</span>
+              </div>
+              <h2 className="text-sm font-bold text-white">Policy Rollback vs Data</h2>
+              <p className="text-[11px] text-slate-400 leading-relaxed mt-1">
+                Save & revert system security parameters. Reverting restores configurations without touching or altering patient records.
+              </p>
+            </div>
+            <div className="pt-2 border-t border-slate-800/80 space-y-1.5">
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={handleSaveConfigRestorePoint}
+                  className="flex-1 py-1 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-purple-300 font-bold text-[11px] transition-all cursor-pointer border border-slate-700"
+                >
+                  Save State
+                </button>
+                <button
+                  onClick={handleRollbackConfig}
+                  disabled={configRunning}
+                  className="flex-1 py-1 px-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-[11px] transition-all cursor-pointer shadow-sm disabled:opacity-50"
+                >
+                  {configRunning ? 'Rolling...' : 'Revert Config'}
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Emergency Security Switchboard */}
-          <div className="p-5 rounded-2xl border border-rose-500/30 bg-rose-950/20 space-y-3">
-            <div className="flex items-center justify-between text-xs font-bold text-rose-400">
-              <span className="flex items-center gap-1.5">
-                <AlertOctagon className="h-4 w-4" />
-                <span>Emergency Switchboard</span>
-              </span>
-              <span className="text-[10px] font-mono text-rose-300">CODE SILVER</span>
-            </div>
-
-            <div className="flex items-center justify-between text-xs pt-1">
-              <div>
-                <span className="font-bold text-white block">System Lockdown</span>
-                <span className="text-[10px] text-slate-400">Freeze all non-admin sessions</span>
+          <div className="p-4 rounded-2xl border border-rose-500/30 bg-rose-950/20 space-y-2 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between text-xs font-bold text-rose-400 mb-1.5">
+                <span className="flex items-center gap-1.5">
+                  <AlertOctagon className="h-4 w-4" />
+                  <span>Emergency Switchboard</span>
+                </span>
+                <span className="text-[10px] font-mono text-rose-300">CODE SILVER</span>
               </div>
-              <button
-                onClick={() => {
-                  const next = !systemLockdown;
-                  setSystemLockdown(next);
-                  triggerToast(next ? 'EMERGENCY LOCKDOWN ACTIVATED: All non-admin sessions frozen.' : 'Emergency lockdown cleared. Normal clinical operations restored.');
-                }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  systemLockdown ? 'bg-rose-600 text-white animate-pulse' : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
-                }`}
-              >
-                {systemLockdown ? 'ENGAGED' : 'Disarmed'}
-              </button>
-            </div>
-
-            <div className="flex items-center justify-between text-xs pt-2 border-t border-slate-800">
-              <div>
-                <span className="font-bold text-white block">Maintenance Bypass</span>
-                <span className="text-[10px] text-slate-400">Drain traffic for hot updates</span>
+              <h2 className="text-sm font-bold text-white">Defense Controls</h2>
+              <div className="space-y-1.5 mt-2">
+                <div className="flex items-center justify-between text-xs">
+                  <div>
+                    <span className="font-bold text-white block text-[11px]">System Lockdown</span>
+                    <span className="text-[10px] text-slate-400">Freeze non-admin</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const next = !systemLockdown;
+                      setSystemLockdown(next);
+                      triggerToast(next ? 'EMERGENCY LOCKDOWN ACTIVATED: All non-admin sessions frozen.' : 'Emergency lockdown cleared.');
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                      systemLockdown ? 'bg-rose-600 text-white animate-pulse' : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                    }`}
+                  >
+                    {systemLockdown ? 'ENGAGED' : 'Disarmed'}
+                  </button>
+                </div>
+                <div className="flex items-center justify-between text-xs pt-1.5 border-t border-slate-800/80">
+                  <div>
+                    <span className="font-bold text-white block text-[11px]">Maintenance</span>
+                    <span className="text-[10px] text-slate-400">Drain traffic</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      const next = !maintenanceMode;
+                      setMaintenanceMode(next);
+                      triggerToast(next ? 'Maintenance mode enabled.' : 'Maintenance mode disabled.');
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                      maintenanceMode ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                    }`}
+                  >
+                    {maintenanceMode ? 'ACTIVE' : 'Off'}
+                  </button>
+                </div>
               </div>
-              <button
-                onClick={() => {
-                  const next = !maintenanceMode;
-                  setMaintenanceMode(next);
-                  triggerToast(next ? 'Maintenance mode enabled.' : 'Maintenance mode disabled.');
-                }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  maintenanceMode ? 'bg-amber-500 text-slate-950' : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
-                }`}
-              >
-                {maintenanceMode ? 'ACTIVE' : 'Off'}
-              </button>
             </div>
           </div>
 
         </div>
+
+        {/* ── Configuration Rollback Live Proof Alert (Req #9) ── */}
+        {configProof && (
+          <div className="p-3.5 rounded-xl border border-emerald-500/40 bg-emerald-950/30 text-xs flex items-center justify-between text-emerald-200 animate-in slide-in-from-top-2">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+              <span>{configProof}</span>
+            </div>
+            <button onClick={() => setConfigProof(null)} className="text-slate-400 hover:text-white px-2 py-1 font-bold">✕</button>
+          </div>
+        )}
 
         {/* ── 21 Personnel RBAC Credential & Account Directory ── */}
         <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
@@ -595,7 +732,9 @@ export default function SuperAdminPage() {
                         className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                           staff.status === 'ACTIVE'
                             ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
-                            : 'bg-rose-950 text-rose-400 border border-rose-800'
+                            : staff.status === 'DELETED'
+                            ? 'bg-rose-950 text-rose-400 border border-rose-800'
+                            : 'bg-amber-950 text-amber-400 border border-amber-800'
                         }`}
                       >
                         {staff.status}
@@ -603,16 +742,33 @@ export default function SuperAdminPage() {
                     </td>
                     <td className="py-3 px-3 text-right">
                       {staff.role !== 'admin' ? (
-                        <button
-                          onClick={() => handleToggleLock(staff.id)}
-                          className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                            staff.status === 'ACTIVE'
-                              ? 'bg-slate-800 hover:bg-rose-950 hover:text-rose-400 text-slate-300'
-                              : 'bg-emerald-600 hover:bg-emerald-500 text-slate-950'
-                          }`}
-                        >
-                          {staff.status === 'ACTIVE' ? 'Lock Account' : 'Unlock'}
-                        </button>
+                        <div className="flex items-center justify-end gap-1.5">
+                          {staff.status !== 'DELETED' ? (
+                            <>
+                              <button
+                                onClick={() => handleToggleLock(staff.id)}
+                                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                                  staff.status === 'ACTIVE'
+                                    ? 'bg-slate-800 hover:bg-rose-950 hover:text-rose-400 text-slate-300'
+                                    : 'bg-emerald-600 hover:bg-emerald-500 text-slate-950'
+                                }`}
+                              >
+                                {staff.status === 'ACTIVE' ? 'Lock Account' : 'Unlock'}
+                              </button>
+                              <button
+                                onClick={() => handleSoftDelete(staff.id, staff.name)}
+                                title="Soft-delete user (Archive permanently in database audit retention - Requirement 7)"
+                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-950 hover:text-rose-400 text-slate-400 border border-slate-700 hover:border-rose-500/40 transition-all cursor-pointer"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            </>
+                          ) : (
+                            <span className="text-[10px] text-rose-400 font-mono px-2 py-0.5 rounded bg-rose-950/60 border border-rose-900">
+                              ARCHIVED (SOFT-DELETED)
+                            </span>
+                          )}
+                        </div>
                       ) : (
                         <span className="text-[10px] text-purple-400 font-mono">Protected</span>
                       )}
@@ -635,7 +791,7 @@ export default function SuperAdminPage() {
                 <div className="flex items-center gap-2">
                   <h2 className="text-sm font-bold text-white">Personnel Member Activity & Forensic Audit Ledger</h2>
                   <span className="text-[10px] px-2 py-0.5 rounded-full font-mono font-bold bg-emerald-950 text-emerald-400 border border-emerald-500/30">
-                    ● Merkle Cryptographic Proof Active
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse inline-block mr-1.5" /> Merkle Cryptographic Proof Active
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-400">
@@ -862,8 +1018,8 @@ export default function SuperAdminPage() {
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   <span>Security & MFA Policy Auto-Applied:</span>
                 </div>
-                <div>• Password will be secured with Argon2id + HMAC Pepper + Salt</div>
-                <div>• Mandatory Two-Factor Authentication (2FA) enforced on first login</div>
+                <div>| Password will be secured with Argon2id + HMAC Pepper + Salt</div>
+                <div>| Mandatory Two-Factor Authentication (2FA) enforced on first login</div>
               </div>
 
               <div className="flex justify-end gap-2.5 pt-2 border-t border-slate-800">

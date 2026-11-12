@@ -22,6 +22,7 @@ import {
   RefreshCw,
   Sliders,
   Send,
+  Syringe,
 } from 'lucide-react';
 
 interface Patient {
@@ -226,7 +227,7 @@ export default function NurseVitalsPage() {
             <div className="h-4 w-px bg-slate-800 hidden sm:block" />
             <div className="flex items-center gap-2">
               <div className="h-9 w-9 rounded-xl bg-pink-950/80 border border-pink-500/40 flex items-center justify-center text-base shadow-md">
-                💉
+                <Syringe className="h-4 w-4 text-pink-300" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
@@ -274,14 +275,14 @@ export default function NurseVitalsPage() {
                 Shift Nursing Workstation
               </span>
               <span className="text-[10px] text-pink-400 bg-pink-950/60 px-2.5 py-0.5 rounded-full border border-pink-500/30 font-medium">
-                ● Bedside Observations Active
+                <span className="h-1.5 w-1.5 rounded-full bg-pink-400 animate-pulse inline-block mr-1.5" /> Bedside Observations Active
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
               In-Patient Bed Roster & Shift Vitals Charting
             </h1>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Attending Registered Nurse: <strong className="text-pink-300">{user?.name || 'Staff Nurse Beatrice'} (RN)</strong> • Real-time physiologic telemetry, hourly vitals log, and digital shift handover continuity.
+              Attending Registered Nurse: <strong className="text-pink-300">{user?.name || 'Staff Nurse Beatrice'} (RN)</strong> | Real-time physiologic telemetry, hourly vitals log, and digital shift handover continuity.
             </p>
           </div>
 
@@ -379,7 +380,7 @@ export default function NurseVitalsPage() {
                 <div key={idx} className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 flex flex-col gap-1.5">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-bold text-pink-300">{log.nurse}</span>
-                    <span className="font-mono text-slate-400">{log.time} • {log.shift}</span>
+                    <span className="font-mono text-slate-400">{log.time} | {log.shift}</span>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">{log.note}</p>
                 </div>
@@ -473,7 +474,7 @@ export default function NurseVitalsPage() {
                       <span className="text-slate-400 font-mono truncate max-w-[220px]">
                         {p.vitals_summary || 'Vitals check pending'}
                       </span>
-                      <span className="text-pink-400 font-bold">Chart →</span>
+                      <span className="text-pink-400 font-bold">Chart &gt;</span>
                     </div>
                   </div>
                 );
@@ -491,12 +492,12 @@ export default function NurseVitalsPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-mono text-pink-400 font-bold">{selectedPatient.patient_code}</span>
-                      <span className="text-slate-600">•</span>
+                      <span className="text-slate-600">|</span>
                       <span className="text-xs text-slate-400">{selectedPatient.ward_room}</span>
                     </div>
                     <h2 className="text-xl font-black text-white mt-0.5">{selectedPatient.name}</h2>
                     <p className="text-xs text-slate-400 mt-0.5">
-                      Diagnosis: <strong className="text-slate-200">{selectedPatient.diagnosis}</strong> • Attending: <span className="text-slate-300">{selectedPatient.attending_doctor}</span>
+                      Diagnosis: <strong className="text-slate-200">{selectedPatient.diagnosis}</strong> | Attending: <span className="text-slate-300">{selectedPatient.attending_doctor}</span>
                     </p>
                   </div>
 
@@ -514,10 +515,10 @@ export default function NurseVitalsPage() {
                       <span>Physiologic Early Warning Triggered (MEWS Alert):</span>
                     </div>
                     <div className="text-[11px] text-rose-200/90 pl-6 space-y-0.5">
-                      {isHypoxia && <div>• <strong>Hypoxemia Alert:</strong> SpO2 is {spO2}% (&lt; 94%). Administer supplemental O2 via nasal cannula.</div>}
-                      {isHypertension && <div>• <strong>Hypertensive Reading:</strong> Systolic BP is {bpSystolic} mmHg (&ge; 140 mmHg). Re-check in 15 mins.</div>}
-                      {isTachycardia && <div>• <strong>Tachycardia:</strong> Heart Rate is {heartRate} bpm (&gt; 100 bpm). Notify attending physician.</div>}
-                      {isFever && <div>• <strong>Pyrexia / Fever:</strong> Temperature is {tempCelsius}°C (&ge; 38.0°C). Administer prescribed antipyretic.</div>}
+                      {isHypoxia && <div>| <strong>Hypoxemia Alert:</strong> SpO2 is {spO2}% (&lt; 94%). Administer supplemental O2 via nasal cannula.</div>}
+                      {isHypertension && <div>| <strong>Hypertensive Reading:</strong> Systolic BP is {bpSystolic} mmHg (&ge; 140 mmHg). Re-check in 15 mins.</div>}
+                      {isTachycardia && <div>| <strong>Tachycardia:</strong> Heart Rate is {heartRate} bpm (&gt; 100 bpm). Notify attending physician.</div>}
+                      {isFever && <div>| <strong>Pyrexia / Fever:</strong> Temperature is {tempCelsius}°C (&ge; 38.0°C). Administer prescribed antipyretic.</div>}
                     </div>
                   </div>
                 )}
