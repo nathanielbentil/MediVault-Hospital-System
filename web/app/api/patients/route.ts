@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
       ward_room = 'General Ward',
       admission_status = 'Admitted',
       diagnosis,
-      vitals_summary = 'BP 120/80 mmHg | Heart Rate 72 bpm | Temp 36.8°C | SpO2 99%',
+      vitals_summary = 'BP 120/80 mmHg | Heart Rate 72 bpm | Temp 36.8 deg C | SpO2 99%',
       prescription = '',
       treatment_plan = '',
       attending_doctor,

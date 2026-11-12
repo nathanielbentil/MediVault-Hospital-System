@@ -172,7 +172,7 @@ export default function ManagerCensusPage() {
         </div>
       )}
 
-      {/* ── Top Header Navigation Bar ── */}
+      {/* -- Top Header Navigation Bar -- */}
       <header className="border-b border-slate-800 bg-slate-950 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -223,10 +223,10 @@ export default function ManagerCensusPage() {
         </div>
       </header>
 
-      {/* ── Main Container ── */}
+      {/* -- Main Container -- */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        {/* ── Workstation Clearance Banner ── */}
+        {/* -- Workstation Clearance Banner -- */}
         <div className="rounded-2xl border border-blue-500/30 bg-gradient-to-r from-blue-950 via-slate-900 to-blue-950/40 p-6 shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1.5 relative z-10">
             <div className="flex items-center gap-2">
@@ -263,7 +263,7 @@ export default function ManagerCensusPage() {
           </div>
         </div>
 
-        {/* ── KPI Metric Cards ── */}
+        {/* -- KPI Metric Cards -- */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="p-4 rounded-xl bg-slate-900/80 border border-blue-500/20 shadow-md">
             <div className="flex items-center justify-between">
@@ -302,7 +302,7 @@ export default function ManagerCensusPage() {
           </div>
         </div>
 
-        {/* ── Ward Capacity Visual Progress Bars ── */}
+        {/* -- Ward Capacity Visual Progress Bars -- */}
         <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-5">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <div>
@@ -352,7 +352,7 @@ export default function ManagerCensusPage() {
           </div>
         </div>
 
-        {/* ── Active In-Patient Allocation Table ── */}
+        {/* -- Active In-Patient Allocation Table -- */}
         <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
@@ -410,7 +410,7 @@ export default function ManagerCensusPage() {
           </div>
         </div>
 
-        {/* ── Clinical Worker Shift Intelligence & Cross-Department Handover ── */}
+        {/* -- Clinical Worker Shift Intelligence & Cross-Department Handover -- */}
         <div className="rounded-2xl border border-blue-500/30 bg-slate-900/60 p-5 space-y-5 shadow-xl">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-3">
             <div className="flex items-center gap-2.5">

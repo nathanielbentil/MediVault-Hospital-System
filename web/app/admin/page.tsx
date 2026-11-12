@@ -206,7 +206,7 @@ export default function SuperAdminPage() {
         setMaintenanceMode(data.restoredConfig?.maintenanceMode || false);
         setSystemLockdown(data.restoredConfig?.systemLockdown || false);
         setConfigProof(
-          `✓ Configuration reverted to baseline. Proof: ${data.dataPreservationProof?.patientsPreserved} patient records and ${data.dataPreservationProof?.auditLogsPreserved} audit blocks remained 100% intact (zero data lost).`
+          `[OK] Configuration reverted to baseline. Proof: ${data.dataPreservationProof?.patientsPreserved} patient records and ${data.dataPreservationProof?.auditLogsPreserved} audit blocks remained 100% intact (zero data lost).`
         );
         triggerToast('Configuration reverted. All database records preserved!');
         fetchAuditLogs();
@@ -347,7 +347,7 @@ export default function SuperAdminPage() {
         </div>
       )}
 
-      {/* ── Top Header Navigation Bar ── */}
+      {/* -- Top Header Navigation Bar -- */}
       <header className="border-b border-slate-800 bg-slate-950 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -398,10 +398,10 @@ export default function SuperAdminPage() {
         </div>
       </header>
 
-      {/* ── Main Container ── */}
+      {/* -- Main Container -- */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        {/* ── Workstation Clearance Banner ── */}
+        {/* -- Workstation Clearance Banner -- */}
         <div className="rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-950 via-slate-900 to-purple-950/40 p-6 shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1.5 relative z-10">
             <div className="flex items-center gap-2">
@@ -439,7 +439,7 @@ export default function SuperAdminPage() {
           </div>
         </div>
 
-        {/* ── KPI Metric Cards ── */}
+        {/* -- KPI Metric Cards -- */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="p-4 rounded-xl bg-slate-900/80 border border-purple-500/20 shadow-md">
             <div className="flex items-center justify-between">
@@ -478,18 +478,18 @@ export default function SuperAdminPage() {
           </div>
         </div>
 
-        {/* ── DR Drill Banner / Result ── */}
+        {/* -- DR Drill Banner / Result -- */}
         {drStatus && (
           <div className="p-4 rounded-xl border border-purple-500/40 bg-purple-950/30 text-xs flex items-center justify-between animate-in slide-in-from-top-2">
             <div className="flex items-center gap-2 text-purple-200">
               <Server className="h-4 w-4 text-purple-400 shrink-0" />
               <span>{drStatus}</span>
             </div>
-            <button onClick={() => setDrStatus(null)} className="text-slate-400 hover:text-white px-2 py-1 font-bold">✕</button>
+            <button onClick={() => setDrStatus(null)} className="text-slate-400 hover:text-white px-2 py-1 font-bold">X</button>
           </div>
         )}
 
-        {/* ── Emergency Switchboard & 3-2-1 Status Grid (Requirement 4 & 9) ── */}
+        {/* -- Emergency Switchboard & 3-2-1 Status Grid (Requirement 4 & 9) -- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
           {/* Copy 1 & 2: Local Encrypted DB */}
@@ -622,18 +622,18 @@ export default function SuperAdminPage() {
 
         </div>
 
-        {/* ── Configuration Rollback Live Proof Alert (Req #9) ── */}
+        {/* -- Configuration Rollback Live Proof Alert (Req #9) -- */}
         {configProof && (
           <div className="p-3.5 rounded-xl border border-emerald-500/40 bg-emerald-950/30 text-xs flex items-center justify-between text-emerald-200 animate-in slide-in-from-top-2">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
               <span>{configProof}</span>
             </div>
-            <button onClick={() => setConfigProof(null)} className="text-slate-400 hover:text-white px-2 py-1 font-bold">✕</button>
+            <button onClick={() => setConfigProof(null)} className="text-slate-400 hover:text-white px-2 py-1 font-bold">X</button>
           </div>
         )}
 
-        {/* ── 21 Personnel RBAC Credential & Account Directory ── */}
+        {/* -- 21 Personnel RBAC Credential & Account Directory -- */}
         <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
@@ -780,7 +780,7 @@ export default function SuperAdminPage() {
           </div>
         </div>
 
-        {/* ── All Personnel Member Activity & Forensic Audit Ledger ── */}
+        {/* -- All Personnel Member Activity & Forensic Audit Ledger -- */}
         <div className="rounded-2xl border border-purple-500/30 bg-slate-900/60 p-5 space-y-4 shadow-xl">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-3">
             <div className="flex items-center gap-2.5">
@@ -830,7 +830,7 @@ export default function SuperAdminPage() {
                 <option value="all">All Personnel ({staffDirectory.length} Members)</option>
                 {staffDirectory.map((staff) => (
                   <option key={staff.id} value={staff.id}>
-                    {staff.name} — {staff.role.toUpperCase()} ({staff.email})
+                    {staff.name}  -  {staff.role.toUpperCase()} ({staff.email})
                   </option>
                 ))}
               </select>
@@ -929,7 +929,7 @@ export default function SuperAdminPage() {
 
       </main>
 
-      {/* ── Register New Staff Worker Modal ── */}
+      {/* -- Register New Staff Worker Modal -- */}
       {showAddModal && (
         <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-purple-500/50 p-6 space-y-4 shadow-2xl animate-in zoom-in-95">

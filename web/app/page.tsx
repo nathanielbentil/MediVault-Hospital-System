@@ -45,10 +45,10 @@ import {
   Syringe,
 } from 'lucide-react';
 
-// ─── Real Premier Hospital Photography (Homepage Only) ──────────────────────
+// --- Real Premier Hospital Photography (Homepage Only) ----------------------
 const HOSPITAL_HOMEPAGE_BG = '/hospital-hero.jpg';
 
-// ─── Types ──────────────────────────────────────────────────────────────────
+// --- Types ------------------------------------------------------------------
 interface StaffAccount {
   id: number;
   role: string;
@@ -121,14 +121,14 @@ function getRoleIcon(role: string, className = "h-3.5 w-3.5 inline shrink-0") {
   return <UserCircle className={className} />;
 }
 
-// ─── Full Clinical Leadership & Staff Directory (21 Personnel) ───────────────
+// --- Full Clinical Leadership & Staff Directory (21 Personnel) ---------------
 const FULL_STAFF_DIRECTORY: StaffAccount[] = [
   // Executive Leadership
   {
     id: 1,
     role: 'Admin',
     category: 'Executive',
-    icon: '👑',
+    icon: 'admin',
     name: 'Dr. Prof. Nathaniel Bentil',
     label: 'Chief Admin',
     email: 'admin@medivault.cloud',
@@ -141,7 +141,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 2,
     role: 'Manager',
     category: 'Executive',
-    icon: '📋',
+    icon: 'manager',
     name: 'Dr. Bright Ainoo (MD)',
     label: 'MD Manager',
     email: 'manager@medivault.cloud',
@@ -156,7 +156,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 3,
     role: 'Doctor',
     category: 'Medical',
-    icon: '🩺',
+    icon: 'doctor',
     name: 'Dr. Isaac Donkoh',
     label: 'Dr. Donkoh',
     email: 'doctor@medivault.cloud',
@@ -169,7 +169,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 13,
     role: 'Doctor',
     category: 'Medical',
-    icon: '🩺',
+    icon: 'doctor',
     name: 'Dr. Kofi Mensah',
     label: 'Dr. Kofi Mensah',
     email: 'doctor.kofi@medivault.cloud',
@@ -182,7 +182,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 14,
     role: 'Doctor',
     category: 'Medical',
-    icon: '🩺',
+    icon: 'doctor',
     name: 'Dr. Akua Boateng',
     label: 'Dr. Akua Boateng',
     email: 'doctor.akua@medivault.cloud',
@@ -195,7 +195,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 22,
     role: 'Doctor',
     category: 'Medical',
-    icon: '🩺',
+    icon: 'doctor',
     name: 'Dr. Judah',
     label: 'Dr. Judah',
     email: 'juda@gmail.com',
@@ -210,7 +210,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 4,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'nurse',
     name: 'Nurse Beatrice Mensah, RN',
     label: 'Nurse Beatrice',
     email: 'nurse@medivault.cloud',
@@ -223,7 +223,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 15,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'nurse',
     name: 'Nurse Abena Osei, RN',
     label: 'Nurse Abena Osei',
     email: 'nurse.abena@medivault.cloud',
@@ -236,7 +236,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 16,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'nurse',
     name: 'Nurse Comfort Appiah, RN',
     label: 'Nurse Comfort',
     email: 'nurse.comfort@medivault.cloud',
@@ -249,7 +249,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 17,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'nurse',
     name: 'Nurse Dorothy Ansah, RN',
     label: 'Nurse Dorothy',
     email: 'nurse.dorothy@medivault.cloud',
@@ -262,7 +262,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 18,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'nurse',
     name: 'Nurse Emmanuel Tetteh, RN',
     label: 'Nurse Emmanuel',
     email: 'nurse.emmanuel@medivault.cloud',
@@ -275,7 +275,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 19,
     role: 'Nurse',
     category: 'Nursing',
-    icon: '💉',
+    icon: 'nurse',
     name: 'Nurse Florence Danquah, RN',
     label: 'Nurse Florence',
     email: 'nurse.florence@medivault.cloud',
@@ -290,7 +290,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 5,
     role: 'Pharmacist',
     category: 'Pharmacy',
-    icon: '💊',
+    icon: 'pharmacist',
     name: 'Pharm. Kwabena Appiah',
     label: 'Pharm. Appiah',
     email: 'pharmacist@medivault.cloud',
@@ -303,7 +303,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 20,
     role: 'Pharmacist',
     category: 'Pharmacy',
-    icon: '💊',
+    icon: 'pharmacist',
     name: 'Pharm. Adwoa Kwarteng',
     label: 'Pharm. Adwoa',
     email: 'pharm.adwoa@medivault.cloud',
@@ -318,7 +318,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 6,
     role: 'Auditor',
     category: 'Audit',
-    icon: '🔍',
+    icon: 'auditor',
     name: 'Auditor Samuel Osei',
     label: 'Auditor Osei',
     email: 'auditor@medivault.cloud',
@@ -331,7 +331,7 @@ const FULL_STAFF_DIRECTORY: StaffAccount[] = [
     id: 21,
     role: 'Auditor',
     category: 'Audit',
-    icon: '🔍',
+    icon: 'auditor',
     name: 'Auditor Sarah Addo',
     label: 'Auditor Sarah Addo',
     email: 'auditor.sarah@medivault.cloud',
@@ -353,7 +353,7 @@ const DEMO_STAFF: StaffAccount[] = [
   FULL_STAFF_DIRECTORY[5], // Doctor (Dr. Judah)
 ];
 
-// ─── Status Badge ─────────────────────────────────────────────────────────────
+// --- Status Badge -------------------------------------------------------------
 function StatusBadge({ status }: { status: string }) {
   const s = (status || '').toUpperCase();
   const styles: Record<string, string> = {
@@ -369,7 +369,7 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-// ─── Severity Badge ───────────────────────────────────────────────────────────
+// --- Severity Badge -----------------------------------------------------------
 function SeverityBadge({ severity }: { severity: string }) {
   const s = (severity || '').toLowerCase();
   const styles: Record<string, string> = {
@@ -385,7 +385,7 @@ function SeverityBadge({ severity }: { severity: string }) {
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// --- Main Page ----------------------------------------------------------------
 export default function Home() {
   const [user, setUser]       = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
@@ -466,19 +466,19 @@ export default function Home() {
   const [admBlood, setAdmBlood]       = useState('O+');
   const [admWard, setAdmWard]         = useState('Ward 2 - Bed B4');
   const [admDiagnosis, setAdmDiagnosis] = useState('');
-  const [admVitals, setAdmVitals]     = useState('BP 120/80 mmHg | HR 72 bpm | Temp 36.8°C | SpO2 99%');
+  const [admVitals, setAdmVitals]     = useState('BP 120/80 mmHg | HR 72 bpm | Temp 36.8 deg C | SpO2 99%');
   const [admRx, setAdmRx]             = useState('Amoxicillin 500mg TID + Paracetamol 1g PRN');
   const [admStatus, setAdmStatus]     = useState('Admitted');
   const [admitting, setAdmitting]     = useState(false);
   const [admitSuccess, setAdmitSuccess] = useState('');
 
-  // ── Show Toast Notification Helper ─────────────────────────────────────────
+  // -- Show Toast Notification Helper -----------------------------------------
   const triggerToast = (msg: string) => {
     setLiveToast(msg);
     setTimeout(() => setLiveToast(null), 3500);
   };
 
-  // ── Drug Interaction Checker ───────────────────────────────────────────────
+  // -- Drug Interaction Checker -----------------------------------------------
   const runDrugCheck = () => {
     if (drug1.includes('Warfarin') && drug2.includes('Aspirin')) {
       setDrugResult({
@@ -501,7 +501,7 @@ export default function Home() {
     }
   };
 
-  // ── Data Fetchers ────────────────────────────────────────────────────────
+  // -- Data Fetchers --------------------------------------------------------
   const loadPatients = useCallback(async () => {
     setPatientsLoading(true);
     try {
@@ -522,7 +522,7 @@ export default function Home() {
     finally { setAuditLoading(false); }
   }, []);
 
-  // ── Session Restore on Mount ─────────────────────────────────────────────
+  // -- Session Restore on Mount ---------------------------------------------
   useEffect(() => {
     fetch('/api/auth/user')
       .then((r) => r.json())
@@ -540,7 +540,7 @@ export default function Home() {
       .finally(() => setLoading(false));
   }, [loadPatients, loadAudit]);
 
-  // ── Auth Handlers ────────────────────────────────────────────────────────
+  // -- Auth Handlers --------------------------------------------------------
   const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setLoginError('');
@@ -635,15 +635,15 @@ export default function Home() {
       });
       const data = await res.json();
       if (data.success) {
-        setAdmitSuccess(`✓ ${admName} successfully admitted to ${admWard}`);
+        setAdmitSuccess(`[OK] ${admName} successfully admitted to ${admWard}`);
         setAdmName(''); setAdmDiagnosis('');
         loadPatients();
         setTimeout(() => { setAdmitSuccess(''); setActiveTab('patients'); }, 2000);
       } else {
-        setAdmitSuccess('✗ ' + (data.message || 'Could not complete admission.'));
+        setAdmitSuccess('[ERR] ' + (data.message || 'Could not complete admission.'));
       }
     } catch {
-      setAdmitSuccess('✗ Network error. Try again.');
+      setAdmitSuccess('[ERR] Network error. Try again.');
     } finally {
       setAdmitting(false);
     }
@@ -652,11 +652,11 @@ export default function Home() {
   // Save Bedside Vitals (Nurse action)
   const handleSaveVitals = () => {
     if (!vitalsPatient) return;
-    const summary = `BP ${vitalsBp} mmHg | HR ${vitalsHr} bpm | Temp ${vitalsTemp}°C | SpO2 ${vitalsSpo2}% | Pain ${vitalsPain}/10`;
+    const summary = `BP ${vitalsBp} mmHg | HR ${vitalsHr} bpm | Temp ${vitalsTemp} deg C | SpO2 ${vitalsSpo2}% | Pain ${vitalsPain}/10`;
     setPatients((prev) =>
       prev.map((p) => (p.id === vitalsPatient.id ? { ...p, vitals_summary: summary } : p))
     );
-    setVitalsSuccess(`✓ Bedside vitals recorded for ${vitalsPatient.name}`);
+    setVitalsSuccess(`[OK] Bedside vitals recorded for ${vitalsPatient.name}`);
     setTimeout(() => {
       setVitalsSuccess('');
       setShowVitalsModal(false);
@@ -687,7 +687,7 @@ export default function Home() {
     }, 1200);
   };
 
-  // ── Derived State ────────────────────────────────────────────────────────
+  // -- Derived State --------------------------------------------------------
   const filteredPatients = patients.filter((p) => {
     const q = searchQuery.toLowerCase();
     const matchSearch =
@@ -717,12 +717,12 @@ export default function Home() {
     return matchCat && matchQ;
   });
 
-  // ── Loading Screen ────────────────────────────────────────────────────────
+  // -- Loading Screen --------------------------------------------------------
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-3">
-        <div className="h-16 w-16 rounded-2xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-3xl shadow-xl shadow-cyan-950 animate-pulse">
-          🏥
+        <div className="h-16 w-16 rounded-2xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center shadow-xl shadow-cyan-950 animate-pulse">
+          <Hospital className="h-8 w-8 text-cyan-400" />
         </div>
         <div className="flex items-center gap-2 text-cyan-400 font-mono text-sm tracking-wide">
           <RefreshCw className="h-4 w-4 animate-spin" />
@@ -732,9 +732,9 @@ export default function Home() {
     );
   }
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ==========================================================================
   //  VIEW 1: CLEAN PROFESSIONAL HOSPITAL PORTAL
-  // ══════════════════════════════════════════════════════════════════════════
+  // ==========================================================================
   if (!user) {
     return (
       <div
@@ -744,12 +744,10 @@ export default function Home() {
         {/* Soft Dark Vignette & Glass Mask so the Real Hospital Picture shines through cleanly */}
         <div className="absolute inset-0 bg-slate-950/75 backdrop-blur-[2px]" />
 
-        {/* ── Top Hospital Header Bar ── */}
+        {/* -- Top Hospital Header Bar -- */}
         <header className="relative z-10 max-w-5xl w-full mx-auto flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-xl bg-cyan-950/90 border border-cyan-500/40 flex items-center justify-center text-2xl shadow-lg shadow-cyan-950/50 backdrop-blur-md">
-              🏥
-            </div>
+            <div className="h-11 w-11 rounded-xl bg-cyan-950/90 border border-cyan-500/40 flex items-center justify-center shadow-lg shadow-cyan-950/50 backdrop-blur-md"><Hospital className="h-6 w-6 text-cyan-400" /></div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xl font-bold text-white tracking-tight">
@@ -760,7 +758,7 @@ export default function Home() {
                 </span>
               </div>
               <p className="text-xs text-slate-300 hidden sm:block">
-                St. Luke Medical Center • Clinical Governance & Electronic Health Records
+                St. Luke Medical Center  |  Clinical Governance & Electronic Health Records
               </p>
             </div>
           </div>
@@ -771,7 +769,7 @@ export default function Home() {
           </div>
         </header>
 
-        {/* ── Centered Clean Hospital Sign-In Card ── */}
+        {/* -- Centered Clean Hospital Sign-In Card -- */}
         <main className="relative z-10 max-w-lg w-full mx-auto my-auto py-6">
           <div className="rounded-2xl p-6 sm:p-8 bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-2xl space-y-6">
             <div className="text-center space-y-1.5">
@@ -814,7 +812,7 @@ export default function Home() {
                     type={showPass ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••••••"
+                    placeholder=" |  |  |  |  |  |  |  |  |  |  |  | "
                     required
                     className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
                   />
@@ -893,10 +891,10 @@ export default function Home() {
                 className="w-full flex items-center justify-between text-xs font-bold text-slate-300 hover:text-white py-1 transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-2">
-                  <span>👥</span>
+                  <Users className="h-4 w-4 text-purple-400" />
                   <span>Full Hospital Clinical Leadership & Staff Directory (21 Personnel)</span>
                 </div>
-                <span className="text-cyan-400 text-xs">{showFullDirectory ? 'Hide ▲' : 'Expand ▼'}</span>
+                <span className="text-cyan-400 text-xs">{showFullDirectory ? 'Hide [-]' : 'Expand [+]'}</span>
               </button>
 
               {showFullDirectory && (
@@ -971,18 +969,18 @@ export default function Home() {
           </div>
         </main>
 
-        {/* ── Simple Clean Hospital Footer ── */}
+        {/* -- Simple Clean Hospital Footer -- */}
         <footer className="relative z-10 max-w-5xl w-full mx-auto text-center text-xs text-slate-400 py-3">
-          <p>© 2026 MediVault Hospital Management System • St. Luke Medical Center</p>
+          <p>(c) 2026 MediVault Hospital Management System  |  St. Luke Medical Center</p>
         </footer>
 
-        {/* ── 2FA Challenge Modal ── */}
+        {/* -- 2FA Challenge Modal -- */}
         {show2FA && (
           <div className="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
             <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-cyan-500/50 p-6 space-y-5 shadow-2xl">
               <div className="text-center space-y-2">
-                <div className="inline-flex h-12 w-12 rounded-xl bg-cyan-950 border border-cyan-500/40 items-center justify-center text-xl mx-auto shadow-md">
-                  🔐
+                <div className="inline-flex h-12 w-12 rounded-xl bg-cyan-950 border border-cyan-500/40 items-center justify-center mx-auto shadow-md">
+                  <Lock className="h-6 w-6 text-cyan-400" />
                 </div>
                 <h3 className="text-base font-bold text-white">Two-Factor Authentication</h3>
                 {is2FAAdmin ? (
@@ -1008,7 +1006,7 @@ export default function Home() {
                 maxLength={6}
                 value={totpCode}
                 onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, ''))}
-                placeholder="••••••"
+                placeholder=" |  |  |  |  |  | "
                 autoFocus
                 className="w-full text-center text-3xl font-mono tracking-[0.5em] font-black py-3 rounded-xl bg-slate-950 border border-cyan-500/50 text-cyan-300 focus:outline-none focus:border-cyan-400"
               />
@@ -1037,9 +1035,9 @@ export default function Home() {
     );
   }
 
-  // ══════════════════════════════════════════════════════════════════════════
+  // ==========================================================================
   //  VIEW 2: ENTERPRISE CLINICAL WORKSTATIONS (ROLE-TAILORED COLORS & ACTIONS)
-  // ══════════════════════════════════════════════════════════════════════════
+  // ==========================================================================
   const userRole = (user.role || '').toLowerCase();
   const isAdmin = userRole.includes('admin') || userRole.includes('chief');
   const isAuditor = userRole.includes('auditor') || userRole.includes('compliance');
@@ -1169,7 +1167,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-      {/* ── Toast Notification ── */}
+      {/* -- Toast Notification -- */}
       {liveToast && (
         <div className="fixed top-5 right-5 z-50 p-4 rounded-xl bg-slate-900 border border-cyan-400 text-white text-xs shadow-2xl flex items-center gap-2 animate-in slide-in-from-top-4">
           <Sparkles className="h-4 w-4 text-cyan-400 shrink-0" />
@@ -1177,7 +1175,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* ── Top Clinical Navigation Bar ── */}
+      {/* -- Top Clinical Navigation Bar -- */}
       <header className="border-b border-slate-800 bg-slate-950 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -1213,7 +1211,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* ── Subnav Tabs (Role-Colored Glow) ── */}
+      {/* -- Subnav Tabs (Role-Colored Glow) -- */}
       <div className="border-b border-slate-800/80 bg-slate-950/90 sticky top-14 z-20 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-1.5 overflow-x-auto py-2">
@@ -1235,10 +1233,10 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ── Main Station Content ── */}
+      {/* -- Main Station Content -- */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-        {/* ── Role-Customized Workstation Clearance Banner ── */}
+        {/* -- Role-Customized Workstation Clearance Banner -- */}
         <div className={`mb-6 rounded-2xl border ${roleStyles.border} bg-gradient-to-r ${roleStyles.gradient} p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6`}>
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
@@ -1447,9 +1445,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* ====================================================================
             TAB: OVERVIEW (ROLE-TAILORED KPIS & FAST ACTIONS)
-           ════════════════════════════════════════════════════════════════════ */}
+           ==================================================================== */}
         {activeTab === 'dashboard' && (
           <div className="space-y-6">
             {/* KPI Stat Cards (Role Customized Colors) */}
@@ -1740,9 +1738,10 @@ export default function Home() {
                 </h3>
                 <button
                   onClick={() => setActiveTab('patients')}
-                  className="text-xs text-cyan-400 hover:text-cyan-300 font-bold transition-colors cursor-pointer"
+                  className="text-xs text-cyan-400 hover:text-cyan-300 font-bold transition-colors cursor-pointer flex items-center gap-1"
                 >
-                  View all ({patients.length}) →
+                  <span>View all ({patients.length})</span>
+                  <ArrowRight className="h-3 w-3" />
                 </button>
               </div>
               <div className="overflow-x-auto">
@@ -1777,9 +1776,9 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* ====================================================================
             TAB: WARDS & PATIENT DIRECTORY
-           ════════════════════════════════════════════════════════════════════ */}
+           ==================================================================== */}
         {activeTab === 'patients' && (
           <div className="space-y-4">
             {/* Search and Status Filters */}
@@ -1832,7 +1831,7 @@ export default function Home() {
                       <div>
                         <h4 className="font-bold text-white text-sm leading-snug">{p.name}</h4>
                         <p className="text-[11px] text-slate-400 font-mono mt-0.5">
-                          {p.patient_code} · {p.age}y · {p.gender} · {p.blood_group}
+                          {p.patient_code}  |  {p.age}y  |  {p.gender}  |  {p.blood_group}
                         </p>
                       </div>
                       <StatusBadge status={p.admission_status} />
@@ -1850,7 +1849,7 @@ export default function Home() {
 
                     {p.vitals_summary && (
                       <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-[10px] font-mono text-emerald-400 leading-relaxed">
-                        📊 {p.vitals_summary}
+                        {p.vitals_summary}
                       </div>
                     )}
                   </div>
@@ -1860,9 +1859,9 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* ====================================================================
             TAB: ADMISSION FORM (DOCTORS / MANAGERS / ADMINS)
-           ════════════════════════════════════════════════════════════════════ */}
+           ==================================================================== */}
         {activeTab === 'admission' && (isDoctor || isManager) && (
           <div className="max-w-2xl mx-auto space-y-4">
             <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 shadow-lg">
@@ -1878,7 +1877,7 @@ export default function Home() {
               <form onSubmit={handleAdmit} className="space-y-4">
                 {admitSuccess && (
                   <div className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
-                    admitSuccess.startsWith('✓')
+                    admitSuccess.startsWith('[OK]')
                       ? 'bg-emerald-950/80 border-emerald-500/40 text-emerald-300'
                       : 'bg-rose-950/80 border-rose-500/40 text-rose-300'
                   }`}>
@@ -2004,9 +2003,9 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* ====================================================================
             TAB: PHARMACY DISPENSARY (PHARMACISTS / DOCTORS / ADMINS)
-           ════════════════════════════════════════════════════════════════════ */}
+           ==================================================================== */}
         {activeTab === 'pharmacy' && (isPharmacist || isDoctor) && (
           <div className="space-y-4">
             <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
@@ -2036,7 +2035,7 @@ export default function Home() {
                       <div>
                         <h4 className="font-bold text-white text-sm">{p.name}</h4>
                         <p className="text-[11px] text-slate-400 font-mono">
-                          {p.patient_code} · {p.ward_room || 'General Ward'}
+                          {p.patient_code}  |  {p.ward_room || 'General Ward'}
                         </p>
                       </div>
                       <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-[10px] font-bold text-emerald-300">
@@ -2044,7 +2043,7 @@ export default function Home() {
                       </span>
                     </div>
                     <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-amber-300 leading-relaxed">
-                      Rx: {p.prescription || 'Amoxicillin 500mg TID · IV Fluids 0.9% Normal Saline · Paracetamol 1g PRN'}
+                      Rx: {p.prescription || 'Amoxicillin 500mg TID  |  IV Fluids 0.9% Normal Saline  |  Paracetamol 1g PRN'}
                     </div>
                     <p className="text-[11px] text-slate-400">
                       Attending Physician: {p.attending_doctor || 'Dr. Isaac Donkoh, MD'}
@@ -2056,9 +2055,9 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* ====================================================================
             TAB: SECURITY AUDIT (AUDITOR & CHIEF ADMIN ONLY)
-           ════════════════════════════════════════════════════════════════════ */}
+           ==================================================================== */}
         {activeTab === 'audit' && (isAdmin || isAuditor) && (
           <div className="space-y-5">
             <div className="rounded-2xl border border-indigo-500/40 bg-slate-900 p-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4 shadow-xl">
@@ -2069,7 +2068,7 @@ export default function Home() {
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed max-w-xl">
                   Every user authentication, patient admission, and clinical prescription change is sealed with the
-                  previous record&apos;s SHA-256 cryptographic hash — creating an unbroken, tamper-evident audit trail
+                  previous record&apos;s SHA-256 cryptographic hash  -  creating an unbroken, tamper-evident audit trail
                   across all clinical workstations.
                 </p>
                 <div className="flex items-center gap-3 pt-1 flex-wrap">
@@ -2154,9 +2153,9 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* ====================================================================
             TAB: WARD BED CENSUS & OPERATIONS (MANAGING DIRECTOR - MD ONLY)
-           ════════════════════════════════════════════════════════════════════ */}
+           ==================================================================== */}
         {activeTab === 'census' && isManager && (
           <div className="space-y-6">
             <div className="rounded-2xl border border-blue-500/30 bg-gradient-to-r from-blue-950/60 via-slate-900 to-slate-950 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
@@ -2179,7 +2178,8 @@ export default function Home() {
                   className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Building2 className="h-4 w-4" />
-                  <span>Open Dedicated Census Console →</span>
+                  <span>Open Dedicated Census Console</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <button
                   onClick={() => triggerToast('Emergency surge buffer beds unlocked. +10 capacity added to ICU & ER.')}
@@ -2242,10 +2242,10 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* ====================================================================
             TAB: PRACTICE ACCOUNT UNLOCKS (MANAGING DIRECTOR - MD ONLY)
             Faithfully reproducing backend/resources/views/branch/dashboard.blade.php
-           ════════════════════════════════════════════════════════════════════ */}
+           ==================================================================== */}
         {activeTab === 'operations' && isManager && (
           <div className="space-y-6">
             <div className="rounded-2xl border border-blue-500/30 bg-slate-900 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
@@ -2324,10 +2324,10 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* ====================================================================
             TAB: STAFF & RBAC GOVERNANCE (CHIEF ADMIN ONLY)
             Faithfully reproducing backend/resources/views/admin/dashboard.blade.php
-           ════════════════════════════════════════════════════════════════════ */}
+           ==================================================================== */}
         {activeTab === 'staff' && isAdmin && (
           <div className="space-y-6">
             <div className="rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-950/60 via-slate-900 to-slate-950 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
@@ -2417,10 +2417,10 @@ export default function Home() {
           </div>
         )}
 
-        {/* ════════════════════════════════════════════════════════════════════
+        {/* ====================================================================
             TAB: 3-2-1 CLOUD BACKUP & DR (CHIEF ADMIN ONLY)
             Faithfully reproducing backend/resources/views/admin/backups.blade.php
-           ════════════════════════════════════════════════════════════════════ */}
+           ==================================================================== */}
         {activeTab === 'backups' && isAdmin && (
           <div className="space-y-6">
             <div className="rounded-2xl border border-purple-500/30 bg-slate-900 p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-xl">
@@ -2459,7 +2459,7 @@ export default function Home() {
             {drDrillResult && (
               <div className="p-4 rounded-xl border border-purple-500/40 bg-purple-950/30 text-xs text-purple-200 flex items-center justify-between animate-in slide-in-from-top-2">
                 <span>{drDrillResult}</span>
-                <button onClick={() => setDrDrillResult(null)} className="text-slate-400 hover:text-white px-2 py-0.5 font-bold">✕</button>
+                <button onClick={() => setDrDrillResult(null)} className="text-slate-400 hover:text-white px-2 py-0.5 font-bold">X</button>
               </div>
             )}
 
@@ -2467,7 +2467,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-5 rounded-2xl border border-slate-800 bg-slate-900/60 space-y-2">
                 <div className="flex items-center justify-between text-xs font-semibold text-emerald-400">
-                  <span>3 Copies • 2 Media</span>
+                  <span>3 Copies  |  2 Media</span>
                   <span className="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/30 text-[10px] uppercase">Active</span>
                 </div>
                 <h4 className="text-sm font-bold text-white">Local Encrypted Volume</h4>
@@ -2492,7 +2492,7 @@ export default function Home() {
                   <span>Continuity Guarantee</span>
                   <span className="px-2 py-0.5 rounded bg-purple-950 border border-purple-500/30 text-[10px] uppercase">VERIFIED</span>
                 </div>
-                <h4 className="text-sm font-bold text-white">RTO &lt; 10s • RPO 0.0s</h4>
+                <h4 className="text-sm font-bold text-white">RTO &lt; 10s  |  RPO 0.0s</h4>
                 <p className="text-xs text-slate-400">
                   Automated failover integrity tests execute periodically to guarantee zero patient data loss during incidents.
                 </p>
@@ -2502,9 +2502,9 @@ export default function Home() {
         )}
       </main>
 
-      {/* ══════════════════════════════════════════════════════════════════════
+      {/* ======================================================================
           ROLE-SPECIFIC INTERACTIVE CUSTOM MODALS
-         ══════════════════════════════════════════════════════════════════════ */}
+         ====================================================================== */}
 
       {/* 1. Doctor: Drug Interaction Lab Modal */}
       {showDrugLabModal && (
@@ -2512,7 +2512,7 @@ export default function Home() {
           <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-cyan-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🔬</span>
+                <div className="p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30 text-cyan-400"><Microscope className="h-5 w-5" /></div>
                 <div>
                   <h3 className="font-bold text-white text-base">Physician Drug Interaction Lab</h3>
                   <p className="text-xs text-slate-400">Pharmacology cross-check engine for co-administered therapies</p>
@@ -2584,7 +2584,7 @@ export default function Home() {
           <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-pink-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">💉</span>
+                <div className="p-2 rounded-xl bg-pink-950/80 border border-pink-500/30 text-pink-400"><Syringe className="h-5 w-5" /></div>
                 <div>
                   <h3 className="font-bold text-white text-base">Bedside Vital Signs Charting</h3>
                   <p className="text-xs text-slate-400">Live nursing telemetry entry directly to hospital chart</p>
@@ -2643,7 +2643,7 @@ export default function Home() {
 
               <div className="grid grid-cols-3 gap-2">
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-300">Temp (°C)</label>
+                  <label className="text-xs font-semibold text-slate-300">Temp ( deg C)</label>
                   <input
                     type="text"
                     value={vitalsTemp}
@@ -2691,7 +2691,7 @@ export default function Home() {
           <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-pink-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">📋</span>
+                <div className="p-2 rounded-xl bg-blue-950/80 border border-blue-500/30 text-blue-400"><ClipboardList className="h-5 w-5" /></div>
                 <div>
                   <h3 className="font-bold text-white text-base">Nurse Shift Handover Log</h3>
                   <p className="text-xs text-slate-400">Shift changeover documentation & ward alerts</p>
@@ -2732,7 +2732,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => {
-                  setHandoverSuccess('✓ Shift handover digitally sealed and broadcast to incoming nursing team.');
+                  setHandoverSuccess('[OK] Shift handover digitally sealed and broadcast to incoming nursing team.');
                   setTimeout(() => {
                     setHandoverSuccess('');
                     setShowHandoverModal(false);
@@ -2754,7 +2754,7 @@ export default function Home() {
           <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-amber-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🔍</span>
+                <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30 text-emerald-400"><Search className="h-5 w-5" /></div>
                 <div>
                   <h3 className="font-bold text-white text-base">Pharmacy Barcode Scanner</h3>
                   <p className="text-xs text-slate-400">GS1-128 barcode verification & lot release</p>
@@ -2788,7 +2788,7 @@ export default function Home() {
 
               {barcodeResult && (
                 <div className="p-3.5 rounded-xl bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs space-y-2">
-                  <div className="font-bold">✓ Prescription Verified Intact</div>
+                  <div className="font-bold">[OK] Prescription Verified Intact</div>
                   <p className="text-[11px] opacity-90 font-mono">{barcodeResult}</p>
                   <button
                     onClick={() => {
@@ -2812,7 +2812,7 @@ export default function Home() {
           <div className="w-full max-w-4xl rounded-2xl bg-slate-900 border border-purple-500/50 p-6 space-y-4 shadow-2xl max-h-[85vh] flex flex-col">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">👥</span>
+                <div className="p-2 rounded-xl bg-purple-950/80 border border-purple-500/30 text-purple-400"><Users className="h-5 w-5" /></div>
                 <div>
                   <h3 className="font-bold text-white text-base">Hospital Staff Directory & RBAC Governance</h3>
                   <p className="text-xs text-slate-400">All 21 authorized clinical officers, roles & HIPAA credentials</p>
@@ -2890,7 +2890,7 @@ export default function Home() {
           <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-purple-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">💾</span>
+                <div className="p-2 rounded-xl bg-cyan-950/80 border border-cyan-500/30 text-cyan-400"><Database className="h-5 w-5" /></div>
                 <div>
                   <h3 className="font-bold text-white text-base">3-2-1 Backup & Disaster Recovery (DR) Hub</h3>
                   <p className="text-xs text-slate-400">Cryptographically sealed cloud snapshots & local replicas</p>
@@ -2905,15 +2905,15 @@ export default function Home() {
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-white">Tier 1: Primary AWS London PostgreSQL</span>
-                  <span className="text-emerald-400 font-bold">● Active Online</span>
+                  <span className="text-emerald-400 font-bold">* Active Online</span>
                 </div>
-                <p className="text-[11px] text-slate-400">Pooler: aws-0-eu-west-2 • Real-time patient telemetry replication</p>
+                <p className="text-[11px] text-slate-400">Pooler: aws-0-eu-west-2  |  Real-time patient telemetry replication</p>
               </div>
 
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-white">Tier 2: Encrypted Local SQLite Mirror</span>
-                  <span className="text-cyan-400 font-bold">● 100% Synced</span>
+                  <span className="text-cyan-400 font-bold">* 100% Synced</span>
                 </div>
                 <p className="text-[11px] text-slate-400">Asymmetric X25519 encrypted snapshot on on-premise hardware</p>
               </div>
@@ -2921,7 +2921,7 @@ export default function Home() {
               <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-white">Tier 3: Offsite Immutable WORM Cloud Archive</span>
-                  <span className="text-purple-400 font-bold">● Sealed</span>
+                  <span className="text-purple-400 font-bold">* Sealed</span>
                 </div>
                 <p className="text-[11px] text-slate-400">Write-Once-Read-Many anti-ransomware backup vault</p>
               </div>
@@ -2958,7 +2958,7 @@ export default function Home() {
           <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-emerald-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🛡️</span>
+                <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30 text-emerald-400"><Shield className="h-5 w-5" /></div>
                 <div>
                   <h3 className="font-bold text-white text-base">SHA-256 Merkle Chain Verification</h3>
                   <p className="text-xs text-slate-400">Forensic blockchain integrity test against genesis block</p>
@@ -3000,7 +3000,7 @@ export default function Home() {
           <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-blue-500/50 p-6 space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🛏️</span>
+                <div className="p-2 rounded-xl bg-teal-950/80 border border-teal-500/30 text-teal-400"><Bed className="h-5 w-5" /></div>
                 <div>
                   <h3 className="font-bold text-white text-base">Ward Bed Allocation & Census</h3>
                   <p className="text-xs text-slate-400">Real-time occupancy rates across hospital departments</p>
@@ -3054,7 +3054,7 @@ export default function Home() {
               <div>
                 <h3 className="font-bold text-white text-base">{selectedPatient.name}</h3>
                 <p className="text-xs text-slate-400 font-mono">
-                  {selectedPatient.patient_code} • {selectedPatient.gender} • {selectedPatient.age} years old
+                  {selectedPatient.patient_code}  |  {selectedPatient.gender}  |  {selectedPatient.age} years old
                 </p>
               </div>
               <button onClick={() => setSelectedPatient(null)} className="text-slate-400 hover:text-white cursor-pointer">

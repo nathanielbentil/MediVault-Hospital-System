@@ -113,7 +113,7 @@ export default function NurseVitalsPage() {
 
   const handleSelectPatient = (p: Patient) => {
     setSelectedPatient(p);
-    // Parse vitals if present in format BP 120/80 mmHg | HR 72 bpm | Temp 36.8°C | SpO2 98%
+    // Parse vitals if present in format BP 120/80 mmHg | HR 72 bpm | Temp 36.8 deg C | SpO2 98%
     const bpMatch = p.vitals_summary?.match(/BP\s*(\d+)\/(\d+)/i);
     if (bpMatch) {
       setBpSystolic(bpMatch[1]);
@@ -129,7 +129,7 @@ export default function NurseVitalsPage() {
 
   const handleRecordVitals = () => {
     if (!selectedPatient) return;
-    const newSummary = `BP ${bpSystolic}/${bpDiastolic} mmHg | HR ${heartRate} bpm | Temp ${tempCelsius}°C | SpO2 ${spO2}% | Pain ${painLevel}/10`;
+    const newSummary = `BP ${bpSystolic}/${bpDiastolic} mmHg | HR ${heartRate} bpm | Temp ${tempCelsius} deg C | SpO2 ${spO2}% | Pain ${painLevel}/10`;
 
     // Update in memory
     setPatients((prev) =>
@@ -213,7 +213,7 @@ export default function NurseVitalsPage() {
         </div>
       )}
 
-      {/* ── Top Header Navigation Bar ── */}
+      {/* -- Top Header Navigation Bar -- */}
       <header className="border-b border-slate-800 bg-slate-950 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -264,10 +264,10 @@ export default function NurseVitalsPage() {
         </div>
       </header>
 
-      {/* ── Main Container ── */}
+      {/* -- Main Container -- */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-        {/* ── Workstation Clearance Banner ── */}
+        {/* -- Workstation Clearance Banner -- */}
         <div className="rounded-2xl border border-pink-500/30 bg-gradient-to-r from-pink-950 via-slate-900 to-pink-950/40 p-6 shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1.5 relative z-10">
             <div className="flex items-center gap-2">
@@ -304,7 +304,7 @@ export default function NurseVitalsPage() {
           </div>
         </div>
 
-        {/* ── KPI Metric Cards ── */}
+        {/* -- KPI Metric Cards -- */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="p-4 rounded-xl bg-slate-900/80 border border-pink-500/20 shadow-md">
             <div className="flex items-center justify-between">
@@ -345,7 +345,7 @@ export default function NurseVitalsPage() {
           </div>
         </div>
 
-        {/* ── Shift Handover Drawer / Collapsible ── */}
+        {/* -- Shift Handover Drawer / Collapsible -- */}
         {showHandover && (
           <div className="rounded-2xl border border-pink-500/30 bg-slate-900/95 p-6 shadow-2xl space-y-4 animate-in slide-in-from-top-3">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -389,7 +389,7 @@ export default function NurseVitalsPage() {
           </div>
         )}
 
-        {/* ── Main Dual-Panel Workspace (Patient Roster & Vitals Charting) ── */}
+        {/* -- Main Dual-Panel Workspace (Patient Roster & Vitals Charting) -- */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
           {/* Left Panel: Active In-Patient Roster (5 Cols) */}
@@ -518,7 +518,7 @@ export default function NurseVitalsPage() {
                       {isHypoxia && <div>| <strong>Hypoxemia Alert:</strong> SpO2 is {spO2}% (&lt; 94%). Administer supplemental O2 via nasal cannula.</div>}
                       {isHypertension && <div>| <strong>Hypertensive Reading:</strong> Systolic BP is {bpSystolic} mmHg (&ge; 140 mmHg). Re-check in 15 mins.</div>}
                       {isTachycardia && <div>| <strong>Tachycardia:</strong> Heart Rate is {heartRate} bpm (&gt; 100 bpm). Notify attending physician.</div>}
-                      {isFever && <div>| <strong>Pyrexia / Fever:</strong> Temperature is {tempCelsius}°C (&ge; 38.0°C). Administer prescribed antipyretic.</div>}
+                      {isFever && <div>| <strong>Pyrexia / Fever:</strong> Temperature is {tempCelsius} deg C (&ge; 38.0 deg C). Administer prescribed antipyretic.</div>}
                     </div>
                   </div>
                 )}
@@ -572,7 +572,7 @@ export default function NurseVitalsPage() {
                   {/* Body Temperature */}
                   <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
                     <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
-                      Temperature (°C)
+                      Temperature ( deg C)
                     </label>
                     <div className="flex items-center gap-2">
                       <Thermometer className="h-4 w-4 text-amber-400" />
@@ -583,7 +583,7 @@ export default function NurseVitalsPage() {
                         placeholder="36.8"
                         className="w-20 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-xs font-mono font-bold text-white focus:outline-none focus:border-pink-400"
                       />
-                      <span className="text-[11px] text-slate-400">°C</span>
+                      <span className="text-[11px] text-slate-400"> deg C</span>
                     </div>
                     <span className="text-[10px] text-slate-500">Normal: 36.5 - 37.5</span>
                   </div>

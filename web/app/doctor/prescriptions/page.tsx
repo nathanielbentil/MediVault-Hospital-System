@@ -117,7 +117,7 @@ export default function DoctorPrescriptionsPage() {
       prev.map((p) => (p.id === selectedPatient.id ? { ...p, prescription: newRx } : p))
     );
     setSelectedPatient((prev) => (prev ? { ...prev, prescription: newRx } : null));
-    setRxSuccess(`✓ Prescription digitally signed and transmitted to Hospital Central Dispensary for ${selectedPatient.name}.`);
+    setRxSuccess(`[OK] Prescription digitally signed and transmitted to Hospital Central Dispensary for ${selectedPatient.name}.`);
     setTimeout(() => setRxSuccess(''), 4000);
   };
 
@@ -141,7 +141,7 @@ export default function DoctorPrescriptionsPage() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
-      {/* ── Top Navigation Bar with Back / Return Controls ── */}
+      {/* -- Top Navigation Bar with Back / Return Controls -- */}
       <header className="border-b border-slate-800 bg-slate-950 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -176,7 +176,7 @@ export default function DoctorPrescriptionsPage() {
         </div>
       </header>
 
-      {/* ── Main Station Content ── */}
+      {/* -- Main Station Content -- */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Physician Header Banner */}
         <div className="rounded-2xl border border-cyan-500/40 bg-gradient-to-r from-cyan-950 via-slate-900 to-cyan-950/40 p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -215,7 +215,7 @@ export default function DoctorPrescriptionsPage() {
           </div>
         </div>
 
-        {/* ── Two Column Grid: Drug Interaction Lab + Prescription Composer ── */}
+        {/* -- Two Column Grid: Drug Interaction Lab + Prescription Composer -- */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* 1. Drug Interaction Lab */}
           <div className="rounded-2xl bg-slate-900 border border-cyan-500/30 p-6 space-y-4 shadow-xl">
@@ -370,7 +370,7 @@ export default function DoctorPrescriptionsPage() {
           </div>
         </div>
 
-        {/* ── Patient Prescription Roster Table ── */}
+        {/* -- Patient Prescription Roster Table -- */}
         <div className="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-xl space-y-0">
           <div className="p-4 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
