@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     }
 
     const res = await pool.query(
-      `SELECT u.id, u.name, u.email, u.failed_login_attempts, u.two_factor_confirmed_at,
+      `SELECT u.id, u.name, u.email, u.status, u.deleted_at, u.failed_login_attempts, u.two_factor_confirmed_at,
               u.created_at, r.name as role_name
        FROM users u
        LEFT JOIN role_user ru ON ru.user_id = u.id
@@ -94,14 +94,15 @@ export async function POST(req: NextRequest) {
     }
 
     // Hash password using Argon2id + HMAC Pepper
-    const hash = await PasswordService.hash(password);
+    const hashResult = await PasswordService.hash(password);
+    const passwordHash = typeof hashResult === 'string' ? hashResult : hashResult.hash;
 
-    // Insert user into PostgreSQL
+    // Insert user into PostgreSQL with 2FA enforced
     const insertUserRes = await pool.query(
-      `INSERT INTO users (name, email, password, pepper_version, failed_login_attempts, created_at, updated_at)
-       VALUES ($1, $2, $3, 'v1', 0, NOW(), NOW())
+      `INSERT INTO users (name, email, password, pepper_version, failed_login_attempts, two_factor_confirmed_at, status, created_at, updated_at)
+       VALUES ($1, $2, $3, 'v1', 0, NOW(), 'active', NOW(), NOW())
        RETURNING id, name, email, created_at`,
-      [name.trim(), cleanEmail, hash]
+      [name.trim(), cleanEmail, passwordHash]
     );
 
     const newUser = insertUserRes.rows[0];
@@ -118,9 +119,9 @@ export async function POST(req: NextRequest) {
 
     // Link role_user
     await pool.query(
-      `INSERT INTO role_user (user_id, role_id, created_at, updated_at)
-       VALUES ($1, $2, NOW(), NOW())
-       ON CONFLICT DO NOTHING`,
+      `INSERT INTO role_user (user_id, role_id, created_at)
+       VALUES ($1, $2, NOW())
+       ON CONFLICT (user_id, role_id) DO NOTHING`,
       [newUser.id, roleId]
     );
 
@@ -190,10 +191,10 @@ export async function DELETE(req: NextRequest) {
 
     const targetUser = target.rows[0];
 
-    // SOFT DELETE: Update deleted_at timestamp and mark status = DELETED (Record is NEVER dropped)
+    // SOFT DELETE: Update deleted_at timestamp and mark status = suspended (Record is NEVER dropped)
     await pool.query(
       `UPDATE users 
-       SET deleted_at = NOW(), status = 'DELETED', updated_at = NOW() 
+       SET deleted_at = NOW(), status = 'suspended', updated_at = NOW() 
        WHERE id = $1`,
       [targetUserId]
     );
