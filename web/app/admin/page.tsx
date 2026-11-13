@@ -95,7 +95,8 @@ export default function SuperAdminPage() {
       .then((d) => {
         if (d.success && d.user) {
           const role = (d.user.role || '').toLowerCase();
-          if (role !== 'admin') {
+          const canAccess = role.includes('admin') || role.includes('chief') || role.includes('manager');
+          if (!canAccess) {
             router.push('/');
             return;
           }
@@ -755,13 +756,15 @@ export default function SuperAdminPage() {
                               >
                                 {staff.status === 'ACTIVE' ? 'Lock Account' : 'Unlock'}
                               </button>
-                              <button
-                                onClick={() => handleSoftDelete(staff.id, staff.name)}
-                                title="Soft-delete user (Archive permanently in database audit retention - Requirement 7)"
-                                className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-950 hover:text-rose-400 text-slate-400 border border-slate-700 hover:border-rose-500/40 transition-all cursor-pointer"
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </button>
+                              {((user?.role || '').toLowerCase().includes('admin') || (user?.role || '').toLowerCase().includes('chief')) && (
+                                <button
+                                  onClick={() => handleSoftDelete(staff.id, staff.name)}
+                                  title="Soft-delete user (Archive permanently in database audit retention - Requirement 7)"
+                                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-950 hover:text-rose-400 text-slate-400 border border-slate-700 hover:border-rose-500/40 transition-all cursor-pointer"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              )}
                             </>
                           ) : (
                             <span className="text-[10px] text-rose-400 font-mono px-2 py-0.5 rounded bg-rose-950/60 border border-rose-900">

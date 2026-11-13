@@ -1399,6 +1399,13 @@ export default function Home() {
                   <Users className="h-3.5 w-3.5" />
                   <span>Staff Duty Roster</span>
                 </button>
+                <Link
+                  href="/admin"
+                  className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  <span>Register New Staff</span>
+                </Link>
               </>
             )}
 
@@ -2260,6 +2267,17 @@ export default function Home() {
                 <p className="text-xs text-slate-300 mt-0.5">
                   Managing Director authority to inspect failed login attempts, review authentication lockouts, and execute security unlocks.
                 </p>
+              </div>
+
+              <div className="flex items-center gap-3 shrink-0">
+                <Link
+                  href="/admin"
+                  className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>Register New Staff Worker</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
               </div>
             </div>
 
