@@ -992,11 +992,7 @@ export default function Home() {
                   </p>
                 ) : (
                   <p className="text-xs text-slate-300">
-                    Enter your 6-digit TOTP code (evaluation passkey:{' '}
-                    <code className="text-cyan-300 font-bold bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-500/30">
-                      123456
-                    </code>
-                    )
+                    Enter your 6-digit TOTP verification code from your authenticator app.
                   </p>
                 )}
               </div>
