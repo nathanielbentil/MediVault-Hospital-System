@@ -59,6 +59,7 @@ export default function SuperAdminPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [toastMsg, setToastMsg] = useState('');
+  const [activeAdminSection, setActiveAdminSection] = useState<'all' | 'salt-pepper' | 'backup-dr' | 'personnel' | 'audit'>('all');
 
   // 3-2-1 Backup & DR State
   const [drRunning, setDrRunning] = useState(false);
