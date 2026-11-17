@@ -1254,11 +1254,11 @@ export default function Home() {
             <div className="h-4 w-px bg-slate-800 hidden sm:block" />
             <button
               onClick={handleOpen2FAPairModal}
-              title="Pair Google Authenticator or Microsoft Authenticator with your account"
+              title="Enable Two-Factor Authentication with your authenticator app"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950/70 border border-cyan-500/50 hover:border-cyan-400 hover:bg-cyan-900/60 text-cyan-300 text-xs font-bold transition-all cursor-pointer shadow-sm"
             >
               <QrCode className="h-3.5 w-3.5 text-cyan-400" />
-              <span className="hidden sm:inline">Pair Real 2FA (Phone)</span>
+              <span className="hidden sm:inline">Enable 2FA</span>
               <span className="sm:hidden">2FA</span>
             </button>
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800">
@@ -3199,8 +3199,8 @@ export default function Home() {
                   <QrCode className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-base">Pair Mobile Authenticator</h3>
-                  <p className="text-[11px] text-slate-400">RFC 6238 TOTP Two-Factor Authentication</p>
+                  <h3 className="font-bold text-white text-base">Enable 2FA</h3>
+                  <p className="text-[11px] text-slate-400">Scan with Google Authenticator, Microsoft Authenticator, or Apple Passwords</p>
                 </div>
               </div>
               <button
@@ -3222,7 +3222,7 @@ export default function Home() {
                   <CheckCircle2 className="h-6 w-6" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="text-sm font-bold text-emerald-400">Device Successfully Bound!</h4>
+                  <h4 className="text-sm font-bold text-emerald-400">2FA Successfully Enabled!</h4>
                   <p className="text-xs text-slate-300">{pairSuccess}</p>
                 </div>
 
@@ -3338,7 +3338,7 @@ export default function Home() {
                     disabled={pairCode.length < 6}
                     className="flex-1 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition-all disabled:opacity-50 cursor-pointer shadow-md shadow-cyan-500/20"
                   >
-                    Verify & Activate 2FA
+                    Enable 2FA
                   </button>
                 </div>
               </form>
