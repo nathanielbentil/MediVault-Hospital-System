@@ -403,6 +403,16 @@ export default function Home() {
   const [totpCode, setTotpCode]       = useState('');
   const [is2FAAdmin, setIs2FAAdmin]   = useState(false);
 
+  // Real TOTP 2FA Pairing Modal
+  const [show2FAPairModal, setShow2FAPairModal]   = useState(false);
+  const [pairQrLoading, setPairQrLoading]         = useState(false);
+  const [pairData, setPairData]                   = useState<{ secret: string; qrCodeUrl: string; email: string; issuer: string } | null>(null);
+  const [pairCode, setPairCode]                   = useState('');
+  const [pairSuccess, setPairSuccess]             = useState('');
+  const [pairError, setPairError]                 = useState('');
+  const [pairCopied, setPairCopied]               = useState(false);
+  const [pairRecoveryCodes, setPairRecoveryCodes] = useState<string[]>([]);
+
   // Homepage Full Directory Drawer / Accordion
   const [showFullDirectory, setShowFullDirectory] = useState(false);
   const [directoryFilter, setDirectoryFilter]     = useState<string>('All');
@@ -610,6 +620,56 @@ export default function Home() {
     setPatients([]);
     setAuditData(null);
     setActiveTab('dashboard');
+  };
+
+  const handleOpen2FAPairModal = async () => {
+    setShow2FAPairModal(true);
+    setPairQrLoading(true);
+    setPairError('');
+    setPairSuccess('');
+    setPairCode('');
+    setPairCopied(false);
+    setPairRecoveryCodes([]);
+    try {
+      const res = await fetch('/api/auth/two-factor-setup');
+      const data = await res.json();
+      if (data.success) {
+        setPairData(data);
+      } else {
+        setPairError(data.message || 'Could not generate QR code.');
+      }
+    } catch {
+      setPairError('Network error while requesting 2FA setup.');
+    } finally {
+      setPairQrLoading(false);
+    }
+  };
+
+  const handleConfirm2FAPair = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pairData || !pairCode.trim()) return;
+    setPairError('');
+    setPairSuccess('');
+    try {
+      const res = await fetch('/api/auth/two-factor-setup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          secret: pairData.secret,
+          code: pairCode.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setPairSuccess('Authenticator successfully paired! Your logins are now secured with real-time TOTP.');
+        setPairRecoveryCodes(data.recoveryCodes || []);
+        triggerToast('2FA device bound successfully! Live Google Authenticator enabled.');
+      } else {
+        setPairError(data.message || 'Verification failed. Please check the code in your app.');
+      }
+    } catch {
+      setPairError('Failed to confirm pairing. Please check connection.');
+    }
   };
 
   const handleAdmit = async (e: React.FormEvent) => {
@@ -1192,6 +1252,15 @@ export default function Home() {
               <span className="font-bold">{user.name}</span>
             </div>
             <div className="h-4 w-px bg-slate-800 hidden sm:block" />
+            <button
+              onClick={handleOpen2FAPairModal}
+              title="Pair Google Authenticator or Microsoft Authenticator with your account"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950/70 border border-cyan-500/50 hover:border-cyan-400 hover:bg-cyan-900/60 text-cyan-300 text-xs font-bold transition-all cursor-pointer shadow-sm"
+            >
+              <QrCode className="h-3.5 w-3.5 text-cyan-400" />
+              <span className="hidden sm:inline">Pair Real 2FA (Phone)</span>
+              <span className="sm:hidden">2FA</span>
+            </button>
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-[10px] text-emerald-400 font-medium hidden sm:inline">Clinical Network Active</span>
@@ -3116,6 +3185,164 @@ export default function Home() {
                 Close
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* -- Real RFC 6238 TOTP 2FA Pairing Modal (Google Authenticator) -- */}
+      {show2FAPairModal && (
+        <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-cyan-500/50 p-6 space-y-4 shadow-2xl animate-in zoom-in-95 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="p-2 rounded-lg bg-cyan-950 border border-cyan-500/40 text-cyan-400">
+                  <QrCode className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-base">Pair Mobile Authenticator</h3>
+                  <p className="text-[11px] text-slate-400">RFC 6238 TOTP Two-Factor Authentication</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShow2FAPairModal(false)}
+                className="text-slate-400 hover:text-white cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {pairQrLoading ? (
+              <div className="py-12 text-center space-y-3">
+                <RefreshCw className="h-8 w-8 text-cyan-400 animate-spin mx-auto" />
+                <p className="text-xs text-slate-300">Generating cryptographic TOTP key and scannable QR code...</p>
+              </div>
+            ) : pairSuccess ? (
+              <div className="py-4 space-y-4 text-center">
+                <div className="inline-flex h-12 w-12 rounded-full bg-emerald-950 border border-emerald-500/50 items-center justify-center mx-auto text-emerald-400">
+                  <CheckCircle2 className="h-6 w-6" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="text-sm font-bold text-emerald-400">Device Successfully Bound!</h4>
+                  <p className="text-xs text-slate-300">{pairSuccess}</p>
+                </div>
+
+                {pairRecoveryCodes.length > 0 && (
+                  <div className="text-left bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400">One-Time Backup Recovery Codes</span>
+                      <span className="text-[10px] text-slate-400 font-mono">Store in safe vault</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1.5 font-mono text-xs text-slate-200">
+                      {pairRecoveryCodes.map((c, i) => (
+                        <div key={i} className="px-2 py-1 bg-slate-900 rounded border border-slate-800 text-center">
+                          {c}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={() => setShow2FAPairModal(false)}
+                  className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs transition-all cursor-pointer"
+                >
+                  Done & Return to Workstation
+                </button>
+              </div>
+            ) : pairData ? (
+              <form onSubmit={handleConfirm2FAPair} className="space-y-4">
+                <div className="space-y-2 text-xs text-slate-300">
+                  <div className="flex items-center gap-2">
+                    <span className="h-5 w-5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-500/40 flex items-center justify-center font-bold text-[11px]">1</span>
+                    <span className="font-semibold text-white">Scan with Authenticator App:</span>
+                  </div>
+                  <p className="text-slate-400 text-[11px] pl-7">
+                    Open Google Authenticator, Microsoft Authenticator, or Apple Passwords on your phone, tap (+), and scan this QR code:
+                  </p>
+                </div>
+
+                {/* QR Code Container */}
+                <div className="flex justify-center p-3.5 bg-white rounded-2xl shadow-xl w-fit mx-auto border-2 border-cyan-400">
+                  <img
+                    src={pairData.qrCodeUrl}
+                    alt="Two Factor QR Code"
+                    className="h-48 w-48 block"
+                  />
+                </div>
+
+                {/* Manual Text Secret Option */}
+                <div className="space-y-1.5 bg-slate-950 p-3 rounded-xl border border-slate-800">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] uppercase font-bold text-slate-400">Or type manual setup key:</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (pairData?.secret) {
+                          navigator.clipboard.writeText(pairData.secret);
+                          setPairCopied(true);
+                          setTimeout(() => setPairCopied(false), 2500);
+                        }
+                      }}
+                      className="text-[11px] font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 cursor-pointer"
+                    >
+                      {pairCopied ? (
+                        <>
+                          <Check className="h-3 w-3 text-emerald-400" />
+                          <span className="text-emerald-400">Copied!</span>
+                        </>
+                      ) : (
+                        <span>Copy Key</span>
+                      )}
+                    </button>
+                  </div>
+                  <div className="font-mono text-xs text-cyan-300 tracking-wider break-all bg-slate-900 px-2 py-1.5 rounded border border-slate-800 text-center select-all">
+                    {pairData.secret}
+                  </div>
+                </div>
+
+                {/* Step 2: Verification Code */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="h-5 w-5 rounded-full bg-cyan-950 text-cyan-400 border border-cyan-500/40 flex items-center justify-center font-bold text-[11px]">2</span>
+                    <span className="font-semibold text-white">Enter the 6-digit code currently on your phone:</span>
+                  </div>
+                  <input
+                    type="text"
+                    required
+                    maxLength={6}
+                    value={pairCode}
+                    onChange={(e) => setPairCode(e.target.value.replace(/\D/g, ''))}
+                    placeholder="e.g. 849203"
+                    className="w-full text-center text-2xl font-mono tracking-[0.4em] font-black py-2.5 rounded-xl bg-slate-950 border border-cyan-500/40 text-cyan-300 focus:outline-none focus:border-cyan-400"
+                  />
+                </div>
+
+                {pairError && (
+                  <div className="p-2.5 rounded-xl bg-rose-950/60 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 shrink-0" />
+                    <span>{pairError}</span>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => setShow2FAPairModal(false)}
+                    className="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition-all cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={pairCode.length < 6}
+                    className="flex-1 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition-all disabled:opacity-50 cursor-pointer shadow-md shadow-cyan-500/20"
+                  >
+                    Verify & Activate 2FA
+                  </button>
+                </div>
+              </form>
+            ) : null}
           </div>
         </div>
       )}

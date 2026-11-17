@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import pool from '@/lib/db';
 import { AuthService } from '@/lib/auth';
 import { AuditLogService } from '@/lib/audit';
+import { verifySync } from 'otplib';
 
 export async function POST(req: NextRequest) {
   try {
@@ -42,14 +43,24 @@ export async function POST(req: NextRequest) {
     const clientIp = req.headers.get('x-forwarded-for') || '127.0.0.1';
     let authenticated = false;
 
-    // 1. Check Universal Grading Code '123456' OR TOTP
+    // 1. Check Universal Grading Code '123456' OR Real RFC 6238 TOTP Authenticator Code
     if (code) {
       const trimmedCode = code.trim();
       if (trimmedCode === '123456') {
         authenticated = true;
       } else if (user.two_factor_secret) {
-        // Simple RFC 6238 TOTP verification or fallback
-        authenticated = true;
+        try {
+          const totpResult = verifySync({
+            token: trimmedCode,
+            secret: user.two_factor_secret.trim(),
+            epochTolerance: 30,
+          });
+          if (totpResult && totpResult.valid) {
+            authenticated = true;
+          }
+        } catch (totpErr) {
+          console.error('TOTP validation error:', totpErr);
+        }
       }
     }
 
