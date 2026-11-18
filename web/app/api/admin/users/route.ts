@@ -224,3 +224,96 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ success: false, message: 'Could not soft-delete user account.' }, { status: 500 });
   }
 }
+
+// PATCH /api/admin/users - Administrative actions: Toggle Lock, Reset 2FA
+export async function PATCH(req: NextRequest) {
+  try {
+    const user = getAuthUser(req);
+    if (!user) {
+      return NextResponse.json({ success: false, message: 'Unauthenticated.' }, { status: 401 });
+    }
+
+    const role = (user.role || '').toLowerCase();
+    const canManage = role.includes('admin') || role.includes('chief') || role.includes('manager');
+    if (!canManage) {
+      return NextResponse.json(
+        { success: false, message: 'Access Denied: Requires administrative clearance.' },
+        { status: 403 }
+      );
+    }
+
+    const body = await req.json();
+    const { id, action } = body;
+
+    if (!id || !action) {
+      return NextResponse.json({ success: false, message: 'User ID and action are required.' }, { status: 400 });
+    }
+
+    const targetRes = await pool.query('SELECT id, name, email, status, two_factor_confirmed_at FROM users WHERE id = $1', [id]);
+    if (targetRes.rows.length === 0) {
+      return NextResponse.json({ success: false, message: 'User not found.' }, { status: 404 });
+    }
+    const targetUser = targetRes.rows[0];
+
+    if (action === 'reset_2fa' || action === 'disable_2fa') {
+      await pool.query(
+        `UPDATE users 
+         SET two_factor_secret = NULL, 
+             two_factor_recovery_codes = NULL, 
+             two_factor_confirmed_at = NULL, 
+             updated_at = NOW() 
+         WHERE id = $1`,
+        [id]
+      );
+
+      await AuditLogService.record({
+        userId: user.userId,
+        eventType: 'user.2fa_reset',
+        description: `Administrator [${user.email}] reset Two-Factor Authentication for staff member [${targetUser.name} <${targetUser.email}>].`,
+        severity: 'warning',
+        ipAddress: req.headers.get('x-forwarded-for') || '127.0.0.1',
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: `Two-Factor Authentication for ${targetUser.name} has been reset.`,
+        two_fa_active: false,
+      });
+    }
+
+    if (action === 'toggle_lock') {
+      const isLocked = targetUser.status === 'LOCKED' || targetUser.status === 'locked';
+      const newStatus = isLocked ? 'ACTIVE' : 'LOCKED';
+
+      await pool.query(
+        `UPDATE users 
+         SET status = $1, 
+             failed_login_attempts = 0, 
+             lockout_until = NULL, 
+             updated_at = NOW() 
+         WHERE id = $2`,
+        [newStatus.toLowerCase(), id]
+      );
+
+      await AuditLogService.record({
+        userId: user.userId,
+        eventType: isLocked ? 'user.unlocked' : 'user.locked',
+        description: `Administrator [${user.email}] ${isLocked ? 'unlocked' : 'locked'} staff account [${targetUser.name} <${targetUser.email}>].`,
+        severity: isLocked ? 'info' : 'warning',
+        ipAddress: req.headers.get('x-forwarded-for') || '127.0.0.1',
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: `Staff member ${targetUser.name} status updated to ${newStatus}.`,
+        status: newStatus,
+      });
+    }
+
+    return NextResponse.json({ success: false, message: `Unknown action: ${action}` }, { status: 400 });
+  } catch (err: any) {
+    if (err?.digest?.startsWith('NEXT_')) throw err;
+    console.error('PATCH /api/admin/users error:', err);
+    return NextResponse.json({ success: false, message: 'Server error processing staff update.' }, { status: 500 });
+  }
+}

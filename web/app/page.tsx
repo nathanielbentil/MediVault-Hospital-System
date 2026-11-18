@@ -505,27 +505,27 @@ export default function Home() {
 
   // Staff Management State (Req #7: Delete, Lock/Unlock, Search, Register)
   const [staffDirectory, setStaffDirectory] = useState<StaffDirectoryUser[]>([
-    { id: 1, name: 'Dr. Prof. Nathaniel Bentil', email: 'chiefadmin@medivault.local', role: 'admin', department: 'Executive Governance', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 2, name: 'Dr. Bright Ainoo', email: 'director.ainoo@medivault.local', role: 'manager', department: 'Hospital Medical Director', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 3, name: 'Dr. Kwesi Appiah', email: 'deputy.appiah@medivault.local', role: 'manager', department: 'Clinical Services Directorship', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 4, name: 'Dr. Judah Owusu-Ansah', email: 'dr.judah@medivault.local', role: 'doctor', department: 'Lead Attending Physician', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 5, name: 'Dr. Isaac Donkoh', email: 'dr.isaac@medivault.local', role: 'doctor', department: 'Chief Resident Surgeon', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 6, name: 'Dr. Matilda Mensah', email: 'dr.matilda@medivault.local', role: 'doctor', department: 'Head of Pediatric Medicine', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 7, name: 'Dr. Emmanuel Baah', email: 'dr.baah@medivault.local', role: 'doctor', department: 'Senior Critical Care / ICU', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 8, name: 'Dr. Priscilla Addo', email: 'dr.addo@medivault.local', role: 'doctor', department: 'Senior Obstetrician & Gynecologist', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 9, name: 'Dr. Kofi Boateng', email: 'dr.boateng@medivault.local', role: 'doctor', department: 'Consultant Cardiologist', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 10, name: 'Dr. Akosua Frimpong', email: 'dr.frimpong@medivault.local', role: 'doctor', department: 'Lead Emergency Room Physician', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 11, name: 'Staff Nurse Beatrice Owusu', email: 'nurse.beatrice@medivault.local', role: 'nurse', department: 'Principal Nursing Sister', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 12, name: 'Senior Nurse David Kyei', email: 'nurse.kyei@medivault.local', role: 'nurse', department: 'ICU Charge Nurse Specialist', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 13, name: 'Nurse Mary Asante', email: 'nurse.asante@medivault.local', role: 'nurse', department: 'Surgical Theater Staff Nurse', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 14, name: 'Nurse Samuel Mensah', email: 'nurse.mensah@medivault.local', role: 'nurse', department: 'Pediatric Ward Staff Nurse', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 15, name: 'Nurse Grace Tetteh', email: 'nurse.tetteh@medivault.local', role: 'nurse', department: 'Trauma & Emergency Sister', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 16, name: 'Pharm. Kwame Appiah', email: 'pharm.appiah@medivault.local', role: 'pharmacist', department: 'Chief Hospital Pharmacist', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 17, name: 'Pharm. Rita Mensah', email: 'pharm.rita@medivault.local', role: 'pharmacist', department: 'Clinical Specialist Pharmacist', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 18, name: 'Pharm. Eric Dankwah', email: 'pharm.eric@medivault.local', role: 'pharmacist', department: 'Narcotics & Controlled Vault', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
+    { id: 1, name: 'Dr. Prof. Nathaniel Bentil', email: 'chiefadmin@medivault.local', role: 'admin', department: 'Executive Governance', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 2, name: 'Dr. Bright Ainoo', email: 'director.ainoo@medivault.local', role: 'manager', department: 'Hospital Medical Director', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 3, name: 'Dr. Kwesi Appiah', email: 'deputy.appiah@medivault.local', role: 'manager', department: 'Clinical Services Directorship', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 4, name: 'Dr. Judah Owusu-Ansah', email: 'dr.judah@medivault.local', role: 'doctor', department: 'Lead Attending Physician', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 5, name: 'Dr. Isaac Donkoh', email: 'dr.isaac@medivault.local', role: 'doctor', department: 'Chief Resident Surgeon', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 6, name: 'Dr. Matilda Mensah', email: 'dr.matilda@medivault.local', role: 'doctor', department: 'Head of Pediatric Medicine', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 7, name: 'Dr. Emmanuel Baah', email: 'dr.baah@medivault.local', role: 'doctor', department: 'Senior Critical Care / ICU', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 8, name: 'Dr. Priscilla Addo', email: 'dr.addo@medivault.local', role: 'doctor', department: 'Senior Obstetrician & Gynecologist', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 9, name: 'Dr. Kofi Boateng', email: 'dr.boateng@medivault.local', role: 'doctor', department: 'Consultant Cardiologist', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 10, name: 'Dr. Akosua Frimpong', email: 'dr.frimpong@medivault.local', role: 'doctor', department: 'Lead Emergency Room Physician', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 11, name: 'Staff Nurse Beatrice Owusu', email: 'nurse.beatrice@medivault.local', role: 'nurse', department: 'Principal Nursing Sister', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 12, name: 'Senior Nurse David Kyei', email: 'nurse.kyei@medivault.local', role: 'nurse', department: 'ICU Charge Nurse Specialist', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 13, name: 'Nurse Mary Asante', email: 'nurse.asante@medivault.local', role: 'nurse', department: 'Surgical Theater Staff Nurse', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 14, name: 'Nurse Samuel Mensah', email: 'nurse.mensah@medivault.local', role: 'nurse', department: 'Pediatric Ward Staff Nurse', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 15, name: 'Nurse Grace Tetteh', email: 'nurse.tetteh@medivault.local', role: 'nurse', department: 'Trauma & Emergency Sister', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 16, name: 'Pharm. Kwame Appiah', email: 'pharm.appiah@medivault.local', role: 'pharmacist', department: 'Chief Hospital Pharmacist', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 17, name: 'Pharm. Rita Mensah', email: 'pharm.rita@medivault.local', role: 'pharmacist', department: 'Clinical Specialist Pharmacist', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 18, name: 'Pharm. Eric Dankwah', email: 'pharm.eric@medivault.local', role: 'pharmacist', department: 'Narcotics & Controlled Vault', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
     { id: 19, name: 'Auditor Samuel Osei', email: 'auditor.samuel@medivault.local', role: 'auditor', department: 'Chief Forensic Security Officer', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 20, name: 'Auditor Nana Aba', email: 'auditor.aba@medivault.local', role: 'auditor', department: 'HIPAA Regulatory Officer', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
-    { id: 21, name: 'Auditor Yaw Antwi', email: 'auditor.yaw@medivault.local', role: 'auditor', department: 'Cyber Defense Forensics', status: 'ACTIVE', twoFaActive: true, failedAttempts: 0 },
+    { id: 20, name: 'Auditor Nana Aba', email: 'auditor.aba@medivault.local', role: 'auditor', department: 'HIPAA Regulatory Officer', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
+    { id: 21, name: 'Auditor Yaw Antwi', email: 'auditor.yaw@medivault.local', role: 'auditor', department: 'Cyber Defense Forensics', status: 'ACTIVE', twoFaActive: false, failedAttempts: 0 },
   ]);
   const [staffSearchQuery, setStaffSearchQuery] = useState('');
   const [staffRoleFilter, setStaffRoleFilter] = useState('all');
@@ -1054,6 +1054,23 @@ export default function Home() {
       }
     } catch {
       setPairError('Failed to confirm pairing. Please check connection.');
+    }
+  };
+
+  const handleDisableMy2FA = async () => {
+    if (!confirm('Are you sure you want to disable Two-Factor Authentication? You can re-enable it at any time.')) return;
+    try {
+      const res = await fetch('/api/auth/two-factor-setup', { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        setUser((prev: any) => prev ? { ...prev, two_factor_enabled: false } : prev);
+        setShow2FAPairModal(false);
+        triggerToast('Two-Factor Authentication disabled. Account reverted to standard credentials.');
+      } else {
+        triggerToast(data.message || 'Failed to disable 2FA.');
+      }
+    } catch {
+      triggerToast('Network error while disabling 2FA.');
     }
   };
 
@@ -1635,22 +1652,22 @@ export default function Home() {
             {user?.two_factor_enabled ? (
               <button
                 onClick={handleOpen2FAPairModal}
-                title="Two-Factor Authentication is active and protecting your account. Click to view or re-pair authenticator."
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-950/80 border border-emerald-500/60 hover:border-emerald-400 hover:bg-emerald-900/60 text-emerald-300 text-xs font-bold transition-all cursor-pointer shadow-sm"
+                title="2FA is ACTIVE: Protected by Google/Microsoft Authenticator. Click to manage, re-pair, or disable."
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-950/90 border border-emerald-500/70 hover:border-emerald-400 hover:bg-emerald-900 text-emerald-300 text-xs font-bold transition-all cursor-pointer shadow-sm shadow-emerald-500/10"
               >
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
-                <span className="hidden sm:inline">2FA Enabled</span>
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                <span className="hidden sm:inline">2FA: Enabled</span>
                 <span className="sm:hidden">2FA On</span>
               </button>
             ) : (
               <button
                 onClick={handleOpen2FAPairModal}
-                title="Enable Two-Factor Authentication with your authenticator app"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950/70 border border-cyan-500/50 hover:border-cyan-400 hover:bg-cyan-900/60 text-cyan-300 text-xs font-bold transition-all cursor-pointer shadow-sm"
+                title="2FA is DISABLED: Click to scan QR code and activate Two-Factor Authentication."
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-950/80 border border-amber-500/60 hover:border-amber-400 hover:bg-amber-900/60 text-amber-300 text-xs font-bold transition-all cursor-pointer shadow-sm shadow-amber-500/10"
               >
-                <QrCode className="h-3.5 w-3.5 text-cyan-400" />
-                <span className="hidden sm:inline">Enable 2FA</span>
-                <span className="sm:hidden">2FA</span>
+                <AlertCircle className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+                <span className="hidden sm:inline">2FA: Disabled (Click to Enable)</span>
+                <span className="sm:hidden">2FA Off</span>
               </button>
             )}
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800">
@@ -1873,17 +1890,44 @@ export default function Home() {
             {/* ADMIN Permitted Action Buttons */}
             {isAdmin && (
               <>
+                {activeTab !== 'dashboard' ? (
+                  <button
+                    onClick={() => switchTab('dashboard')}
+                    className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md shadow-purple-500/25 transition-all flex items-center gap-1.5 cursor-pointer"
+                    title="Return to SuperAdmin Executive Overview"
+                  >
+                    <Activity className="h-3.5 w-3.5 text-purple-200" />
+                    <span>Executive Overview</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setShowAddModal(true)}
+                    className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md shadow-purple-500/25 transition-all flex items-center gap-1.5 cursor-pointer"
+                    title="Register New Clinical Personnel with Argon2id Password Hash"
+                  >
+                    <Plus className="h-3.5 w-3.5 text-purple-200" />
+                    <span>Register Staff</span>
+                  </button>
+                )}
                 <button
                   onClick={() => switchTab('salt-pepper')}
-                  className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md shadow-indigo-500/25 transition-all flex items-center gap-1.5 cursor-pointer border border-indigo-400/40"
+                  className={`px-3.5 py-2 rounded-xl border font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer ${
+                    activeTab === 'salt-pepper'
+                      ? 'bg-indigo-600 text-white border-indigo-400 shadow-indigo-500/25'
+                      : 'bg-slate-800 hover:bg-slate-700 border-slate-700 hover:border-indigo-400 text-indigo-300'
+                  }`}
                   title="Live Database Salts & Argon2id Pepper"
                 >
-                  <Shield className="h-3.5 w-3.5 text-indigo-200" />
+                  <Shield className="h-3.5 w-3.5 text-indigo-300" />
                   <span>Salt & Pepper</span>
                 </button>
                 <button
                   onClick={() => switchTab('backups')}
-                  className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-cyan-400 text-cyan-300 font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                  className={`px-3.5 py-2 rounded-xl border font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer ${
+                    activeTab === 'backups'
+                      ? 'bg-cyan-600 text-white border-cyan-400 shadow-cyan-500/25'
+                      : 'bg-slate-800 hover:bg-slate-700 border-slate-700 hover:border-cyan-400 text-cyan-300'
+                  }`}
                   title="Dedicated 3-2-1 Cloud Backups Hub"
                 >
                   <HardDrive className="h-3.5 w-3.5 text-cyan-400" />
@@ -1891,7 +1935,11 @@ export default function Home() {
                 </button>
                 <button
                   onClick={() => switchTab('restore')}
-                  className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-amber-400 text-amber-300 font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                  className={`px-3.5 py-2 rounded-xl border font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer ${
+                    activeTab === 'restore'
+                      ? 'bg-amber-600 text-white border-amber-400 shadow-amber-500/25'
+                      : 'bg-slate-800 hover:bg-slate-700 border-slate-700 hover:border-amber-400 text-amber-300'
+                  }`}
                   title="Dedicated Point-in-Time Database Disaster Recovery"
                 >
                   <RotateCcw className="h-3.5 w-3.5 text-amber-400" />
@@ -1899,7 +1947,11 @@ export default function Home() {
                 </button>
                 <button
                   onClick={() => switchTab('staff')}
-                  className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-purple-400 text-slate-300 hover:text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                  className={`px-3.5 py-2 rounded-xl border font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer ${
+                    activeTab === 'staff'
+                      ? 'bg-purple-600 text-white border-purple-400 shadow-purple-500/25'
+                      : 'bg-slate-800 hover:bg-slate-700 border-slate-700 hover:border-purple-400 text-slate-300 hover:text-white'
+                  }`}
                   title="Manage Staff, Lock Accounts, and Delete Users"
                 >
                   <Users className="h-3.5 w-3.5 text-slate-400" />
@@ -4108,9 +4160,16 @@ export default function Home() {
                           </span>
                         </td>
                         <td className="py-3 px-3">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800">
-                            ENFORCED
-                          </span>
+                          {staff.twoFaActive ? (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-300 border border-emerald-600/50 inline-flex items-center gap-1 shadow-sm">
+                              <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+                              <span>2FA Active</span>
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700 inline-flex items-center gap-1">
+                              <span>Disabled</span>
+                            </span>
+                          )}
                         </td>
                         <td className="py-3 px-3">
                           <span
@@ -4794,19 +4853,23 @@ export default function Home() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-bold text-white text-base">
-                      {user?.two_factor_enabled ? 'Two-Factor Authentication' : 'Enable 2FA'}
-                    </h3>
-                    {user?.two_factor_enabled && (
-                      <span className="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">
-                        Active
+                    <h3 className="font-bold text-white text-base">Two-Factor Authentication</h3>
+                    {user?.two_factor_enabled ? (
+                      <span className="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-500/50 px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1 shadow-sm">
+                        <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+                        <span>Status: 2FA Active</span>
+                      </span>
+                    ) : (
+                      <span className="text-[10px] bg-amber-950 text-amber-300 border border-amber-500/50 px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1 shadow-sm">
+                        <AlertCircle className="h-3 w-3 text-amber-400" />
+                        <span>Status: 2FA Disabled</span>
                       </span>
                     )}
                   </div>
                   <p className="text-[11px] text-slate-400">
                     {user?.two_factor_enabled
-                      ? 'Your account is secured with 2FA. Re-scan or bind a new authenticator below:'
-                      : 'Scan with Google Authenticator, Microsoft Authenticator, or Apple Passwords'}
+                      ? 'Your account is currently protected by Google Authenticator.'
+                      : 'Standard credentials only. Scan with Google or Microsoft Authenticator to protect your logins.'}
                   </p>
                 </div>
               </div>
@@ -4817,6 +4880,27 @@ export default function Home() {
                 <X className="h-5 w-5" />
               </button>
             </div>
+
+            {/* If 2FA is currently active, show clear Disable Option */}
+            {user?.two_factor_enabled && !pairSuccess && (
+              <div className="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex items-center justify-between gap-3">
+                <div className="space-y-0.5">
+                  <p className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                    <span>2FA Protection is Active</span>
+                  </p>
+                  <p className="text-[11px] text-slate-400">Want to turn off Two-Factor Authentication?</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleDisableMy2FA}
+                  className="px-3 py-1.5 rounded-lg bg-rose-950/80 hover:bg-rose-900 border border-rose-800 text-rose-300 text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1 shadow-sm"
+                >
+                  <X className="h-3 w-3" />
+                  <span>Disable 2FA</span>
+                </button>
+              </div>
+            )}
 
             {pairQrLoading ? (
               <div className="py-12 text-center space-y-3">

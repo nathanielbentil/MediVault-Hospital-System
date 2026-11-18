@@ -137,3 +137,44 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+// DELETE /api/auth/two-factor-setup - Disable 2FA for the authenticated user
+export async function DELETE(req: NextRequest) {
+  try {
+    const authUser = getAuthUser(req);
+    if (!authUser) {
+      return NextResponse.json({ success: false, message: 'Unauthenticated.' }, { status: 401 });
+    }
+
+    await pool.query(
+      `UPDATE users 
+       SET two_factor_secret = NULL, 
+           two_factor_recovery_codes = NULL, 
+           two_factor_confirmed_at = NULL, 
+           updated_at = NOW() 
+       WHERE id = $1`,
+      [authUser.userId]
+    );
+
+    await AuditLogService.record({
+      userId: authUser.userId,
+      eventType: 'auth.2fa_disabled',
+      description: `User [${authUser.email}] disabled Two-Factor Authentication. Account reverted to standard credentials.`,
+      severity: 'warning',
+      ipAddress: req.headers.get('x-forwarded-for') || '127.0.0.1',
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: 'Two-Factor Authentication has been successfully disabled.',
+      two_factor_enabled: false,
+    });
+  } catch (err: any) {
+    if (err?.digest?.startsWith('NEXT_')) throw err;
+    console.error('DELETE /api/auth/two-factor-setup error:', err);
+    return NextResponse.json(
+      { success: false, message: 'Failed to disable Two-Factor Authentication.' },
+      { status: 500 }
+    );
+  }
+}
