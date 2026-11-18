@@ -1509,25 +1509,34 @@ export default function Home() {
               <>
                 <Link
                   href="/admin"
-                  className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-black text-xs shadow-lg shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Crown className="h-3.5 w-3.5" />
-                  <span>Open SuperAdmin Governance Hub</span>
+                  <Crown className="h-3.5 w-3.5 text-purple-200" />
+                  <span>Admin Dashboard</span>
                   <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <Link
+                  href="/admin?tab=salt-pepper"
+                  className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-500/25 transition-all flex items-center gap-1.5 cursor-pointer border border-indigo-400/50"
+                  title="Click to view live database salts and HMAC pepper configuration"
+                >
+                  <Shield className="h-3.5 w-3.5 text-indigo-200" />
+                  <span>View Salt & Pepper</span>
+                </Link>
+                <Link
+                  href="/admin?tab=backup-dr"
+                  className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-purple-400 text-purple-300 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                  title="Click to access 3-2-1 backup snapshots and disaster restore"
+                >
+                  <HardDrive className="h-3.5 w-3.5 text-purple-400" />
+                  <span>Backup & Restore</span>
                 </Link>
                 <button
                   onClick={() => setShowStaffModal(true)}
-                  className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-purple-400 text-purple-300 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-purple-400 text-slate-300 hover:text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Users className="h-3.5 w-3.5" />
-                  <span>Manage Staff & Roles</span>
-                </button>
-                <button
-                  onClick={() => setShowBackupModal(true)}
-                  className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-purple-400 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
-                >
-                  <HardDrive className="h-3.5 w-3.5" />
-                  <span>3-2-1 Cloud Backup</span>
+                  <Users className="h-3.5 w-3.5 text-slate-400" />
+                  <span>Manage Staff</span>
                 </button>
               </>
             )}
@@ -1542,7 +1551,7 @@ export default function Home() {
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-500 text-xs text-white font-bold transition-all shadow-md shrink-0 cursor-pointer"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${patientsLoading ? 'animate-spin text-cyan-400' : ''}`} />
-              <span>Refresh Records</span>
+              <span>Refresh Data</span>
             </button>
           </div>
         </div>
