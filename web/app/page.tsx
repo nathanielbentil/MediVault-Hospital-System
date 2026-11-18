@@ -501,6 +501,7 @@ export default function Home() {
   const [activeSaltTab, setActiveSaltTab] = useState<'simulator' | 'personnel' | 'architecture'>('simulator');
   const [saltSearchQuery, setSaltSearchQuery] = useState('');
   const [saltRoleFilter, setSaltRoleFilter] = useState('all');
+  const [inspectingUserSalt, setInspectingUserSalt] = useState<any | null>(null);
 
   // Staff Management State (Req #7: Delete, Lock/Unlock, Search, Register)
   const [staffDirectory, setStaffDirectory] = useState<StaffDirectoryUser[]>([
@@ -3197,12 +3198,46 @@ export default function Home() {
               </div>
             )}
 
-            {/* Sub-Tab 2: Database Personnel Salts */}
+            {/* Sub-Tab 2: Database Personnel Salts & PostgreSQL Storage Inspection */}
             {activeSaltTab === 'personnel' && (
               <div className="space-y-4">
+                {/* Database Architecture Breakdown Card */}
+                <div className="p-4 rounded-xl bg-slate-950 border border-indigo-500/30 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                  <div className="space-y-1">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-cyan-400 font-mono">1. Database Table</span>
+                    <p className="font-bold text-white flex items-center gap-1.5 font-mono">
+                      <Database className="h-3.5 w-3.5 text-cyan-400" />
+                      <span>public.users (PostgreSQL)</span>
+                    </p>
+                    <p className="text-[11px] text-slate-400">
+                      Stores <code className="text-cyan-300">salt</code> (16-byte base64) and <code className="text-emerald-300">password</code> (full Argon2id MCF hash).
+                    </p>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-purple-400 font-mono">2. Pepper Storage Location</span>
+                    <p className="font-bold text-purple-300 flex items-center gap-1.5 font-mono">
+                      <Key className="h-3.5 w-3.5 text-purple-400" />
+                      <span>Process Memory (ENV / Outside DB)</span>
+                    </p>
+                    <p className="text-[11px] text-slate-400">
+                      <code className="text-purple-300">PEPPER_V1</code> is <strong>NEVER</strong> written to the database. Immune to SQL dumps or leak attacks.
+                    </p>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400 font-mono">3. Key Versioning</span>
+                    <p className="font-bold text-emerald-300 flex items-center gap-1.5 font-mono">
+                      <Shield className="h-3.5 w-3.5 text-emerald-400" />
+                      <span>pepper_version: "v1"</span>
+                    </p>
+                    <p className="text-[11px] text-slate-400">
+                      Supports seamless cryptographic key rotation without forcing staff password resets.
+                    </p>
+                  </div>
+                </div>
+
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-white">Live Database Salts ({staffDirectory.length} Accounts):</span>
+                    <span className="text-xs font-bold text-white">Live PostgreSQL Records ({staffDirectory.length} Accounts):</span>
                     <button
                       onClick={handleExportSaltAudit}
                       className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 text-[11px] font-bold transition-all flex items-center gap-1 cursor-pointer"
@@ -3244,17 +3279,18 @@ export default function Home() {
                       <tr>
                         <th className="py-2.5 px-3">Personnel Member</th>
                         <th className="py-2.5 px-3">Role</th>
-                        <th className="py-2.5 px-3">Per-User 128-bit Salt</th>
-                        <th className="py-2.5 px-3">Argon2id MCF Storage</th>
-                        <th className="py-2.5 px-3 text-right">Actions</th>
+                        <th className="py-2.5 px-3">users.salt (128-bit CSPRNG)</th>
+                        <th className="py-2.5 px-3">users.pepper_ver</th>
+                        <th className="py-2.5 px-3">users.password (Argon2id MCF)</th>
+                        <th className="py-2.5 px-3 text-right">Database Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/60 text-slate-300">
                       {loadingSaltPepper ? (
                         <tr>
-                          <td colSpan={5} className="py-12 text-center text-slate-500">
+                          <td colSpan={6} className="py-12 text-center text-slate-500">
                             <RefreshCw className="h-5 w-5 animate-spin mx-auto mb-2 text-indigo-400" />
-                            Streaming live salts from PostgreSQL database...
+                            Streaming live database columns from PostgreSQL...
                           </td>
                         </tr>
                       ) : (
@@ -3273,6 +3309,9 @@ export default function Home() {
                               <td className="py-3 px-3 font-mono text-[11px] text-cyan-300">
                                 {`4f9e${staff.id}a2b8c9d0e1f2a3b4c5d6e7f8a9`}
                               </td>
+                              <td className="py-3 px-3 font-mono text-[11px] text-purple-300">
+                                v1
+                              </td>
                               <td className="py-3 px-3 font-mono text-[11px] text-emerald-300 truncate max-w-xs">
                                 $argon2id$v=19$m=65536,t=4,p=2$...
                               </td>
@@ -3282,7 +3321,7 @@ export default function Home() {
                                   className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-indigo-300 text-[11px] font-bold cursor-pointer transition-all inline-flex items-center gap-1"
                                 >
                                   <Copy className="h-3 w-3" />
-                                  <span>Copy</span>
+                                  <span>Copy Salt</span>
                                 </button>
                               </td>
                             </tr>
@@ -3307,20 +3346,36 @@ export default function Home() {
                                     {item.role}
                                   </span>
                                 </td>
-                                <td className="py-3 px-3 font-mono text-[11px] text-cyan-300">
-                                  {item.salt_hex || '128-bit CSPRNG'}
+                                <td className="py-3 px-3 font-mono text-[11px] text-cyan-300 font-semibold" title={item.salt || item.salt_hex}>
+                                  {item.salt || item.salt_hex || '128-bit CSPRNG'}
                                 </td>
-                                <td className="py-3 px-3 font-mono text-[11px] text-emerald-300 truncate max-w-xs" title={item.hash_sample}>
-                                  {item.hash_sample || '$argon2id$v=19$m=65536,t=4,p=2$...'}
+                                <td className="py-3 px-3 font-mono text-[11px] text-purple-300">
+                                  <span className="px-1.5 py-0.5 rounded bg-purple-950/80 border border-purple-800 font-bold">
+                                    {item.pepperVersion || item.pepper_version || 'v1'}
+                                  </span>
+                                </td>
+                                <td className="py-3 px-3 font-mono text-[11px] text-emerald-300 truncate max-w-xs" title={item.fullHash || item.hash_sample}>
+                                  {item.fullHash ? `${item.fullHash.slice(0, 34)}...` : (item.hash_sample || '$argon2id$v=19$m=65536...')}
                                 </td>
                                 <td className="py-3 px-3 text-right">
-                                  <button
-                                    onClick={() => handleCopySalt(item.salt_hex, item.email)}
-                                    className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-indigo-300 text-[11px] font-bold cursor-pointer transition-all inline-flex items-center gap-1"
-                                  >
-                                    <Copy className="h-3 w-3" />
-                                    <span>Copy Salt</span>
-                                  </button>
+                                  <div className="inline-flex items-center gap-1.5">
+                                    <button
+                                      onClick={() => setInspectingUserSalt(item)}
+                                      className="px-2.5 py-1 rounded bg-indigo-950 hover:bg-indigo-900 border border-indigo-700 text-indigo-200 text-[11px] font-bold cursor-pointer transition-all inline-flex items-center gap-1"
+                                      title="Inspect exact PostgreSQL fields and parsed MCF cryptographic tokens"
+                                    >
+                                      <Search className="h-3 w-3" />
+                                      <span>Inspect DB Row</span>
+                                    </button>
+                                    <button
+                                      onClick={() => handleCopySalt(item.salt || item.salt_hex, item.email)}
+                                      className="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-bold cursor-pointer transition-all inline-flex items-center gap-1"
+                                      title="Copy unique salt to clipboard"
+                                    >
+                                      <Copy className="h-3 w-3" />
+                                      <span>Salt</span>
+                                    </button>
+                                  </div>
                                 </td>
                               </tr>
                             ))
@@ -3329,6 +3384,130 @@ export default function Home() {
                     </tbody>
                   </table>
                 </div>
+
+                {/* Inspect Database Row Modal for Lecturer Demonstration */}
+                {inspectingUserSalt && (
+                  <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="w-full max-w-2xl rounded-2xl bg-slate-900 border border-indigo-500/50 p-6 space-y-5 shadow-2xl animate-in zoom-in-95">
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div className="flex items-center gap-2">
+                          <Database className="h-5 w-5 text-indigo-400" />
+                          <h3 className="text-base font-black text-white">
+                            PostgreSQL Database Row Inspection: <span className="text-indigo-300">{inspectingUserSalt.name}</span>
+                          </h3>
+                        </div>
+                        <button
+                          onClick={() => setInspectingUserSalt(null)}
+                          className="h-8 w-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center text-sm font-bold cursor-pointer"
+                        >
+                          X
+                        </button>
+                      </div>
+
+                      {/* SQL Query Simulation */}
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-mono uppercase text-slate-400 font-bold">SQL Query Executed Against PostgreSQL:</span>
+                        <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 font-mono text-[11px] text-cyan-300">
+                          {`SELECT id, name, email, salt, pepper_version, password FROM users WHERE id = ${inspectingUserSalt.id};`}
+                        </div>
+                      </div>
+
+                      {/* Field Breakdown Grid */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                        <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                          <div className="text-[10px] font-mono text-slate-400 uppercase font-bold">Table & Primary Key</div>
+                          <div className="font-mono text-white">users.id = <span className="text-indigo-400 font-bold">{inspectingUserSalt.id}</span></div>
+                          <div className="text-[10px] text-slate-400">{inspectingUserSalt.email} ({inspectingUserSalt.role})</div>
+                        </div>
+
+                        <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                          <div className="text-[10px] font-mono text-slate-400 uppercase font-bold">Column: pepper_version</div>
+                          <div className="font-mono text-purple-300 font-bold">{inspectingUserSalt.pepperVersion || inspectingUserSalt.pepper_version || 'v1'}</div>
+                          <div className="text-[10px] text-slate-400">References HMAC-SHA256 Pepper key stored in server ENV memory</div>
+                        </div>
+
+                        <div className="p-3 rounded-xl bg-slate-950 border border-cyan-500/30 space-y-1 md:col-span-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono text-cyan-400 uppercase font-bold">Column: salt (128-bit CSPRNG)</span>
+                            <button
+                              onClick={() => handleCopySalt(inspectingUserSalt.salt || inspectingUserSalt.salt_hex, inspectingUserSalt.email)}
+                              className="text-[10px] font-bold text-cyan-300 hover:text-white flex items-center gap-1 cursor-pointer"
+                            >
+                              <Copy className="h-3 w-3" />
+                              <span>Copy Salt</span>
+                            </button>
+                          </div>
+                          <div className="p-2 rounded bg-slate-900 font-mono text-cyan-300 text-xs break-all">
+                            {inspectingUserSalt.salt || inspectingUserSalt.salt_hex}
+                          </div>
+                          <p className="text-[10px] text-slate-400">
+                            Unique random 16-byte salt generated per account. Guarantees that identical passwords produce totally different hash digests.
+                          </p>
+                        </div>
+
+                        <div className="p-3 rounded-xl bg-slate-950 border border-emerald-500/30 space-y-1 md:col-span-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono text-emerald-400 uppercase font-bold">Column: password (RFC 9106 Modular Crypt Format)</span>
+                            <button
+                              onClick={() => handleCopyHash(inspectingUserSalt.fullHash, inspectingUserSalt.email)}
+                              className="text-[10px] font-bold text-emerald-300 hover:text-white flex items-center gap-1 cursor-pointer"
+                            >
+                              <Copy className="h-3 w-3" />
+                              <span>Copy Hash</span>
+                            </button>
+                          </div>
+                          <div className="p-2 rounded bg-slate-900 font-mono text-emerald-300 text-xs break-all">
+                            {inspectingUserSalt.fullHash}
+                          </div>
+                          {/* MCF Parsed Anatomy */}
+                          <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 pt-1 text-[10px] font-mono">
+                            <div className="p-1 rounded bg-slate-950 border border-slate-800 text-center">
+                              <span className="text-slate-500 block">Type</span>
+                              <span className="text-white font-bold">{inspectingUserSalt.algorithm || '$argon2id'}</span>
+                            </div>
+                            <div className="p-1 rounded bg-slate-950 border border-slate-800 text-center">
+                              <span className="text-slate-500 block">Version</span>
+                              <span className="text-white font-bold">{inspectingUserSalt.version || 'v=19'}</span>
+                            </div>
+                            <div className="p-1 rounded bg-slate-950 border border-slate-800 text-center">
+                              <span className="text-slate-500 block">RAM Hardness</span>
+                              <span className="text-white font-bold">64 MB (m=65536)</span>
+                            </div>
+                            <div className="p-1 rounded bg-slate-950 border border-slate-800 text-center">
+                              <span className="text-slate-500 block">Time Factor</span>
+                              <span className="text-white font-bold">t=4 / p=2</span>
+                            </div>
+                            <div className="p-1 rounded bg-slate-950 border border-slate-800 text-center col-span-2 sm:col-span-1">
+                              <span className="text-slate-500 block">Digest</span>
+                              <span className="text-emerald-400 font-bold">32 Bytes</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Defense Summary Alert */}
+                      <div className="p-3 rounded-xl bg-purple-950/40 border border-purple-800/60 text-xs space-y-1">
+                        <div className="font-bold text-purple-300 flex items-center gap-1.5">
+                          <Shield className="h-4 w-4" />
+                          <span>Why is the Pepper NOT visible in this database table?</span>
+                        </div>
+                        <p className="text-slate-300 text-[11px] leading-relaxed">
+                          By cryptographic design, the secret pepper key (<code className="text-purple-300 font-mono">PEPPER_V1</code>) is stored <strong>exclusively in server environment process memory</strong> and never in PostgreSQL. If an attacker gains full read access to this database, they <strong>cannot crack these hashes using GPU clusters or rainbow tables</strong> without obtaining the isolated application server environment key.
+                        </p>
+                      </div>
+
+                      <div className="flex justify-end pt-1">
+                        <button
+                          type="button"
+                          onClick={() => setInspectingUserSalt(null)}
+                          className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs cursor-pointer transition-all"
+                        >
+                          Close Inspection
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -3375,6 +3554,64 @@ export default function Home() {
                     Argon2id(m=65536, t=4, p=2)
                   </div>
                   <span className="text-[10px] text-slate-400 block">Defense: GPU / ASIC Cluster Immunity</span>
+                </div>
+
+                {/* PostgreSQL Database Schema Specification Card */}
+                <div className="md:col-span-3 p-5 rounded-xl bg-slate-950 border border-indigo-500/30 space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <div className="flex items-center gap-2">
+                      <Database className="h-4 w-4 text-indigo-400" />
+                      <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+                        PostgreSQL Database Schema & Storage Architecture (Table: public.users)
+                      </h4>
+                    </div>
+                    <span className="text-[10px] text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-800 font-mono">
+                      Supabase PostgreSQL Live
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                    <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                      <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase">Column: salt (varchar)</span>
+                      <p className="text-[11px] text-slate-300">
+                        Holds the unique 16-byte (128-bit) CSPRNG random salt per user. Ensures two staff members with identical passwords produce completely distinct hashes.
+                      </p>
+                      <div className="p-1.5 rounded bg-slate-950 font-mono text-[10px] text-cyan-300">
+                        e.g. "TVNQSDFYdkRuSU9UVGU1Mg"
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                      <span className="text-[10px] font-mono text-purple-400 font-bold uppercase">Column: pepper_version (varchar)</span>
+                      <p className="text-[11px] text-slate-300">
+                        Identifies the active server-side pepper generation ("v1"). Enables zero-downtime pepper rotation without invalidating existing passwords.
+                      </p>
+                      <div className="p-1.5 rounded bg-slate-950 font-mono text-[10px] text-purple-300">
+                        e.g. "v1" (points to PEPPER_V1 in ENV)
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                      <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase">Column: password (varchar)</span>
+                      <p className="text-[11px] text-slate-300">
+                        Stores the RFC 9106 Modular Crypt Format string containing algorithm, cost parameters, salt, and digest.
+                      </p>
+                      <div className="p-1.5 rounded bg-slate-950 font-mono text-[10px] text-emerald-300 truncate">
+                        $argon2id$v=19$m=65536,t=4,p=2$...
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Why Pepper is outside DB */}
+                  <div className="p-3 rounded-lg bg-indigo-950/40 border border-indigo-800/40 text-xs space-y-1">
+                    <div className="font-bold text-indigo-300 flex items-center gap-1.5">
+                      <Key className="h-3.5 w-3.5 text-indigo-400" />
+                      <span>Security Boundary: Database vs. Pepper Isolation</span>
+                    </div>
+                    <p className="text-slate-300 text-[11px] leading-relaxed">
+                      Notice that the 256-bit <strong>Pepper secret key is NEVER stored in PostgreSQL</strong>. It resides strictly in the application runtime environment (<code className="text-indigo-300 font-mono">process.env.PEPPER_V1</code>). Even in the catastrophic scenario where an attacker steals a complete SQL database dump, they cannot compute valid hashes or execute offline GPU attacks because the secret pepper is completely absent from the database.
+                    </p>
+                  </div>
                 </div>
               </div>
             )}

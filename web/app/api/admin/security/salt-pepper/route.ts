@@ -30,18 +30,19 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Query 8 sample personnel accounts from PostgreSQL to inspect live database salts
+    // Query personnel accounts from PostgreSQL to inspect live database salts and pepper versions
     const res = await pool.query(
-      `SELECT u.id, u.name, u.email, u.pepper_version, u.password, r.name as role_name
+      `SELECT u.id, u.name, u.email, u.pepper_version, u.password, u.salt, r.name as role_name
        FROM users u
        LEFT JOIN role_user ru ON ru.user_id = u.id
        LEFT JOIN roles r ON r.id = ru.role_id
        ORDER BY u.id ASC
-       LIMIT 8`
+       LIMIT 12`
     );
 
     const personnelSalts = res.rows.map((row) => {
       const parts = (row.password || '').split('$');
+      const saltValue = row.salt || parts[4] || '128-bit-csprng-salt';
       return {
         id: row.id,
         name: row.name,
@@ -51,9 +52,17 @@ export async function GET(req: NextRequest) {
         algorithm: parts[1] || 'argon2id',
         version: parts[2] || 'v=19',
         parameters: parts[3] || 'm=65536,t=4,p=2',
-        salt: parts[4] || '128-bit-csprng-salt',
+        salt: saltValue,
+        salt_hex: saltValue,
+        hash_sample: row.password ? `${row.password.slice(0, 38)}...` : '',
         hashDigestPreview: parts[5] ? `${parts[5].slice(0, 12)}...${parts[5].slice(-8)}` : 'Stored',
         fullHash: row.password,
+        databaseTable: 'users',
+        dbColumns: {
+          password: row.password,
+          salt: row.salt || parts[4],
+          pepper_version: row.pepper_version || 'v1',
+        },
       };
     });
 
@@ -132,6 +141,10 @@ export async function POST(req: NextRequest) {
       success: true,
       simulation: {
         rawPassword: rawInput,
+        stage1_raw_input: rawInput,
+        stage2_peppered_digest: pepperedHex,
+        stage3_salt_hex: extractedSalt,
+        stage4_final_mcf_hash: hashResult.hash,
         step1_raw: {
           description: 'User enters raw plaintext password during registration or login.',
           value: rawInput,
