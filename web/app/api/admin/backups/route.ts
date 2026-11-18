@@ -165,7 +165,7 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: '3-2-1 WORM Backup Snapshot dispatched to encrypted local volume and offsite S3 mirror.',
+        message: 'Backup completed successfully! All hospital records and clinical data are safely secured.',
         digest: snapshotHash,
       });
     }

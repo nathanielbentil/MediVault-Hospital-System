@@ -739,12 +739,12 @@ export default function Home() {
           status: 'Verified Valid',
         };
         setBackupSnapshots((prev) => [newSnap, ...prev]);
-        triggerToast('3-2-1 WORM backup snapshot generated & encrypted with age X25519.');
+        triggerToast('Backup completed successfully! All hospital records and clinical data are safely secured.');
       } else {
-        triggerToast(data.message || 'Snapshot creation failed.');
+        triggerToast(data.message || 'Backup creation failed.');
       }
     } catch {
-      triggerToast('Snapshot network error.');
+      triggerToast('Backup network error.');
     }
   };
 
@@ -1904,68 +1904,64 @@ export default function Home() {
                 {activeTab !== 'dashboard' ? (
                   <button
                     onClick={() => switchTab('dashboard')}
-                    className="group px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs sm:text-[13px] shadow-lg shadow-purple-600/35 border border-purple-400/60 ring-1 ring-purple-400/30 transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98]"
+                    className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs sm:text-[13px] shadow-lg shadow-purple-500/25 border border-purple-400/50 transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98]"
                     title="Return to SuperAdmin Executive Overview"
                   >
-                    <Activity className="h-4 w-4 text-purple-100 group-hover:scale-110 transition-transform shrink-0" />
+                    <Activity className="h-4 w-4 text-purple-200 shrink-0" />
                     <span>Executive Overview</span>
                   </button>
                 ) : (
                   <button
                     onClick={() => setShowAddModal(true)}
-                    className="group px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs sm:text-[13px] shadow-lg shadow-purple-600/35 border border-purple-400/60 ring-1 ring-purple-400/30 transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98]"
+                    className="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs sm:text-[13px] shadow-lg shadow-purple-500/25 border border-purple-400/50 transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98]"
                     title="Register New Clinical Personnel with Argon2id Password Hash"
                   >
-                    <Plus className="h-4 w-4 text-purple-100 group-hover:scale-110 transition-transform shrink-0" />
+                    <Plus className="h-4 w-4 text-purple-200 shrink-0" />
                     <span>Register Staff</span>
                   </button>
                 )}
                 <button
                   onClick={() => switchTab('salt-pepper')}
-                  className={`group px-4 py-2.5 rounded-xl border font-bold text-xs sm:text-[13px] transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98] ${
-                    activeTab === 'salt-pepper'
-                      ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-black border-indigo-300 shadow-lg shadow-indigo-500/40 ring-1 ring-indigo-400/60'
-                      : 'bg-gradient-to-r from-indigo-950/90 via-slate-900/90 to-indigo-950/70 hover:from-indigo-900/90 hover:to-slate-900 text-indigo-200 hover:text-white border-indigo-500/50 hover:border-indigo-400 shadow-md shadow-indigo-950/50 hover:shadow-indigo-500/20'
-                  }`}
+                  className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-[13px] shadow-lg shadow-indigo-500/30 border border-indigo-400/50 transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98]"
                   title="Live Database Salts & Argon2id Pepper"
                 >
-                  <Shield className={`h-4 w-4 shrink-0 transition-transform group-hover:scale-110 ${activeTab === 'salt-pepper' ? 'text-white' : 'text-indigo-400'}`} />
+                  <Shield className="h-4 w-4 text-indigo-200 shrink-0" />
                   <span>Salt & Pepper</span>
                 </button>
                 <button
                   onClick={() => switchTab('backups')}
-                  className={`group px-4 py-2.5 rounded-xl border font-bold text-xs sm:text-[13px] transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98] ${
+                  className={`px-4 py-2.5 rounded-xl border font-bold text-xs sm:text-[13px] transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98] ${
                     activeTab === 'backups'
-                      ? 'bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 font-black border-cyan-200 shadow-lg shadow-cyan-500/40 ring-1 ring-cyan-300/60'
-                      : 'bg-gradient-to-r from-cyan-950/90 via-slate-900/90 to-cyan-950/70 hover:from-cyan-900/90 hover:to-slate-900 text-cyan-200 hover:text-white border-cyan-500/50 hover:border-cyan-400 shadow-md shadow-cyan-950/50 hover:shadow-cyan-500/20'
+                      ? 'bg-cyan-600 text-white border-cyan-400 shadow-lg shadow-cyan-500/30'
+                      : 'bg-slate-800/90 hover:bg-slate-700/90 border-slate-700 hover:border-cyan-400 text-cyan-300 hover:text-white shadow-sm'
                   }`}
                   title="Dedicated 3-2-1 Cloud Backups Hub"
                 >
-                  <HardDrive className={`h-4 w-4 shrink-0 transition-transform group-hover:scale-110 ${activeTab === 'backups' ? 'text-slate-950' : 'text-cyan-400'}`} />
+                  <HardDrive className={`h-4 w-4 shrink-0 ${activeTab === 'backups' ? 'text-white' : 'text-cyan-400'}`} />
                   <span>Backups</span>
                 </button>
                 <button
                   onClick={() => switchTab('restore')}
-                  className={`group px-4 py-2.5 rounded-xl border font-bold text-xs sm:text-[13px] transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98] ${
+                  className={`px-4 py-2.5 rounded-xl border font-bold text-xs sm:text-[13px] transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98] ${
                     activeTab === 'restore'
-                      ? 'bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black border-amber-200 shadow-lg shadow-amber-500/40 ring-1 ring-amber-300/60'
-                      : 'bg-gradient-to-r from-amber-950/90 via-slate-900/90 to-amber-950/70 hover:from-amber-900/90 hover:to-slate-900 text-amber-200 hover:text-white border-amber-500/50 hover:border-amber-400 shadow-md shadow-amber-950/50 hover:shadow-amber-500/20'
+                      ? 'bg-amber-600 text-white border-amber-400 shadow-lg shadow-amber-500/30'
+                      : 'bg-slate-800/90 hover:bg-slate-700/90 border-slate-700 hover:border-amber-400 text-amber-300 hover:text-white shadow-sm'
                   }`}
                   title="Dedicated Point-in-Time Database Disaster Recovery"
                 >
-                  <RotateCcw className={`h-4 w-4 shrink-0 transition-transform group-hover:scale-110 ${activeTab === 'restore' ? 'text-slate-950' : 'text-amber-400'}`} />
+                  <RotateCcw className={`h-4 w-4 shrink-0 ${activeTab === 'restore' ? 'text-white' : 'text-amber-400'}`} />
                   <span>Restore</span>
                 </button>
                 <button
                   onClick={() => switchTab('staff')}
-                  className={`group px-4 py-2.5 rounded-xl border font-bold text-xs sm:text-[13px] transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98] ${
+                  className={`px-4 py-2.5 rounded-xl border font-bold text-xs sm:text-[13px] transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98] ${
                     activeTab === 'staff'
-                      ? 'bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-black border-purple-300 shadow-lg shadow-purple-500/40 ring-1 ring-purple-400/60'
-                      : 'bg-gradient-to-r from-slate-900 via-purple-950/50 to-slate-900 hover:from-purple-950/80 hover:to-slate-900 text-purple-200 hover:text-white border-purple-500/40 hover:border-purple-400 shadow-md shadow-purple-950/40 hover:shadow-purple-500/20'
+                      ? 'bg-purple-700 text-white border-purple-400 shadow-lg shadow-purple-500/30'
+                      : 'bg-slate-800/90 hover:bg-slate-700/90 border-slate-700 hover:border-purple-400 text-slate-200 hover:text-white shadow-sm'
                   }`}
                   title="Manage Staff, Lock Accounts, and Delete Users"
                 >
-                  <Users className={`h-4 w-4 shrink-0 transition-transform group-hover:scale-110 ${activeTab === 'staff' ? 'text-white' : 'text-purple-400'}`} />
+                  <Users className={`h-4 w-4 shrink-0 ${activeTab === 'staff' ? 'text-white' : 'text-purple-400'}`} />
                   <span>Manage Staff</span>
                 </button>
               </>
@@ -1978,9 +1974,9 @@ export default function Home() {
                 if (isAdmin || isAuditor) loadAudit();
                 triggerToast('Patient records and telemetry refreshed.');
               }}
-              className="group px-4 py-2.5 rounded-xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 hover:from-slate-800 hover:to-slate-700 text-slate-100 hover:text-white border border-slate-600 hover:border-slate-400 text-xs sm:text-[13px] font-bold transition-all duration-200 shadow-md shadow-slate-950/50 shrink-0 cursor-pointer flex items-center gap-2 active:scale-[0.98]"
+              className="px-4 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-700 hover:border-slate-500 text-xs sm:text-[13px] font-bold transition-all shadow-sm shrink-0 cursor-pointer flex items-center gap-2 active:scale-[0.98]"
             >
-              <RefreshCw className={`h-4 w-4 shrink-0 transition-transform duration-300 ${patientsLoading ? 'animate-spin text-cyan-400' : 'text-slate-300 group-hover:rotate-180 group-hover:text-cyan-400'}`} />
+              <RefreshCw className={`h-4 w-4 shrink-0 transition-transform duration-300 ${patientsLoading ? 'animate-spin text-cyan-400' : 'text-slate-400'}`} />
               <span>Refresh Data</span>
             </button>
           </div>
@@ -4688,7 +4684,7 @@ export default function Home() {
                 setTimeout(() => {
                   setBackupTriggered(false);
                   setShowBackupModal(false);
-                  triggerToast('Instant 3-2-1 backup snapshot successfully created and sealed.');
+                  triggerToast('Backup completed successfully! All hospital records are safely secured.');
                 }, 1600);
               }}
               className="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
@@ -4696,10 +4692,10 @@ export default function Home() {
               {backupTriggered ? (
                 <>
                   <RefreshCw className="h-4 w-4 animate-spin" />
-                  <span>Sealing Snapshot with Argon2id Key...</span>
+                  <span>Creating Backup...</span>
                 </>
               ) : (
-                <span>Trigger Instant 3-2-1 Cloud Snapshot</span>
+                <span>Create Backup Now</span>
               )}
             </button>
           </div>
