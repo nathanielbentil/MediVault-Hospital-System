@@ -231,34 +231,39 @@ export default function ManagerCensusPage() {
           <div className="space-y-1.5 relative z-10">
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full border border-blue-500/40 bg-blue-950 text-blue-300">
-                Hospital Operations Command
+                Operations Command
               </span>
               <span className="text-[10px] text-blue-400 bg-blue-950/60 px-2.5 py-0.5 rounded-full border border-blue-500/30 font-medium">
                 <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse inline-block mr-1.5" /> Live Census Telemetry
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Hospital Ward Bed Census & Capacity Allocation
-            </h1>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                Hospital Ward Bed Census
+              </h1>
+              <p className="text-sm font-bold text-blue-300 mt-0.5">
+                {user?.name || 'Dr. Bright Ainoo (MD)'}
+              </p>
+            </div>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Medical Director: <strong className="text-blue-300">{user?.name || 'Dr. Bright Ainoo (MD)'}</strong> | Real-time bed occupancy monitoring, clinical department resource routing, and emergency surge capacity control.
+              Real-time bed occupancy monitoring, ward capacity allocation, and emergency surge controls.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5 shrink-0 relative z-10">
             <button
               onClick={() => triggerToast('Clinical roster generated: 21 personnel confirmed on duty.')}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-blue-400 text-blue-300 font-bold text-xs transition-all flex items-center gap-2 cursor-pointer shadow-md"
+              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-blue-400 text-blue-300 font-bold text-xs transition-all flex items-center gap-2 cursor-pointer shadow-md"
             >
               <Users className="h-4 w-4" />
-              <span>Shift Roster Review</span>
+              <span>Shift Roster</span>
             </button>
             <button
               onClick={handleActivateSurgeCapacity}
-              className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2 cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2 cursor-pointer"
             >
               <Layers className="h-4 w-4" />
-              <span>Unlock Emergency Surge Beds</span>
+              <span>Surge Beds</span>
             </button>
           </div>
         </div>

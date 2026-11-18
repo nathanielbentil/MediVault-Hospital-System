@@ -272,34 +272,39 @@ export default function NurseVitalsPage() {
           <div className="space-y-1.5 relative z-10">
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full border border-pink-500/40 bg-pink-950 text-pink-300">
-                Shift Nursing Workstation
+                Nursing Station
               </span>
               <span className="text-[10px] text-pink-400 bg-pink-950/60 px-2.5 py-0.5 rounded-full border border-pink-500/30 font-medium">
-                <span className="h-1.5 w-1.5 rounded-full bg-pink-400 animate-pulse inline-block mr-1.5" /> Bedside Observations Active
+                <span className="h-1.5 w-1.5 rounded-full bg-pink-400 animate-pulse inline-block mr-1.5" /> Floor Telemetry Active
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              In-Patient Bed Roster & Shift Vitals Charting
-            </h1>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                Bedside Patient Vitals & Shift MAR
+              </h1>
+              <p className="text-sm font-bold text-pink-300 mt-0.5">
+                {user?.name || 'Staff Nurse Beatrice'} (RN)
+              </p>
+            </div>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Attending Registered Nurse: <strong className="text-pink-300">{user?.name || 'Staff Nurse Beatrice'} (RN)</strong> | Real-time physiologic telemetry, hourly vitals log, and digital shift handover continuity.
+              Real-time bedside observations, hourly vital signs charting, and shift handover records.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5 shrink-0 relative z-10">
             <button
               onClick={() => setShowHandover(!showHandover)}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-pink-400 text-pink-300 font-bold text-xs transition-all flex items-center gap-2 cursor-pointer shadow-md"
+              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-pink-400 text-pink-300 font-bold text-xs transition-all flex items-center gap-2 cursor-pointer shadow-md"
             >
               <FileText className="h-4 w-4" />
-              <span>{showHandover ? 'Hide Handover Log' : 'Shift Handover Log'}</span>
+              <span>{showHandover ? 'Hide Handover' : 'Shift Handover'}</span>
             </button>
             <button
               onClick={() => triggerToast('Bedside telemetry monitors synced across all in-patient wards.')}
-              className="px-4 py-2.5 rounded-xl bg-pink-500 hover:bg-pink-400 text-slate-950 font-black text-xs shadow-lg shadow-pink-500/20 transition-all flex items-center gap-2 cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-pink-500 hover:bg-pink-400 text-slate-950 font-black text-xs shadow-lg shadow-pink-500/20 transition-all flex items-center gap-2 cursor-pointer"
             >
               <RefreshCw className="h-4 w-4" />
-              <span>Sync Bed Monitors</span>
+              <span>Sync Monitors</span>
             </button>
           </div>
         </div>

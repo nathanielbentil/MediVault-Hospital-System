@@ -266,17 +266,22 @@ export default function PharmacyDispensaryPage() {
           <div className="space-y-1.5 relative z-10">
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full border border-amber-500/40 bg-amber-950 text-amber-300">
-                Hospital Central Dispensary
+                Dispensary Station
               </span>
               <span className="text-[10px] text-amber-400 bg-amber-950/60 px-2.5 py-0.5 rounded-full border border-amber-500/30 font-medium">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse inline-block mr-1.5" /> Narcotics Vault Locked & Monitored
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse inline-block mr-1.5" /> Narcotics Vault Secured
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Dispensary Fulfillment & Medication Verification
-            </h1>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                Hospital Central Dispensary & Stock
+              </h1>
+              <p className="text-sm font-bold text-amber-300 mt-0.5">
+                {user?.name || 'Pharm. Kwame Appiah'} (RPh)
+              </p>
+            </div>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Licensed Pharmacist: <strong className="text-amber-300">{user?.name || 'Pharm. Kwame Appiah'} (RPh)</strong> | Prescription validation, GS1 barcode batch lot inspection, and double-signed controlled substances auditing.
+              Medication fulfillment, barcode verification, formulary stock auditing, and controlled substances.
             </p>
           </div>
 
@@ -286,17 +291,17 @@ export default function PharmacyDispensaryPage() {
                 setBarcodeInput('NARCO-2026-SEC');
                 handleScanBarcode();
               }}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-amber-400 text-amber-300 font-bold text-xs transition-all flex items-center gap-2 cursor-pointer shadow-md"
+              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-amber-400 text-amber-300 font-bold text-xs transition-all flex items-center gap-2 cursor-pointer shadow-md"
             >
               <Lock className="h-4 w-4" />
-              <span>Verify Controlled Narcotic</span>
+              <span>Verify Narcotic</span>
             </button>
             <button
               onClick={() => triggerToast('Central Medical Store synced: 186 formulary lines verified. 0 cold-chain faults.')}
-              className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2 cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/20 transition-all flex items-center gap-2 cursor-pointer"
             >
               <RefreshCw className="h-4 w-4" />
-              <span>Audit Formulary Inventory</span>
+              <span>Audit Stock</span>
             </button>
           </div>
         </div>

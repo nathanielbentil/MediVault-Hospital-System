@@ -616,12 +616,27 @@ export default function SuperAdminPage() {
                 Root Authority
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-              Hospital Governance & Security Architecture
-            </h1>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                SuperAdmin Governance Hub
+              </h1>
+              <p className="text-sm font-bold text-purple-300 mt-0.5">
+                {user?.name || 'Dr. Prof. Nathaniel Bentil'}
+              </p>
+            </div>
+            <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
+              Hospital administration, RBAC staff controls, cryptographic salt & pepper, and backups.
+            </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 shrink-0 relative z-10">
+            <button
+              onClick={() => { switchTab('salt-pepper'); setActiveSaltTab('personnel'); }}
+              className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md shadow-indigo-500/20 transition-all flex items-center gap-1.5 cursor-pointer border border-indigo-400/40"
+            >
+              <Shield className="h-3.5 w-3.5" />
+              <span>Salt & Pepper</span>
+            </button>
             <button
               onClick={() => switchTab('backups')}
               className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-cyan-400 text-cyan-300 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
@@ -637,11 +652,11 @@ export default function SuperAdminPage() {
               <span>Restore</span>
             </button>
             <button
-              onClick={() => { switchTab('salt-pepper'); setActiveSaltTab('personnel'); }}
-              className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md shadow-indigo-500/20 transition-all flex items-center gap-1.5 cursor-pointer border border-indigo-400/40"
+              onClick={() => switchTab('staff')}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-purple-400 text-slate-300 hover:text-white font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
             >
-              <Shield className="h-3.5 w-3.5" />
-              <span>Salt & Pepper</span>
+              <Users className="h-3.5 w-3.5" />
+              <span>Manage Staff</span>
             </button>
           </div>
         </div>

@@ -182,35 +182,41 @@ export default function DoctorPrescriptionsPage() {
         <div className="rounded-2xl border border-cyan-500/40 bg-gradient-to-r from-cyan-950 via-slate-900 to-cyan-950/40 p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5">
+              <span className="text-[11px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 flex items-center gap-1.5">
                 <Stethoscope className="h-3.5 w-3.5" />
-                <span>Attending Physician Workstation</span>
+                <span>Physician Workstation</span>
               </span>
-              <span className="text-[11px] text-slate-400 font-mono hidden sm:inline">
-                Surescripts Electronic Certified
+              <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-medium flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
+                <span>E-Prescribing Active</span>
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Physician Electronic Prescriptions & Clinical Orders
-            </h1>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                Doctor Prescriptions & Pharmacology
+              </h1>
+              <p className="text-sm font-bold text-cyan-300 mt-0.5">
+                {user?.name}
+              </p>
+            </div>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Attending Officer: <strong className="text-cyan-300">{user?.name}</strong> | Direct Hospital Dispensary Bridge | Real-Time Drug Interaction Checking
+              Electronic prescription drafting, real-time drug interaction checks, and ward medication orders.
             </p>
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
             <button
               onClick={() => runDrugAnalysis()}
-              className="px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs shadow-md shadow-cyan-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs shadow-md shadow-cyan-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <Sparkles className="h-3.5 w-3.5" />
-              <span>Cross-Check Interactions</span>
+              <span>Check Interactions</span>
             </button>
             <Link
               href="/"
-              className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer"
             >
-              Back to Overview
+              Main Console
             </Link>
           </div>
         </div>
@@ -224,8 +230,8 @@ export default function DoctorPrescriptionsPage() {
                 <Microscope className="h-5 w-5 text-cyan-400" />
               </div>
               <div>
-                <h3 className="font-bold text-white text-base">Drug Interaction Analysis Lab</h3>
-                <p className="text-xs text-slate-400">Pharmacological cross-check against metabolic antagonism & hemorrhagic contraindications</p>
+                <h3 className="font-bold text-white text-base">Drug Interaction Checker</h3>
+                <p className="text-xs text-slate-400">Check drug pairs for contraindications and adverse reactions.</p>
               </div>
             </div>
 
@@ -295,8 +301,8 @@ export default function DoctorPrescriptionsPage() {
                 <Pill className="h-5 w-5 text-cyan-400" />
               </div>
               <div>
-                <h3 className="font-bold text-white text-base">E-Prescription Order Composer</h3>
-                <p className="text-xs text-slate-400">Direct transmission to Hospital Central Dispensary & Nursing MAR</p>
+                <h3 className="font-bold text-white text-base">New Electronic Prescription</h3>
+                <p className="text-xs text-slate-400">Draft and sign digital prescriptions sent to the dispensary.</p>
               </div>
             </div>
 

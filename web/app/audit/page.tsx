@@ -236,36 +236,41 @@ export default function SecurityAuditPage() {
           <div className="space-y-1.5 relative z-10">
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full border border-emerald-500/40 bg-emerald-950 text-emerald-300">
-                Security Auditor Forensics Hub
+                Security & Forensics
               </span>
               <span className="text-[10px] text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30 font-medium flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" />
-                <span>256-Bit Cryptographic Hash Integrity</span>
+                <span>SHA-256 Merkle Chain Active</span>
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Cryptographic Audit Trail & Forensic Merkle Verification
-            </h1>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                Cryptographic Audit Trail
+              </h1>
+              <p className="text-sm font-bold text-emerald-300 mt-0.5">
+                {user?.name || 'Auditor Samuel Osei'}
+              </p>
+            </div>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Certified Compliance Auditor: <strong className="text-emerald-300">{user?.name || 'Auditor Samuel Osei'}</strong> | Immutable audit log verification, automated threat interception telemetry, and forensic HIPAA certification.
+              Cryptographic audit logs, Merkle chain verification, and forensic HIPAA compliance records.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5 shrink-0 relative z-10">
             <button
               onClick={handleExportCSV}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-400 text-emerald-300 font-bold text-xs transition-all flex items-center gap-2 cursor-pointer shadow-md"
+              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-emerald-400 text-emerald-300 font-bold text-xs transition-all flex items-center gap-2 cursor-pointer shadow-md"
             >
               <Download className="h-4 w-4" />
-              <span>Export HIPAA Trail (CSV)</span>
+              <span>Export CSV</span>
             </button>
             <button
               onClick={handleVerifyChain}
               disabled={verifying}
-              className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black text-xs shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
             >
-              <ShieldCheck className="h-4 w-4" />
-              <span>{verifying ? 'Calculating Hashes...' : 'Verify SHA-256 Chain'}</span>
+              <Shield className={`h-4 w-4 ${verifying ? 'animate-spin' : ''}`} />
+              <span>{verifying ? 'Verifying...' : 'Verify Chain'}</span>
             </button>
           </div>
         </div>
