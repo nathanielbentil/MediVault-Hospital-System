@@ -46,6 +46,7 @@ import {
   Cpu,
   Zap,
   Cloud,
+  RotateCcw,
 } from 'lucide-react';
 
 // --- Real Premier Hospital Photography (Homepage Only) ----------------------
@@ -1164,7 +1165,7 @@ export default function Home() {
       btnSecondary: 'bg-slate-800 border-slate-700 hover:border-purple-400 text-purple-300',
       activeTab: 'bg-purple-600 text-white shadow-purple-500/20',
       stationTitle: 'SuperAdmin Command Center',
-      stationSub: 'Executive Hospital Governance | 3-2-1 Disaster Recovery Hub | RBAC Policy Authority',
+      stationSub: 'Executive Hospital Governance, Cryptographic Security & Disaster Recovery',
       iconComponent: Crown,
     },
     blue: {
@@ -1517,27 +1518,36 @@ export default function Home() {
                 </Link>
                 <Link
                   href="/admin?tab=salt-pepper"
-                  className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-500/25 transition-all flex items-center gap-1.5 cursor-pointer border border-indigo-400/50"
-                  title="Click to view live database salts and HMAC pepper configuration"
+                  className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md shadow-indigo-500/25 transition-all flex items-center gap-1.5 cursor-pointer border border-indigo-400/40"
+                  title="Live Database Salts & Argon2id Pepper"
                 >
                   <Shield className="h-3.5 w-3.5 text-indigo-200" />
-                  <span>View Salt & Pepper</span>
+                  <span>Salt & Pepper</span>
                 </Link>
                 <Link
-                  href="/admin?tab=backup-dr"
-                  className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-purple-400 text-purple-300 font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
-                  title="Click to access 3-2-1 backup snapshots and disaster restore"
+                  href="/admin?tab=backups"
+                  className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-cyan-400 text-cyan-300 font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                  title="Dedicated 3-2-1 Cloud Backups Hub"
                 >
-                  <HardDrive className="h-3.5 w-3.5 text-purple-400" />
-                  <span>Backup & Restore</span>
+                  <HardDrive className="h-3.5 w-3.5 text-cyan-400" />
+                  <span>Backups</span>
                 </Link>
-                <button
-                  onClick={() => setShowStaffModal(true)}
-                  className="px-3.5 py-2 rounded-xl bg-slate-800 border border-slate-700 hover:border-purple-400 text-slate-300 hover:text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                <Link
+                  href="/admin?tab=restore"
+                  className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-amber-400 text-amber-300 font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                  title="Dedicated Point-in-Time Database Disaster Recovery"
+                >
+                  <RotateCcw className="h-3.5 w-3.5 text-amber-400" />
+                  <span>Restore</span>
+                </Link>
+                <Link
+                  href="/admin?tab=staff"
+                  className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-purple-400 text-slate-300 hover:text-white font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+                  title="Manage Staff, Lock Accounts, and Delete Users"
                 >
                   <Users className="h-3.5 w-3.5 text-slate-400" />
                   <span>Manage Staff</span>
-                </button>
+                </Link>
               </>
             )}
 
@@ -3300,12 +3310,20 @@ export default function Home() {
               </table>
             </div>
 
-            <div className="pt-2 border-t border-slate-800 flex justify-end">
+            <div className="pt-2 border-t border-slate-800 flex items-center justify-between">
+              <Link
+                href="/admin?tab=staff"
+                onClick={() => setShowStaffModal(false)}
+                className="text-xs font-bold text-purple-400 hover:text-purple-300 flex items-center gap-1.5 transition-colors"
+              >
+                <span>Open Staff Management Hub (Delete, Lock, Register Staff)</span>
+                <ArrowRight className="h-3 w-3" />
+              </Link>
               <button
                 onClick={() => setShowStaffModal(false)}
-                className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs cursor-pointer"
               >
-                Close Directory
+                Close
               </button>
             </div>
           </div>
