@@ -498,7 +498,7 @@ export default function Home() {
   const [simLoading, setSimLoading] = useState(false);
   const [saltPepperData, setSaltPepperData] = useState<any | null>(null);
   const [loadingSaltPepper, setLoadingSaltPepper] = useState(false);
-  const [activeSaltTab, setActiveSaltTab] = useState<'simulator' | 'personnel' | 'architecture'>('simulator');
+  const [activeSaltTab, setActiveSaltTab] = useState<'personnel' | 'simulator' | 'architecture'>('personnel');
   const [saltSearchQuery, setSaltSearchQuery] = useState('');
   const [saltRoleFilter, setSaltRoleFilter] = useState('all');
   const [inspectingUserSalt, setInspectingUserSalt] = useState<any | null>(null);
@@ -893,6 +893,13 @@ export default function Home() {
   // -- Tab Switch Helper with URL Synchronization ---------------------------
   const switchTab = (tab: TabType) => {
     setActiveTab(tab);
+    if (tab === 'salt-pepper') {
+      setActiveSaltTab('personnel');
+      fetchSaltPepperConfig();
+    }
+    if (tab === 'backups' || tab === 'restore') {
+      loadAudit();
+    }
     if (typeof window !== 'undefined') {
       const url = new URL(window.location.href);
       if (tab === 'dashboard') {
@@ -928,6 +935,10 @@ export default function Home() {
       const tabParam = params.get('tab') as TabType;
       if (tabParam && ['dashboard', 'patients', 'admission', 'pharmacy', 'audit', 'census', 'operations', 'staff', 'backups', 'salt-pepper', 'restore'].includes(tabParam)) {
         setActiveTab(tabParam);
+        if (tabParam === 'salt-pepper') {
+          setActiveSaltTab('personnel');
+          fetchSaltPepperConfig();
+        }
       }
     }
   }, [loadPatients, loadAudit, fetchSaltPepperConfig]);
@@ -3119,6 +3130,17 @@ export default function Home() {
               {/* Sub-tab switchers */}
               <div className="flex items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800 text-xs shrink-0">
                 <button
+                  onClick={() => setActiveSaltTab('personnel')}
+                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                    activeSaltTab === 'personnel'
+                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  <Database className="h-3.5 w-3.5" />
+                  <span>Live Database (PostgreSQL)</span>
+                </button>
+                <button
                   onClick={() => setActiveSaltTab('simulator')}
                   className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                     activeSaltTab === 'simulator'
@@ -3128,17 +3150,6 @@ export default function Home() {
                 >
                   <Cpu className="h-3.5 w-3.5" />
                   <span>Pipeline Simulator</span>
-                </button>
-                <button
-                  onClick={() => setActiveSaltTab('personnel')}
-                  className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    activeSaltTab === 'personnel'
-                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20'
-                      : 'text-slate-400 hover:text-white'
-                  }`}
-                >
-                  <Database className="h-3.5 w-3.5" />
-                  <span>Personnel Salts</span>
                 </button>
                 <button
                   onClick={() => setActiveSaltTab('architecture')}
@@ -3154,103 +3165,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Sub-Tab 1: Live Interactive Pipeline Simulator */}
-            {activeSaltTab === 'simulator' && (
-              <div className="space-y-4">
-                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <label className="text-xs font-bold text-white flex items-center gap-1.5">
-                      <Key className="h-3.5 w-3.5 text-indigo-400" />
-                      <span>Test Password Input (Simulate Hash Generation Pipeline):</span>
-                    </label>
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] text-slate-400">Presets:</span>
-                      <button
-                        onClick={() => { setSimPassword('Lecturer@MediVault2026!'); handleRunSimulation('Lecturer@MediVault2026!'); }}
-                        className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-indigo-300 border border-slate-700 cursor-pointer"
-                      >
-                        Lecturer Pass
-                      </button>
-                      <button
-                        onClick={() => { setSimPassword('ChiefDoctor#Secure99'); handleRunSimulation('ChiefDoctor#Secure99'); }}
-                        className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-slate-700 cursor-pointer"
-                      >
-                        Doctor Pass
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={simPassword}
-                      onChange={(e) => setSimPassword(e.target.value)}
-                      placeholder="Type a sample password to calculate salt & pepper pipeline..."
-                      className="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:border-indigo-500"
-                    />
-                    <button
-                      onClick={() => handleRunSimulation()}
-                      disabled={simLoading}
-                      className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-                    >
-                      <RefreshCw className={`h-3.5 w-3.5 ${simLoading ? 'animate-spin' : ''}`} />
-                      <span>{simLoading ? 'Hashing...' : 'Calculate Pipeline'}</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Pipeline Stages Visualizer */}
-                {simResult && (
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                    <div className="p-3.5 rounded-xl bg-slate-950 border border-indigo-500/30 space-y-2">
-                      <div className="flex items-center justify-between text-xs font-bold text-indigo-400">
-                        <span>Stage 1: Raw Input</span>
-                        <Fingerprint className="h-3.5 w-3.5" />
-                      </div>
-                      <div className="p-2 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-white truncate">
-                        {simResult.stage1_raw_input}
-                      </div>
-                      <p className="text-[10px] text-slate-400">Plaintext password supplied by staff worker.</p>
-                    </div>
-
-                    <div className="p-3.5 rounded-xl bg-slate-950 border border-purple-500/30 space-y-2">
-                      <div className="flex items-center justify-between text-xs font-bold text-purple-400">
-                        <span>Stage 2: HMAC Pepper</span>
-                        <Flame className="h-3.5 w-3.5" />
-                      </div>
-                      <div className="p-2 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-purple-300 truncate" title={simResult.stage2_peppered_digest}>
-                        {simResult.stage2_peppered_digest ? simResult.stage2_peppered_digest.slice(0, 16) + '...' : ''}
-                      </div>
-                      <p className="text-[10px] text-slate-400">256-bit server pepper pre-hashes password before Argon2id.</p>
-                    </div>
-
-                    <div className="p-3.5 rounded-xl bg-slate-950 border border-cyan-500/30 space-y-2">
-                      <div className="flex items-center justify-between text-xs font-bold text-cyan-400">
-                        <span>Stage 3: 128-bit CSPRNG Salt</span>
-                        <Binary className="h-3.5 w-3.5" />
-                      </div>
-                      <div className="p-2 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-cyan-300 truncate" title={simResult.stage3_salt_hex}>
-                        {simResult.stage3_salt_hex}
-                      </div>
-                      <p className="text-[10px] text-slate-400">Unique cryptographic salt defeats rainbow tables & hash catalogs.</p>
-                    </div>
-
-                    <div className="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 space-y-2">
-                      <div className="flex items-center justify-between text-xs font-bold text-emerald-400">
-                        <span>Stage 4: MCF Output</span>
-                        <CheckCircle2 className="h-3.5 w-3.5" />
-                      </div>
-                      <div className="p-2 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-emerald-300 truncate" title={simResult.stage4_final_mcf_hash}>
-                        {simResult.stage4_final_mcf_hash ? simResult.stage4_final_mcf_hash.slice(0, 20) + '...' : ''}
-                      </div>
-                      <p className="text-[10px] text-slate-400">Argon2id Modular Crypt Format stored in PostgreSQL.</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Sub-Tab 2: Database Personnel Salts & PostgreSQL Storage Inspection */}
+            {/* Sub-Tab 1: Database Personnel Salts & PostgreSQL Storage Inspection (Default) */}
             {activeSaltTab === 'personnel' && (
               <div className="space-y-4">
                 {/* Database Architecture Breakdown Card */}
@@ -3557,6 +3472,109 @@ export default function Home() {
                           Close Inspection
                         </button>
                       </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Sub-Tab 2: Live Interactive Pipeline Simulator */}
+            {activeSaltTab === 'simulator' && (
+              <div className="space-y-4">
+                <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <label className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <Key className="h-3.5 w-3.5 text-indigo-400" />
+                      <span>Test Password Input (Simulate Hash Generation Pipeline):</span>
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setActiveSaltTab('personnel')}
+                        className="text-[11px] font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-1 cursor-pointer mr-2"
+                      >
+                        <Database className="h-3 w-3" />
+                        <span>View Live Database Table</span>
+                      </button>
+                      <span className="text-[10px] text-slate-400">Presets:</span>
+                      <button
+                        onClick={() => { setSimPassword('Lecturer@MediVault2026!'); handleRunSimulation('Lecturer@MediVault2026!'); }}
+                        className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-indigo-300 border border-slate-700 cursor-pointer"
+                      >
+                        Lecturer Pass
+                      </button>
+                      <button
+                        onClick={() => { setSimPassword('ChiefDoctor#Secure99'); handleRunSimulation('ChiefDoctor#Secure99'); }}
+                        className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-slate-700 cursor-pointer"
+                      >
+                        Doctor Pass
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={simPassword}
+                      onChange={(e) => setSimPassword(e.target.value)}
+                      placeholder="Type a sample password to calculate salt & pepper pipeline..."
+                      className="flex-1 px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white font-mono placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                    />
+                    <button
+                      onClick={() => handleRunSimulation()}
+                      disabled={simLoading}
+                      className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                    >
+                      <RefreshCw className={`h-3.5 w-3.5 ${simLoading ? 'animate-spin' : ''}`} />
+                      <span>{simLoading ? 'Hashing...' : 'Calculate Pipeline'}</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Pipeline Stages Visualizer */}
+                {simResult && (
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <div className="p-3.5 rounded-xl bg-slate-950 border border-indigo-500/30 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-indigo-400">
+                        <span>Stage 1: Raw Input</span>
+                        <Fingerprint className="h-3.5 w-3.5" />
+                      </div>
+                      <div className="p-2 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-white truncate">
+                        {simResult.stage1_raw_input}
+                      </div>
+                      <p className="text-[10px] text-slate-400">Plaintext password supplied by staff worker.</p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-slate-950 border border-purple-500/30 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-purple-400">
+                        <span>Stage 2: HMAC Pepper</span>
+                        <Flame className="h-3.5 w-3.5" />
+                      </div>
+                      <div className="p-2 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-purple-300 truncate" title={simResult.stage2_peppered_digest}>
+                        {simResult.stage2_peppered_digest ? simResult.stage2_peppered_digest.slice(0, 16) + '...' : ''}
+                      </div>
+                      <p className="text-[10px] text-slate-400">256-bit server pepper pre-hashes password before Argon2id.</p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-slate-950 border border-cyan-500/30 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-cyan-400">
+                        <span>Stage 3: 128-bit CSPRNG Salt</span>
+                        <Binary className="h-3.5 w-3.5" />
+                      </div>
+                      <div className="p-2 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-cyan-300 truncate" title={simResult.stage3_salt_hex}>
+                        {simResult.stage3_salt_hex}
+                      </div>
+                      <p className="text-[10px] text-slate-400">Unique cryptographic salt defeats rainbow tables & hash catalogs.</p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 space-y-2">
+                      <div className="flex items-center justify-between text-xs font-bold text-emerald-400">
+                        <span>Stage 4: MCF Output</span>
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                      </div>
+                      <div className="p-2 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono text-emerald-300 truncate" title={simResult.stage4_final_mcf_hash}>
+                        {simResult.stage4_final_mcf_hash ? simResult.stage4_final_mcf_hash.slice(0, 20) + '...' : ''}
+                      </div>
+                      <p className="text-[10px] text-slate-400">Argon2id Modular Crypt Format stored in PostgreSQL.</p>
                     </div>
                   </div>
                 )}
