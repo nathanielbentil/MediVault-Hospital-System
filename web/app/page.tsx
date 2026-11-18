@@ -1904,93 +1904,84 @@ export default function Home() {
                 {activeTab !== 'dashboard' ? (
                   <button
                     onClick={() => switchTab('dashboard')}
-                    className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-purple-700 hover:from-purple-500 hover:to-fuchsia-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-purple-600/35 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 border-purple-400/80"
+                    className="group px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs sm:text-[13px] shadow-lg shadow-purple-600/35 border border-purple-400/60 ring-1 ring-purple-400/30 transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98]"
                     title="Return to SuperAdmin Executive Overview"
                   >
-                    <Activity className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-purple-100 shrink-0" />
-                    <span className="tracking-wide">Executive Overview</span>
+                    <Activity className="h-4 w-4 text-purple-100 group-hover:scale-110 transition-transform shrink-0" />
+                    <span>Executive Overview</span>
                   </button>
                 ) : (
                   <button
                     onClick={() => setShowAddModal(true)}
-                    className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-purple-700 hover:from-purple-500 hover:to-fuchsia-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-purple-600/35 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 border-purple-400/80"
+                    className="group px-4 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-extrabold text-xs sm:text-[13px] shadow-lg shadow-purple-600/35 border border-purple-400/60 ring-1 ring-purple-400/30 transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98]"
                     title="Register New Clinical Personnel with Argon2id Password Hash"
                   >
-                    <Plus className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-purple-100 shrink-0" />
-                    <span className="tracking-wide">Register Staff</span>
+                    <Plus className="h-4 w-4 text-purple-100 group-hover:scale-110 transition-transform shrink-0" />
+                    <span>Register Staff</span>
                   </button>
                 )}
-
-                {/* Salt & Pepper (Electric Indigo / Sapphire) */}
                 <button
                   onClick={() => switchTab('salt-pepper')}
-                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-extrabold text-xs sm:text-sm transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 ${
+                  className={`group px-4 py-2.5 rounded-xl border font-bold text-xs sm:text-[13px] transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98] ${
                     activeTab === 'salt-pepper'
-                      ? 'bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 text-white border-indigo-300 shadow-xl shadow-indigo-600/40 ring-2 ring-indigo-400/40'
-                      : 'bg-gradient-to-r from-indigo-950/90 via-slate-900 to-indigo-950/70 border-indigo-500/60 hover:border-indigo-400 text-indigo-300 hover:text-white shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:bg-indigo-900/60'
+                      ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-black border-indigo-300 shadow-lg shadow-indigo-500/40 ring-1 ring-indigo-400/60'
+                      : 'bg-gradient-to-r from-indigo-950/90 via-slate-900/90 to-indigo-950/70 hover:from-indigo-900/90 hover:to-slate-900 text-indigo-200 hover:text-white border-indigo-500/50 hover:border-indigo-400 shadow-md shadow-indigo-950/50 hover:shadow-indigo-500/20'
                   }`}
                   title="Live Database Salts & Argon2id Pepper"
                 >
-                  <Shield className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-indigo-400 shrink-0" />
-                  <span className="tracking-wide">Salt & Pepper</span>
+                  <Shield className={`h-4 w-4 shrink-0 transition-transform group-hover:scale-110 ${activeTab === 'salt-pepper' ? 'text-white' : 'text-indigo-400'}`} />
+                  <span>Salt & Pepper</span>
                 </button>
-
-                {/* Backups (Cyber Cyan / Teal) */}
                 <button
                   onClick={() => switchTab('backups')}
-                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-extrabold text-xs sm:text-sm transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 ${
+                  className={`group px-4 py-2.5 rounded-xl border font-bold text-xs sm:text-[13px] transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98] ${
                     activeTab === 'backups'
-                      ? 'bg-gradient-to-r from-cyan-500 via-teal-500 to-cyan-600 text-slate-950 font-black border-cyan-200 shadow-xl shadow-cyan-500/40 ring-2 ring-cyan-400/40'
-                      : 'bg-gradient-to-r from-cyan-950/90 via-slate-900 to-cyan-950/70 border-cyan-500/60 hover:border-cyan-400 text-cyan-300 hover:text-white shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:bg-cyan-900/60'
+                      ? 'bg-gradient-to-r from-cyan-500 to-teal-400 text-slate-950 font-black border-cyan-200 shadow-lg shadow-cyan-500/40 ring-1 ring-cyan-300/60'
+                      : 'bg-gradient-to-r from-cyan-950/90 via-slate-900/90 to-cyan-950/70 hover:from-cyan-900/90 hover:to-slate-900 text-cyan-200 hover:text-white border-cyan-500/50 hover:border-cyan-400 shadow-md shadow-cyan-950/50 hover:shadow-cyan-500/20'
                   }`}
                   title="Dedicated 3-2-1 Cloud Backups Hub"
                 >
-                  <HardDrive className={`h-4 w-4 sm:h-4.5 sm:w-4.5 shrink-0 ${activeTab === 'backups' ? 'text-slate-950' : 'text-cyan-400'}`} />
-                  <span className="tracking-wide">Backups</span>
+                  <HardDrive className={`h-4 w-4 shrink-0 transition-transform group-hover:scale-110 ${activeTab === 'backups' ? 'text-slate-950' : 'text-cyan-400'}`} />
+                  <span>Backups</span>
                 </button>
-
-                {/* Restore (Radiant Amber / Gold) */}
                 <button
                   onClick={() => switchTab('restore')}
-                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-extrabold text-xs sm:text-sm transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 ${
+                  className={`group px-4 py-2.5 rounded-xl border font-bold text-xs sm:text-[13px] transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98] ${
                     activeTab === 'restore'
-                      ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-black border-amber-200 shadow-xl shadow-amber-500/40 ring-2 ring-amber-400/40'
-                      : 'bg-gradient-to-r from-amber-950/90 via-slate-900 to-amber-950/70 border-amber-500/60 hover:border-amber-400 text-amber-300 hover:text-white shadow-md shadow-amber-500/20 hover:shadow-amber-500/40 hover:bg-amber-900/60'
+                      ? 'bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black border-amber-200 shadow-lg shadow-amber-500/40 ring-1 ring-amber-300/60'
+                      : 'bg-gradient-to-r from-amber-950/90 via-slate-900/90 to-amber-950/70 hover:from-amber-900/90 hover:to-slate-900 text-amber-200 hover:text-white border-amber-500/50 hover:border-amber-400 shadow-md shadow-amber-950/50 hover:shadow-amber-500/20'
                   }`}
                   title="Dedicated Point-in-Time Database Disaster Recovery"
                 >
-                  <RotateCcw className={`h-4 w-4 sm:h-4.5 sm:w-4.5 shrink-0 ${activeTab === 'restore' ? 'text-slate-950' : 'text-amber-400'}`} />
-                  <span className="tracking-wide">Restore</span>
+                  <RotateCcw className={`h-4 w-4 shrink-0 transition-transform group-hover:scale-110 ${activeTab === 'restore' ? 'text-slate-950' : 'text-amber-400'}`} />
+                  <span>Restore</span>
                 </button>
-
-                {/* Manage Staff (Vibrant Rose / Ruby) */}
                 <button
                   onClick={() => switchTab('staff')}
-                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-extrabold text-xs sm:text-sm transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 ${
+                  className={`group px-4 py-2.5 rounded-xl border font-bold text-xs sm:text-[13px] transition-all duration-200 flex items-center gap-2 cursor-pointer active:scale-[0.98] ${
                     activeTab === 'staff'
-                      ? 'bg-gradient-to-r from-rose-600 via-pink-600 to-rose-700 text-white font-black border-rose-300 shadow-xl shadow-rose-600/40 ring-2 ring-rose-400/40'
-                      : 'bg-gradient-to-r from-rose-950/90 via-slate-900 to-rose-950/70 border-rose-500/60 hover:border-rose-400 text-rose-300 hover:text-white shadow-md shadow-rose-500/20 hover:shadow-rose-500/40 hover:bg-rose-900/60'
+                      ? 'bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-black border-purple-300 shadow-lg shadow-purple-500/40 ring-1 ring-purple-400/60'
+                      : 'bg-gradient-to-r from-slate-900 via-purple-950/50 to-slate-900 hover:from-purple-950/80 hover:to-slate-900 text-purple-200 hover:text-white border-purple-500/40 hover:border-purple-400 shadow-md shadow-purple-950/40 hover:shadow-purple-500/20'
                   }`}
                   title="Manage Staff, Lock Accounts, and Delete Users"
                 >
-                  <Users className={`h-4 w-4 sm:h-4.5 sm:w-4.5 shrink-0 ${activeTab === 'staff' ? 'text-white' : 'text-rose-400'}`} />
-                  <span className="tracking-wide">Manage Staff</span>
+                  <Users className={`h-4 w-4 shrink-0 transition-transform group-hover:scale-110 ${activeTab === 'staff' ? 'text-white' : 'text-purple-400'}`} />
+                  <span>Manage Staff</span>
                 </button>
               </>
             )}
 
-            {/* Universal Refresh Button (Emerald Mint / Neon) */}
+            {/* Universal Refresh Button */}
             <button
               onClick={() => {
                 loadPatients();
                 if (isAdmin || isAuditor) loadAudit();
                 triggerToast('Patient records and telemetry refreshed.');
               }}
-              className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-emerald-950/90 via-slate-900 to-emerald-950/70 border-2 border-emerald-500/60 hover:border-emerald-400 text-emerald-300 hover:text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:bg-emerald-900/60 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer shrink-0"
-              title="Refresh Telemetry, Patient Records & System Audit State"
+              className="group px-4 py-2.5 rounded-xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 hover:from-slate-800 hover:to-slate-700 text-slate-100 hover:text-white border border-slate-600 hover:border-slate-400 text-xs sm:text-[13px] font-bold transition-all duration-200 shadow-md shadow-slate-950/50 shrink-0 cursor-pointer flex items-center gap-2 active:scale-[0.98]"
             >
-              <RefreshCw className={`h-4 w-4 sm:h-4.5 sm:w-4.5 text-emerald-400 shrink-0 ${patientsLoading ? 'animate-spin' : ''}`} />
-              <span className="tracking-wide">Refresh Data</span>
+              <RefreshCw className={`h-4 w-4 shrink-0 transition-transform duration-300 ${patientsLoading ? 'animate-spin text-cyan-400' : 'text-slate-300 group-hover:rotate-180 group-hover:text-cyan-400'}`} />
+              <span>Refresh Data</span>
             </button>
           </div>
         </div>
