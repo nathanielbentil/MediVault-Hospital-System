@@ -1904,84 +1904,93 @@ export default function Home() {
                 {activeTab !== 'dashboard' ? (
                   <button
                     onClick={() => switchTab('dashboard')}
-                    className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md shadow-purple-500/25 transition-all flex items-center gap-1.5 cursor-pointer"
+                    className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-purple-700 hover:from-purple-500 hover:to-fuchsia-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-purple-600/35 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 border-purple-400/80"
                     title="Return to SuperAdmin Executive Overview"
                   >
-                    <Activity className="h-3.5 w-3.5 text-purple-200" />
-                    <span>Executive Overview</span>
+                    <Activity className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-purple-100 shrink-0" />
+                    <span className="tracking-wide">Executive Overview</span>
                   </button>
                 ) : (
                   <button
                     onClick={() => setShowAddModal(true)}
-                    className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-md shadow-purple-500/25 transition-all flex items-center gap-1.5 cursor-pointer"
+                    className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-purple-700 hover:from-purple-500 hover:to-fuchsia-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-purple-600/35 hover:shadow-purple-500/50 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 border-purple-400/80"
                     title="Register New Clinical Personnel with Argon2id Password Hash"
                   >
-                    <Plus className="h-3.5 w-3.5 text-purple-200" />
-                    <span>Register Staff</span>
+                    <Plus className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-purple-100 shrink-0" />
+                    <span className="tracking-wide">Register Staff</span>
                   </button>
                 )}
+
+                {/* Salt & Pepper (Electric Indigo / Sapphire) */}
                 <button
                   onClick={() => switchTab('salt-pepper')}
-                  className={`px-3.5 py-2 rounded-xl border font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-extrabold text-xs sm:text-sm transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 ${
                     activeTab === 'salt-pepper'
-                      ? 'bg-indigo-600 text-white border-indigo-400 shadow-indigo-500/25'
-                      : 'bg-slate-800 hover:bg-slate-700 border-slate-700 hover:border-indigo-400 text-indigo-300'
+                      ? 'bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 text-white border-indigo-300 shadow-xl shadow-indigo-600/40 ring-2 ring-indigo-400/40'
+                      : 'bg-gradient-to-r from-indigo-950/90 via-slate-900 to-indigo-950/70 border-indigo-500/60 hover:border-indigo-400 text-indigo-300 hover:text-white shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:bg-indigo-900/60'
                   }`}
                   title="Live Database Salts & Argon2id Pepper"
                 >
-                  <Shield className="h-3.5 w-3.5 text-indigo-300" />
-                  <span>Salt & Pepper</span>
+                  <Shield className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-indigo-400 shrink-0" />
+                  <span className="tracking-wide">Salt & Pepper</span>
                 </button>
+
+                {/* Backups (Cyber Cyan / Teal) */}
                 <button
                   onClick={() => switchTab('backups')}
-                  className={`px-3.5 py-2 rounded-xl border font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-extrabold text-xs sm:text-sm transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 ${
                     activeTab === 'backups'
-                      ? 'bg-cyan-600 text-white border-cyan-400 shadow-cyan-500/25'
-                      : 'bg-slate-800 hover:bg-slate-700 border-slate-700 hover:border-cyan-400 text-cyan-300'
+                      ? 'bg-gradient-to-r from-cyan-500 via-teal-500 to-cyan-600 text-slate-950 font-black border-cyan-200 shadow-xl shadow-cyan-500/40 ring-2 ring-cyan-400/40'
+                      : 'bg-gradient-to-r from-cyan-950/90 via-slate-900 to-cyan-950/70 border-cyan-500/60 hover:border-cyan-400 text-cyan-300 hover:text-white shadow-md shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:bg-cyan-900/60'
                   }`}
                   title="Dedicated 3-2-1 Cloud Backups Hub"
                 >
-                  <HardDrive className="h-3.5 w-3.5 text-cyan-400" />
-                  <span>Backups</span>
+                  <HardDrive className={`h-4 w-4 sm:h-4.5 sm:w-4.5 shrink-0 ${activeTab === 'backups' ? 'text-slate-950' : 'text-cyan-400'}`} />
+                  <span className="tracking-wide">Backups</span>
                 </button>
+
+                {/* Restore (Radiant Amber / Gold) */}
                 <button
                   onClick={() => switchTab('restore')}
-                  className={`px-3.5 py-2 rounded-xl border font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-extrabold text-xs sm:text-sm transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 ${
                     activeTab === 'restore'
-                      ? 'bg-amber-600 text-white border-amber-400 shadow-amber-500/25'
-                      : 'bg-slate-800 hover:bg-slate-700 border-slate-700 hover:border-amber-400 text-amber-300'
+                      ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-slate-950 font-black border-amber-200 shadow-xl shadow-amber-500/40 ring-2 ring-amber-400/40'
+                      : 'bg-gradient-to-r from-amber-950/90 via-slate-900 to-amber-950/70 border-amber-500/60 hover:border-amber-400 text-amber-300 hover:text-white shadow-md shadow-amber-500/20 hover:shadow-amber-500/40 hover:bg-amber-900/60'
                   }`}
                   title="Dedicated Point-in-Time Database Disaster Recovery"
                 >
-                  <RotateCcw className="h-3.5 w-3.5 text-amber-400" />
-                  <span>Restore</span>
+                  <RotateCcw className={`h-4 w-4 sm:h-4.5 sm:w-4.5 shrink-0 ${activeTab === 'restore' ? 'text-slate-950' : 'text-amber-400'}`} />
+                  <span className="tracking-wide">Restore</span>
                 </button>
+
+                {/* Manage Staff (Vibrant Rose / Ruby) */}
                 <button
                   onClick={() => switchTab('staff')}
-                  className={`px-3.5 py-2 rounded-xl border font-bold text-xs shadow-sm transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl font-extrabold text-xs sm:text-sm transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer border-2 ${
                     activeTab === 'staff'
-                      ? 'bg-purple-600 text-white border-purple-400 shadow-purple-500/25'
-                      : 'bg-slate-800 hover:bg-slate-700 border-slate-700 hover:border-purple-400 text-slate-300 hover:text-white'
+                      ? 'bg-gradient-to-r from-rose-600 via-pink-600 to-rose-700 text-white font-black border-rose-300 shadow-xl shadow-rose-600/40 ring-2 ring-rose-400/40'
+                      : 'bg-gradient-to-r from-rose-950/90 via-slate-900 to-rose-950/70 border-rose-500/60 hover:border-rose-400 text-rose-300 hover:text-white shadow-md shadow-rose-500/20 hover:shadow-rose-500/40 hover:bg-rose-900/60'
                   }`}
                   title="Manage Staff, Lock Accounts, and Delete Users"
                 >
-                  <Users className="h-3.5 w-3.5 text-slate-400" />
-                  <span>Manage Staff</span>
+                  <Users className={`h-4 w-4 sm:h-4.5 sm:w-4.5 shrink-0 ${activeTab === 'staff' ? 'text-white' : 'text-rose-400'}`} />
+                  <span className="tracking-wide">Manage Staff</span>
                 </button>
               </>
             )}
 
-            {/* Universal Refresh Button */}
+            {/* Universal Refresh Button (Emerald Mint / Neon) */}
             <button
               onClick={() => {
                 loadPatients();
                 if (isAdmin || isAuditor) loadAudit();
                 triggerToast('Patient records and telemetry refreshed.');
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-500 text-xs text-white font-bold transition-all shadow-md shrink-0 cursor-pointer"
+              className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gradient-to-r from-emerald-950/90 via-slate-900 to-emerald-950/70 border-2 border-emerald-500/60 hover:border-emerald-400 text-emerald-300 hover:text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:bg-emerald-900/60 transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center gap-2 cursor-pointer shrink-0"
+              title="Refresh Telemetry, Patient Records & System Audit State"
             >
-              <RefreshCw className={`h-3.5 w-3.5 ${patientsLoading ? 'animate-spin text-cyan-400' : ''}`} />
-              <span>Refresh Data</span>
+              <RefreshCw className={`h-4 w-4 sm:h-4.5 sm:w-4.5 text-emerald-400 shrink-0 ${patientsLoading ? 'animate-spin' : ''}`} />
+              <span className="tracking-wide">Refresh Data</span>
             </button>
           </div>
         </div>
