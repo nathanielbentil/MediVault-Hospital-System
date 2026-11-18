@@ -117,6 +117,7 @@ export async function POST(req: NextRequest) {
         success: true,
         two_factor_required: true,
         is_admin: isAdmin,
+        has_paired_authenticator: Boolean(user.two_factor_secret && user.two_factor_confirmed_at),
         message: 'Two-Factor Authentication is required.',
         temp_token: tempToken,
       });

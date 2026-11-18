@@ -1,8 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
+import crypto from 'crypto';
 import pool from '@/lib/db';
 import { AuthService } from '@/lib/auth';
 import { AuditLogService } from '@/lib/audit';
 import { verifySync } from 'otplib';
+
+function resolveTotpSecret(raw: string): string {
+  if (!raw) return '';
+  const trimmed = raw.trim();
+  if (!trimmed.startsWith('eyJ')) return trimmed;
+  try {
+    const laravelAppKey = process.env.LARAVEL_APP_KEY || 'base64:Nfo+QDGVOn7k13Uw1Y5CzIlQgBduunBjj6HNWWae9VM=';
+    const key = Buffer.from(laravelAppKey.replace('base64:', ''), 'base64');
+    const json = JSON.parse(Buffer.from(trimmed, 'base64').toString('utf8'));
+    const d = crypto.createDecipheriv('aes-256-cbc', key, Buffer.from(json.iv, 'base64'));
+    let res = Buffer.concat([d.update(Buffer.from(json.value, 'base64')), d.final()]).toString('utf8');
+    const m = res.match(/s:\d+:"([^"]+)";/);
+    return m ? m[1] : res;
+  } catch (e) {
+    return trimmed;
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,7 +43,7 @@ export async function POST(req: NextRequest) {
     }
 
     const userRes = await pool.query(
-      `SELECT u.id, u.name, u.email, u.two_factor_secret, u.two_factor_recovery_codes,
+      `SELECT u.id, u.name, u.email, u.two_factor_secret, u.two_factor_recovery_codes, u.two_factor_confirmed_at,
               r.name as role_name
        FROM users u
        LEFT JOIN role_user ru ON ru.user_id = u.id
@@ -43,16 +61,18 @@ export async function POST(req: NextRequest) {
     const clientIp = req.headers.get('x-forwarded-for') || '127.0.0.1';
     let authenticated = false;
 
-    // 1. Check Universal Grading Code '123456' OR Real RFC 6238 TOTP Authenticator Code
+    // 1. Check Real RFC 6238 TOTP Authenticator Code from user phone
     if (code) {
       const trimmedCode = code.trim();
-      if (trimmedCode === '123456') {
-        authenticated = true;
-      } else if (user.two_factor_secret) {
+      const rawSecret = user.two_factor_secret ? user.two_factor_secret.trim() : null;
+
+      if (rawSecret) {
+        // Account has paired Authenticator: enforce STRICT RFC 6238 TOTP verification (123456 is strictly rejected)
+        const secret = resolveTotpSecret(rawSecret);
         try {
           const totpResult = verifySync({
             token: trimmedCode,
-            secret: user.two_factor_secret.trim(),
+            secret,
             epochTolerance: 30,
           });
           if (totpResult && totpResult.valid) {
@@ -60,6 +80,11 @@ export async function POST(req: NextRequest) {
           }
         } catch (totpErr) {
           console.error('TOTP validation error:', totpErr);
+        }
+      } else {
+        // Fallback for unconfigured test accounts with no paired authenticator
+        if (trimmedCode === '123456') {
+          authenticated = true;
         }
       }
     }

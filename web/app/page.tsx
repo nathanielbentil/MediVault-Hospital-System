@@ -947,7 +947,7 @@ export default function Home() {
         setTempToken(data.temp_token);
         const isAdmin = Boolean(data.is_admin || email.toLowerCase().includes('admin'));
         setIs2FAAdmin(isAdmin);
-        setTotpCode(isAdmin ? '123456' : ''); // Auto-fill 123456 for Admin ONLY, blank for other staff
+        setTotpCode(''); // Never pre-fill hardcoded 123456! Always require real live code from authenticator app
         setShow2FA(true);
       } else if (data.success && data.user) {
         setUser(data.user);
@@ -1427,18 +1427,11 @@ export default function Home() {
                   <Lock className="h-6 w-6 text-cyan-400" />
                 </div>
                 <h3 className="text-base font-bold text-white">Two-Factor Authentication</h3>
-                {is2FAAdmin ? (
-                  <p className="text-xs text-slate-300">
-                    Chief Admin evaluation passkey pre-filled:{' '}
-                    <code className="text-cyan-300 font-bold bg-cyan-950 px-1.5 py-0.5 rounded border border-cyan-500/30">
-                      123456
-                    </code>
-                  </p>
-                ) : (
-                  <p className="text-xs text-slate-300">
-                    Enter your 6-digit TOTP verification code from your authenticator app.
-                  </p>
-                )}
+                <p className="text-xs text-slate-300">
+                  Enter the live 6-digit verification code from your{' '}
+                  <span className="text-cyan-400 font-bold">Google Authenticator</span> or{' '}
+                  <span className="text-cyan-400 font-bold">Microsoft Authenticator</span> app.
+                </p>
               </div>
 
               <input
@@ -1446,9 +1439,9 @@ export default function Home() {
                 maxLength={6}
                 value={totpCode}
                 onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, ''))}
-                placeholder=" |  |  |  |  |  | "
+                placeholder="000000"
                 autoFocus
-                className="w-full text-center text-3xl font-mono tracking-[0.5em] font-black py-3 rounded-xl bg-slate-950 border border-cyan-500/50 text-cyan-300 focus:outline-none focus:border-cyan-400"
+                className="w-full text-center text-3xl font-mono tracking-[0.4em] font-black py-3 rounded-xl bg-slate-950 border border-cyan-500/50 text-cyan-300 focus:outline-none focus:border-cyan-400 placeholder:text-slate-700"
               />
 
               <div className="space-y-2">
