@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
         role: userRole,
         roles: [userRole],
         is_admin: userRole.includes('Admin') || userRole.includes('Chief'),
-        two_factor_enabled: false,
+        two_factor_enabled: Boolean(user.two_factor_confirmed_at),
       },
     });
 

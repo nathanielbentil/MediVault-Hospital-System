@@ -695,6 +695,7 @@ export default function Home() {
         setPairSuccess('Authenticator successfully paired! Your logins are now secured with real-time TOTP.');
         setPairRecoveryCodes(data.recoveryCodes || []);
         triggerToast('2FA device bound successfully! Live Google Authenticator enabled.');
+        setUser((prev: any) => prev ? { ...prev, two_factor_enabled: true } : prev);
       } else {
         setPairError(data.message || 'Verification failed. Please check the code in your app.');
       }
@@ -1283,15 +1284,27 @@ export default function Home() {
               <span className="font-bold">{user.name}</span>
             </div>
             <div className="h-4 w-px bg-slate-800 hidden sm:block" />
-            <button
-              onClick={handleOpen2FAPairModal}
-              title="Enable Two-Factor Authentication with your authenticator app"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950/70 border border-cyan-500/50 hover:border-cyan-400 hover:bg-cyan-900/60 text-cyan-300 text-xs font-bold transition-all cursor-pointer shadow-sm"
-            >
-              <QrCode className="h-3.5 w-3.5 text-cyan-400" />
-              <span className="hidden sm:inline">Enable 2FA</span>
-              <span className="sm:hidden">2FA</span>
-            </button>
+            {user?.two_factor_enabled ? (
+              <button
+                onClick={handleOpen2FAPairModal}
+                title="Two-Factor Authentication is active and protecting your account. Click to view or re-pair authenticator."
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-950/80 border border-emerald-500/60 hover:border-emerald-400 hover:bg-emerald-900/60 text-emerald-300 text-xs font-bold transition-all cursor-pointer shadow-sm"
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                <span className="hidden sm:inline">2FA Enabled</span>
+                <span className="sm:hidden">2FA On</span>
+              </button>
+            ) : (
+              <button
+                onClick={handleOpen2FAPairModal}
+                title="Enable Two-Factor Authentication with your authenticator app"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-950/70 border border-cyan-500/50 hover:border-cyan-400 hover:bg-cyan-900/60 text-cyan-300 text-xs font-bold transition-all cursor-pointer shadow-sm"
+              >
+                <QrCode className="h-3.5 w-3.5 text-cyan-400" />
+                <span className="hidden sm:inline">Enable 2FA</span>
+                <span className="sm:hidden">2FA</span>
+              </button>
+            )}
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-[10px] text-emerald-400 font-medium hidden sm:inline">Clinical Network Active</span>
@@ -1515,9 +1528,10 @@ export default function Home() {
                 <Link
                   href="/admin"
                   className="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                  title="SuperAdmin Governance Hub"
                 >
                   <Crown className="h-3.5 w-3.5 text-purple-200" />
-                  <span>Admin Dashboard</span>
+                  <span>Governance Hub</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <Link
@@ -3486,8 +3500,21 @@ export default function Home() {
                   <QrCode className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white text-base">Enable 2FA</h3>
-                  <p className="text-[11px] text-slate-400">Scan with Google Authenticator, Microsoft Authenticator, or Apple Passwords</p>
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-bold text-white text-base">
+                      {user?.two_factor_enabled ? 'Two-Factor Authentication' : 'Enable 2FA'}
+                    </h3>
+                    {user?.two_factor_enabled && (
+                      <span className="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">
+                        Active
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-slate-400">
+                    {user?.two_factor_enabled
+                      ? 'Your account is secured with 2FA. Re-scan or bind a new authenticator below:'
+                      : 'Scan with Google Authenticator, Microsoft Authenticator, or Apple Passwords'}
+                  </p>
                 </div>
               </div>
               <button
@@ -3625,7 +3652,7 @@ export default function Home() {
                     disabled={pairCode.length < 6}
                     className="flex-1 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition-all disabled:opacity-50 cursor-pointer shadow-md shadow-cyan-500/20"
                   >
-                    Enable 2FA
+                    {user?.two_factor_enabled ? 'Update Authenticator' : 'Enable 2FA'}
                   </button>
                 </div>
               </form>

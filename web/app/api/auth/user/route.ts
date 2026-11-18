@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
         role: role,
         roles: [role],
         is_admin: role.includes('Admin') || role.includes('Chief'),
-        two_factor_enabled: !user.two_factor_confirmed_at,
+        two_factor_enabled: Boolean(user.two_factor_confirmed_at),
       },
     });
   } catch (err: any) {

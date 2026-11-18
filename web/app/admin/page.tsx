@@ -586,6 +586,10 @@ export default function SuperAdminPage() {
               <span className="font-bold">{user?.name || 'Dr. Prof. Nathaniel Bentil'}</span>
             </div>
             <div className="h-4 w-px bg-slate-800 hidden sm:block" />
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 shadow-sm">
+              <CheckCircle2 className="h-3 w-3 text-emerald-400" />
+              <span className="text-[10px] font-bold">2FA Active</span>
+            </div>
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800">
               <span className="h-2 w-2 rounded-full bg-purple-400 animate-pulse" />
               <span className="text-[10px] text-purple-300 font-mono">System Root Clearance</span>

@@ -125,6 +125,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Two-Factor Authentication successfully paired with your authenticator device!',
+      two_factor_enabled: true,
       recoveryCodes,
     });
   } catch (err: any) {
