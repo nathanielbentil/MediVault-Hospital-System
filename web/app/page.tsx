@@ -436,10 +436,6 @@ export default function Home() {
   const [pairCopied, setPairCopied]               = useState(false);
   const [pairRecoveryCodes, setPairRecoveryCodes] = useState<string[]>([]);
 
-  // Homepage Full Directory Drawer / Accordion
-  const [showFullDirectory, setShowFullDirectory] = useState(false);
-  const [directoryFilter, setDirectoryFilter]     = useState<string>('All');
-  const [directorySearch, setDirectorySearch]     = useState<string>('');
 
   // Dashboard Data
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
@@ -1177,18 +1173,6 @@ export default function Home() {
   const admittedCount = patients.filter((p) => p.admission_status?.toUpperCase() === 'ADMITTED').length;
   const outpatientCount = patients.filter((p) => p.admission_status?.toUpperCase() === 'OUTPATIENT').length;
 
-  // Filter Full Directory on Login Card
-  const directoryFilteredList = FULL_STAFF_DIRECTORY.filter((m) => {
-    const matchCat = directoryFilter === 'All' || m.category === directoryFilter;
-    const q = directorySearch.toLowerCase();
-    const matchQ =
-      directorySearch === '' ||
-      m.name.toLowerCase().includes(q) ||
-      m.email.toLowerCase().includes(q) ||
-      m.leadership.toLowerCase().includes(q) ||
-      m.role.toLowerCase().includes(q);
-    return matchCat && matchQ;
-  });
 
   // -- Loading Screen --------------------------------------------------------
   if (loading) {
@@ -1230,8 +1214,8 @@ export default function Home() {
                   Clinical Portal
                 </span>
               </div>
-              <p className="text-xs text-slate-300 hidden sm:block">
-                St. Luke Medical Center  |  Clinical Governance & Electronic Health Records
+              <p className="text-xs text-slate-400 hidden sm:block">
+                St. Luke Medical Center  |  Hospital Management System
               </p>
             </div>
           </div>
@@ -1247,8 +1231,8 @@ export default function Home() {
           <div className="rounded-2xl p-6 sm:p-8 bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-2xl space-y-6">
             <div className="text-center space-y-1.5">
               <h2 className="text-2xl font-bold text-white">Staff Sign In</h2>
-              <p className="text-xs text-slate-300">
-                Please enter your credentials to access your dedicated clinical workstation.
+              <p className="text-xs text-slate-400">
+                Sign in to access your clinical workstation.
               </p>
             </div>
 
@@ -1321,7 +1305,7 @@ export default function Home() {
             {/* Quick Department Leads Selection Chips */}
             <div className="pt-4 border-t border-slate-800/80 space-y-2.5">
               <p className="text-[11px] font-medium text-slate-400 text-center">
-                1-Tap Role Selector (Lead Clinical Evaluator Profiles):
+                Quick Demo Sign-In:
               </p>
               <div className="flex flex-wrap gap-1.5 justify-center">
                 {DEMO_STAFF.map((staff, idx) => {
@@ -1354,90 +1338,6 @@ export default function Home() {
                   );
                 })}
               </div>
-            </div>
-
-            {/* Expandable Accordion: Full Hospital Personnel Directory (21 Staff) */}
-            <div className="pt-2 border-t border-slate-800/80">
-              <button
-                type="button"
-                onClick={() => setShowFullDirectory(!showFullDirectory)}
-                className="w-full flex items-center justify-between text-xs font-bold text-slate-300 hover:text-white py-1 transition-colors cursor-pointer"
-              >
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-purple-400" />
-                  <span>Full Hospital Clinical Leadership & Staff Directory (21 Personnel)</span>
-                </div>
-                <span className="text-cyan-400 text-xs">{showFullDirectory ? 'Hide [-]' : 'Expand [+]'}</span>
-              </button>
-
-              {showFullDirectory && (
-                <div className="mt-3 space-y-3 pt-3 border-t border-slate-800/60 animate-in fade-in duration-200">
-                  {/* Category Filter Pills */}
-                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
-                    {['All', 'Executive', 'Medical', 'Nursing', 'Pharmacy', 'Audit'].map((cat) => (
-                      <button
-                        key={cat}
-                        type="button"
-                        onClick={() => setDirectoryFilter(cat)}
-                        className={`px-2.5 py-1 rounded-lg border font-medium transition-all whitespace-nowrap cursor-pointer ${
-                          directoryFilter === cat
-                            ? 'bg-cyan-500 text-slate-950 font-bold border-cyan-400'
-                            : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'
-                        }`}
-                      >
-                        {cat}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Search Input */}
-                  <div className="relative">
-                    <Search className="h-3.5 w-3.5 absolute left-3 top-2.5 text-slate-500" />
-                    <input
-                      type="text"
-                      value={directorySearch}
-                      onChange={(e) => setDirectorySearch(e.target.value)}
-                      placeholder="Search doctor, nurse, pharmacist, or role..."
-                      className="w-full rounded-xl bg-slate-950/80 border border-slate-800 pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400"
-                    />
-                  </div>
-
-                  {/* Personnel Cards List */}
-                  <div className="max-h-60 overflow-y-auto space-y-1.5 pr-1">
-                    {directoryFilteredList.map((m) => (
-                      <div
-                        key={m.id}
-                        onClick={() => {
-                          setEmail(m.email);
-                          setPassword(m.pass);
-                          setLoginError('');
-                          triggerToast(`Selected: ${m.name} (${m.leadership})`);
-                        }}
-                        className="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-cyan-500/50 transition-all flex items-center justify-between cursor-pointer group"
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <span className="shrink-0 p-1.5 rounded-lg bg-slate-900 border border-slate-800 text-cyan-400">{getRoleIcon(m.role, "h-4 w-4")}</span>
-                          <div className="min-w-0">
-                            <div className="text-xs font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
-                              {m.name}
-                            </div>
-                            <div className="text-[10px] text-slate-400 truncate font-sans">
-                              {m.leadership}
-                            </div>
-                            <div className="text-[9px] text-cyan-400/90 font-mono">
-                              {m.email}
-                            </div>
-                          </div>
-                        </div>
-
-                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-cyan-950 border border-cyan-500/30 text-cyan-300 font-bold shrink-0">
-                          Select
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </main>
