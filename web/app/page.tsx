@@ -1215,7 +1215,7 @@ export default function Home() {
                 </span>
               </div>
               <p className="text-xs text-slate-400 hidden sm:block">
-                St. Luke Medical Center  |  Hospital Management System
+                Secure Hospital Management System
               </p>
             </div>
           </div>
@@ -1344,7 +1344,7 @@ export default function Home() {
 
         {/* -- Simple Clean Hospital Footer -- */}
         <footer className="relative z-10 max-w-5xl w-full mx-auto text-center text-xs text-slate-400 py-3">
-          <p>(c) 2026 MediVault Hospital Management System  |  St. Luke Medical Center</p>
+          <p>(c) 2026 MediVault  |  Secure Hospital Management System</p>
         </footer>
 
         {/* -- 2FA Challenge Modal -- */}
