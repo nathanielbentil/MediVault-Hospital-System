@@ -94,15 +94,16 @@ export async function POST(req: NextRequest) {
     }
 
     // Hash password using Argon2id + HMAC Pepper
-    const hashResult = await PasswordService.hash(password);
+    const hashResult = await PasswordService.hash(password, 'v1');
     const passwordHash = typeof hashResult === 'string' ? hashResult : hashResult.hash;
+    const extractedSalt = PasswordService.extractSalt(passwordHash);
 
-    // Insert user into PostgreSQL with 2FA enforced
+    // Insert user into PostgreSQL with salt and pepper
     const insertUserRes = await pool.query(
-      `INSERT INTO users (name, email, password, pepper_version, failed_login_attempts, two_factor_confirmed_at, status, created_at, updated_at)
-       VALUES ($1, $2, $3, 'v1', 0, NOW(), 'active', NOW(), NOW())
+      `INSERT INTO users (name, email, password, salt, pepper_version, failed_login_attempts, two_factor_confirmed_at, status, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, 'v1', 0, NOW(), 'active', NOW(), NOW())
        RETURNING id, name, email, created_at`,
-      [name.trim(), cleanEmail, passwordHash]
+      [name.trim(), cleanEmail, passwordHash, extractedSalt]
     );
 
     const newUser = insertUserRes.rows[0];

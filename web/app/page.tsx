@@ -420,6 +420,19 @@ export default function Home() {
   const [loginError, setLoginError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Self-Service Registration form
+  const [authMode, setAuthMode]                     = useState<'signin' | 'signup'>('signin');
+  const [regName, setRegName]                       = useState('');
+  const [regEmail, setRegEmail]                     = useState('');
+  const [regPassword, setRegPassword]               = useState('');
+  const [regConfirmPassword, setRegConfirmPassword] = useState('');
+  const [regRole, setRegRole]                       = useState('Doctor');
+  const [regDept, setRegDept]                       = useState('Clinical Care');
+  const [regShowPass, setRegShowPass]               = useState(false);
+  const [regError, setRegError]                     = useState('');
+  const [regSuccess, setRegSuccess]                 = useState('');
+  const [isRegisteringSelf, setIsRegisteringSelf]   = useState(false);
+
   // 2FA Modal
   const [show2FA, setShow2FA]         = useState(false);
   const [tempToken, setTempToken]     = useState('');
@@ -940,6 +953,61 @@ export default function Home() {
   }, [loadPatients, loadAudit, fetchSaltPepperConfig]);
 
   // -- Auth Handlers --------------------------------------------------------
+  const handleRegisterSelf = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setRegError('');
+    setRegSuccess('');
+
+    if (!regName.trim() || !regEmail.trim() || !regPassword) {
+      setRegError('Please provide full name, email, and password.');
+      return;
+    }
+
+    if (regPassword.length < 8) {
+      setRegError('Password must be at least 8 characters long.');
+      return;
+    }
+
+    if (regPassword !== regConfirmPassword) {
+      setRegError('Passwords do not match. Please re-enter.');
+      return;
+    }
+
+    setIsRegisteringSelf(true);
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: regName.trim(),
+          email: regEmail.trim(),
+          password: regPassword,
+          role: regRole,
+          department: regDept,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success && data.user) {
+        setRegSuccess(data.message || 'Account registered successfully!');
+        triggerToast(`Welcome to MediVault, ${data.user.name}!`);
+        setUser(data.user);
+        loadPatients();
+        const roleLower = (data.user.role || '').toLowerCase();
+        if (roleLower.includes('admin') || roleLower.includes('chief') || roleLower.includes('auditor')) {
+          loadAudit();
+          fetchSaltPepperConfig();
+        }
+      } else {
+        setRegError(data.message || 'Registration failed. Please try again.');
+      }
+    } catch {
+      setRegError('Unable to connect to registration service.');
+    } finally {
+      setIsRegisteringSelf(false);
+    }
+  };
+
   const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setLoginError('');
@@ -1226,119 +1294,322 @@ export default function Home() {
           </div>
         </header>
 
-        {/* -- Centered Clean Hospital Sign-In Card -- */}
+        {/* -- Centered Clean Hospital Authentication Card (Sign In / Register) -- */}
         <main className="relative z-10 max-w-lg w-full mx-auto my-auto py-6">
-          <div className="rounded-2xl p-6 sm:p-8 bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-2xl space-y-6">
-            <div className="text-center space-y-1.5">
-              <h2 className="text-2xl font-bold text-white">Staff Sign In</h2>
-              <p className="text-xs text-slate-400">
-                Sign in to access your clinical workstation.
-              </p>
+          <div className="rounded-2xl p-6 sm:p-8 bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-2xl space-y-5">
+            {/* Tab switch between Sign In and Sign Up */}
+            <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800">
+              <button
+                type="button"
+                onClick={() => { setAuthMode('signin'); setLoginError(''); setRegError(''); setRegSuccess(''); }}
+                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  authMode === 'signin'
+                    ? 'bg-cyan-500 text-slate-950 shadow-md font-extrabold'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Lock className="h-3.5 w-3.5" />
+                <span>Staff Sign In</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setAuthMode('signup'); setLoginError(''); setRegError(''); setRegSuccess(''); }}
+                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  authMode === 'signup'
+                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md font-extrabold'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Plus className="h-3.5 w-3.5" />
+                <span>Create Staff Account</span>
+              </button>
             </div>
 
-            {loginError && (
-              <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-500/40 text-rose-300 text-xs flex items-start gap-2">
-                <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-rose-400" />
-                <span>{loginError}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="block text-xs font-medium text-slate-300">
-                  Staff Email Address
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@medivault.cloud"
-                  required
-                  className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <label className="block text-xs font-medium text-slate-300">
-                    Password
-                  </label>
+            {authMode === 'signin' ? (
+              <>
+                <div className="text-center space-y-1.5">
+                  <h2 className="text-2xl font-bold text-white">Staff Sign In</h2>
+                  <p className="text-xs text-slate-400">
+                    Sign in to access your clinical workstation.
+                  </p>
                 </div>
-                <div className="relative">
-                  <input
-                    type={showPass ? 'text' : 'password'}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder=" |  |  |  |  |  |  |  |  |  |  |  | "
-                    required
-                    className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
-                  />
+
+                {loginError && (
+                  <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-500/40 text-rose-300 text-xs flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-rose-400" />
+                    <span>{loginError}</span>
+                  </div>
+                )}
+
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-medium text-slate-300">
+                      Staff Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="name@medivault.cloud"
+                      required
+                      className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-xs font-medium text-slate-300">
+                        Password
+                      </label>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type={showPass ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••••••"
+                        required
+                        className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPass(!showPass)}
+                        className="absolute right-3 top-2.5 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                      >
+                        {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 animate-spin" />
+                        Signing in...
+                      </>
+                    ) : (
+                      <>
+                        <span>Sign In to Workstation</span>
+                        <ChevronRight className="h-4 w-4" />
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                <div className="text-center pt-1">
+                  <span className="text-xs text-slate-400">New staff member? </span>
                   <button
                     type="button"
-                    onClick={() => setShowPass(!showPass)}
-                    className="absolute right-3 top-2.5 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                    onClick={() => { setAuthMode('signup'); setLoginError(''); }}
+                    className="text-xs text-purple-400 hover:text-purple-300 font-semibold underline underline-offset-2 cursor-pointer"
                   >
-                    {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    Create Staff Account
                   </button>
                 </div>
-              </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-              >
-                {isSubmitting ? (
-                  <>
-                    <RefreshCw className="h-4 w-4 animate-spin" />
-                    Signing in...
-                  </>
-                ) : (
-                  <>
-                    <span>Sign In to Workstation</span>
-                    <ChevronRight className="h-4 w-4" />
-                  </>
+                {/* Quick Department Leads Selection Chips */}
+                <div className="pt-4 border-t border-slate-800/80 space-y-2.5">
+                  <p className="text-[11px] font-medium text-slate-400 text-center">
+                    Quick Demo Sign-In:
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 justify-center">
+                    {DEMO_STAFF.map((staff, idx) => {
+                      const borderColors: Record<string, string> = {
+                        purple: 'hover:border-purple-400 border-purple-500/40 text-purple-300',
+                        blue: 'hover:border-blue-400 border-blue-500/40 text-blue-300',
+                        cyan: 'hover:border-cyan-400 border-cyan-500/40 text-cyan-300',
+                        pink: 'hover:border-pink-400 border-pink-500/40 text-pink-300',
+                        amber: 'hover:border-amber-400 border-amber-500/40 text-amber-300',
+                        emerald: 'hover:border-emerald-400 border-emerald-500/40 text-emerald-300',
+                      };
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => {
+                            setEmail(staff.email);
+                            setPassword(staff.pass);
+                            setLoginError('');
+                          }}
+                          className={`px-2.5 py-1 rounded-lg border text-[11px] font-medium transition-all cursor-pointer ${
+                            email === staff.email
+                              ? 'bg-slate-800 ring-1 ring-cyan-400 font-bold'
+                              : 'bg-slate-950/60 ' + (borderColors[staff.color] || 'border-slate-800 text-slate-300')
+                          }`}
+                        >
+                          <span className="mr-1">{getRoleIcon(staff.role)}</span>
+                          <span>{staff.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            ) : (
+              /* --- Sign Up / Register View --- */
+              <>
+                <div className="text-center space-y-1.5">
+                  <h2 className="text-2xl font-bold text-white">Create Staff Account</h2>
+                  <p className="text-xs text-slate-400">
+                    Register as verified hospital clinical personnel.
+                  </p>
+                </div>
+
+                {regError && (
+                  <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-500/40 text-rose-300 text-xs flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-rose-400" />
+                    <span>{regError}</span>
+                  </div>
                 )}
-              </button>
-            </form>
 
-            {/* Quick Department Leads Selection Chips */}
-            <div className="pt-4 border-t border-slate-800/80 space-y-2.5">
-              <p className="text-[11px] font-medium text-slate-400 text-center">
-                Quick Demo Sign-In:
-              </p>
-              <div className="flex flex-wrap gap-1.5 justify-center">
-                {DEMO_STAFF.map((staff, idx) => {
-                  const borderColors: Record<string, string> = {
-                    purple: 'hover:border-purple-400 border-purple-500/40 text-purple-300',
-                    blue: 'hover:border-blue-400 border-blue-500/40 text-blue-300',
-                    cyan: 'hover:border-cyan-400 border-cyan-500/40 text-cyan-300',
-                    pink: 'hover:border-pink-400 border-pink-500/40 text-pink-300',
-                    amber: 'hover:border-amber-400 border-amber-500/40 text-amber-300',
-                    emerald: 'hover:border-emerald-400 border-emerald-500/40 text-emerald-300',
-                  };
-                  return (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => {
-                        setEmail(staff.email);
-                        setPassword(staff.pass);
-                        setLoginError('');
-                      }}
-                      className={`px-2.5 py-1 rounded-lg border text-[11px] font-medium transition-all cursor-pointer ${
-                        email === staff.email
-                          ? 'bg-slate-800 ring-1 ring-cyan-400 font-bold'
-                          : 'bg-slate-950/60 ' + (borderColors[staff.color] || 'border-slate-800 text-slate-300')
-                      }`}
-                    >
-                      <span className="mr-1">{getRoleIcon(staff.role)}</span>
-                      <span>{staff.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+                {regSuccess && (
+                  <div className="p-3 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5 text-emerald-400" />
+                    <span>{regSuccess}</span>
+                  </div>
+                )}
+
+                <form onSubmit={handleRegisterSelf} className="space-y-3">
+                  <div className="space-y-1">
+                    <label className="block text-xs font-medium text-slate-300">
+                      Full Legal Name
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Dr. Jane Mensah, Nurse David Osei"
+                      value={regName}
+                      onChange={(e) => setRegName(e.target.value)}
+                      className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-slate-300">
+                        Clinical Role
+                      </label>
+                      <select
+                        value={regRole}
+                        onChange={(e) => setRegRole(e.target.value)}
+                        className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 transition-all"
+                      >
+                        <option value="Doctor">Attending Physician / Doctor</option>
+                        <option value="Nurse">Ward Nurse / Registered Nurse</option>
+                        <option value="Pharmacist">Hospital Pharmacist</option>
+                        <option value="Auditor">Compliance & HIPAA Auditor</option>
+                        <option value="Manager">Hospital Operations Manager</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-slate-300">
+                        Department
+                      </label>
+                      <input
+                        type="text"
+                        value={regDept}
+                        onChange={(e) => setRegDept(e.target.value)}
+                        placeholder="e.g. Clinical In-Patient Care"
+                        className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-xs font-medium text-slate-300">
+                      Staff Email Address
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="e.g. staff.member@medivault.cloud"
+                      value={regEmail}
+                      onChange={(e) => setRegEmail(e.target.value)}
+                      className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/20 transition-all"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-slate-300">
+                        Password (min 8 chars)
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={regShowPass ? 'text' : 'password'}
+                          required
+                          placeholder="••••••••"
+                          value={regPassword}
+                          onChange={(e) => setRegPassword(e.target.value)}
+                          className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3 py-2 pr-9 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-all"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setRegShowPass(!regShowPass)}
+                          className="absolute right-2.5 top-2 text-slate-400 hover:text-white cursor-pointer"
+                        >
+                          {regShowPass ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-slate-300">
+                        Confirm Password
+                      </label>
+                      <input
+                        type={regShowPass ? 'text' : 'password'}
+                        required
+                        placeholder="••••••••"
+                        value={regConfirmPassword}
+                        onChange={(e) => setRegConfirmPassword(e.target.value)}
+                        className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Cryptographic Protection Badge */}
+                  <div className="p-2.5 rounded-xl bg-slate-950/90 border border-purple-500/30 flex items-center gap-2 text-[11px] text-purple-300">
+                    <Shield className="h-4 w-4 shrink-0 text-purple-400" />
+                    <span>Protected by 256-bit HMAC Pepper + 128-bit CSPRNG Salt + Argon2id</span>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isRegisteringSelf}
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-sm shadow-lg shadow-purple-600/30 transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    {isRegisteringSelf ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 animate-spin" />
+                        <span>Hashing & Securing Account...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="h-4 w-4" />
+                        <span>Create Account & Enter Workstation</span>
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                <div className="text-center pt-1">
+                  <span className="text-xs text-slate-400">Already registered? </span>
+                  <button
+                    type="button"
+                    onClick={() => { setAuthMode('signin'); setRegError(''); }}
+                    className="text-xs text-cyan-400 hover:text-cyan-300 font-semibold underline underline-offset-2 cursor-pointer"
+                  >
+                    Staff Sign In
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </main>
 

@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
        LEFT JOIN role_user ru ON ru.user_id = u.id
        LEFT JOIN roles r ON r.id = ru.role_id
        ORDER BY u.id ASC
-       LIMIT 12`
+       LIMIT 100`
     );
 
     const personnelSalts = res.rows.map((row) => {
