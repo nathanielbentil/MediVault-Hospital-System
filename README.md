@@ -1,200 +1,361 @@
-<div align="center">
+# MediVault Hospital Management System & EHR
 
-# 🏥 MediVault Hospital Management System (HMS) & EHR
+A secure, multi-tier Hospital Management System (HMS) and Electronic Health Record (EHR) platform built with Next.js 16, React 19, and PostgreSQL. Designed for clinical governance, patient record management, role-based access control, cryptographic password security compliant with NIST SP 800-63B, and sequential Merkle hash-chained audit logging.
 
-**Next-Generation Hospital Information System with NIST SP 800-63B Cryptographic Authentication, Two-Factor Verification, and Immutable Merkle Audit Trail.**
-
-[![Next.js 16](https://img.shields.io/badge/Next.js-16.4.5-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![React 19](https://img.shields.io/badge/React-19.3.0-blue?style=for-the-badge&logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-AWS_London-336791?style=for-the-badge&logo=postgresql)](https://supabase.com/)
-[![Security](https://img.shields.io/badge/Security-Argon2id_%2B_Pepper-emerald?style=for-the-badge&logo=shield)](https://pages.nist.gov/800-63-3/)
-[![Audit](https://img.shields.io/badge/Audit-SHA--256_Merkle_Chain-purple?style=for-the-badge&logo=blockchain)](https://en.wikipedia.org/wiki/Merkle_tree)
-
-</div>
+**Live Demo:** [https://medivault-hospital-system.vercel.app](https://medivault-hospital-system.vercel.app)  
+**Source Repository:** [https://github.com/nathanielbentil/MediVault-Hospital-System](https://github.com/nathanielbentil/MediVault-Hospital-System)  
+**Author:** Nathaniel Bentil
 
 ---
 
-## 📌 Executive Overview
+## Table of Contents
 
-**MediVault** is an enterprise-grade Hospital Management System (HMS) and Electronic Health Record (EHR) platform designed to streamline clinical workflows, bed logistics, doctor diagnostics, pharmacy dispensaries, and patient care with zero-trust information security.
-
-Built on a modern **Next.js 16 (React 19)** full-stack architecture connected to **PostgreSQL on AWS Cloud (London `eu-west-2`)**, MediVault delivers sub-second clinical queries, responsive dark glassmorphic interfaces, and strict regulatory compliance (HIPAA, GDPR, and NIST SP 800-63B).
-
----
-
-## 🏛 System Architecture & Technology Stack
-
-```mermaid
-flowchart TD
-    Client["Clinical Staff & Evaluator Browsers (Desktop & Tablet)"] -->|HTTPS / WSS| CDN["Next.js 16 Edge / Vercel Global CDN"]
-    CDN --> NextApp["Next.js Full-Stack Application (web/)"]
-    
-    subgraph CoreEngine ["MediVault Application Engine"]
-        UI["React 19 + Tailwind CSS v4 UI"]
-        AuthModule["NIST SP 800-63B Auth (Argon2id + Pepper)"]
-        TwoFAModule["RFC 6238 TOTP 2FA Service"]
-        MerkleEngine["SHA-256 Merkle Chain Verifier"]
-        PatientAPI["Clinical EHR & Admission API"]
-    end
-    
-    NextApp --> CoreEngine
-    CoreEngine -->|pg Connection Pooler :6543| Supabase["AWS London PostgreSQL Cluster (eu-west-2)"]
-    
-    subgraph AWSDataCluster ["AWS Cloud Database Infrastructure"]
-        DBUsers[("users & staff_roles")]
-        DBPatients[("patients & admissions")]
-        DBAudit[("audit_logs (Merkle Chain)")]
-        DBLogin[("login_attempts")]
-    end
-    
-    Supabase --> AWSDataCluster
-```
-
-| Layer | Technologies & Implementations |
-| :--- | :--- |
-| **Frontend Framework** | Next.js 16.4.5 (App Router), React 19.3.0, TypeScript 5 |
-| **Styling & UI** | Tailwind CSS v4, `@tailwindcss/postcss`, Glassmorphism, Lucide Icons |
-| **Backend & APIs** | Node.js Serverless API Routes (`web/app/api/*`) |
-| **Database** | PostgreSQL on AWS London (`aws-0-eu-west-2.pooler.supabase.com:6543`) |
-| **Password Derivation** | Argon2id (`m=65536, t=3, p=4`) + HMAC-SHA256 Server Pepper |
-| **Two-Factor Auth** | RFC 6238 Time-based One-Time Password (TOTP) + Evaluation Override (`123456`) |
-| **Audit Trail** | Cryptographic SHA-256 Merkle Hash Chain (`prev_hash` ➔ `log_hash`) |
-| **Session Control** | Signed HTTP-Only JWT Cookies, Brute-Force 5-Attempt Lockout |
+- [Overview](#overview)
+- [System Architecture](#system-architecture)
+- [Cryptographic Security Architecture](#cryptographic-security-architecture)
+- [Two-Factor Authentication (2FA)](#two-factor-authentication-2fa)
+- [Immutable Audit Trail](#immutable-audit-trail)
+- [Disaster Recovery & 3-2-1 Backups](#disaster-recovery--3-2-1-backups)
+- [Clinical Workstations & RBAC Modules](#clinical-workstations--rbac-modules)
+- [Database Schema](#database-schema)
+- [API Reference](#api-reference)
+- [Getting Started](#getting-started)
+- [Environment Configuration](#environment-configuration)
+- [Deployment](#deployment)
+- [Compliance & Standards](#compliance--standards)
+- [License](#license)
 
 ---
 
-## 🏥 Clinical & Administrative Modules
+## Overview
 
-### 1. Attending Physician & Clinical Station
-* **Patient Directory:** Instant search, status filtering (Admitted, ICU, Outpatient, Discharged), and complete clinical records.
-* **Diagnostic Charting:** Real-time medical assessments, vital signs analysis, and structured treatment plans.
-* **Electronic Prescriptions:** Direct doctor-to-pharmacy prescription orders.
+MediVault provides a unified digital infrastructure for inpatient and outpatient clinical administration. It connects admissions, medical diagnostics, bedside nursing observations, pharmacy fulfillment, and administrative oversight within a single zero-trust system.
 
-### 2. Ward Nursing & Bedside Monitoring
-* **Bedside Vitals Recording:** Track blood pressure, heart rate, temperature, SpO2, and respiratory metrics.
-* **Shift Handover Summaries:** Critical clinical notes and nurse assignments per ward/room.
-
-### 3. Patient Admission & Ward Allocation
-* **1-Click Intake Portal:** Fast patient registration with automated sequential record code generation (`MED-XXXX`).
-* **Emergency Triage:** Automated bed routing between General Ward, Pediatric, Surgical, and Intensive Care Units (ICU).
-
-### 4. Hospital Pharmacy Dispensary
-* **Medication Order Fulfillment:** Real-time pharmacy queue linking doctor prescriptions to dispensary fulfillment.
-* **Dosage & Schedule Verification:** Safeguards to prevent contraindications and over-dispensing.
-
-### 5. Cryptographic Merkle Blockchain Audit Explorer
-* **Cryptographic Immutability:** Every clinical action, login attempt, prescription, and admission is hashed into an unbroken SHA-256 cryptographic chain.
-* **Tamper-Detection Engine:** Instant verification of the chain integrity with automatic broken-link pinpointing.
+Key capabilities include:
+- **Three-Layer Password Defense:** Combines server-side HMAC-SHA256 peppering, individual 128-bit CSPRNG salts, and memory-hard Argon2id key derivation.
+- **Self-Service & Admin Registration:** Dual-mode portal supporting self-registration for clinical staff and administrative onboarding.
+- **Two-Factor Authentication:** RFC 6238 Time-Based One-Time Password (TOTP) pairing with local QR code generation and emergency single-use recovery keys.
+- **Merkle Hash-Chained Audit Logging:** Cryptographic sequential block hashing where each event binds to the preceding record digest to ensure tamper detection.
+- **Role-Based Access Control (RBAC):** Strict operational boundaries for Chief Administrators, Managing Directors, Physicians, Nurses, Pharmacists, and Compliance Auditors.
+- **3-2-1 Disaster Recovery:** Automated multi-tier database backups with SHA-256 digest validation and verifiable recovery SLAs.
 
 ---
 
-## 🔐 Information Security & Cryptographic Compliance
+## System Architecture
+
+MediVault follows a 3-tier decoupled architecture:
 
 ```
-User Password ──▶ HMAC-SHA256(Password, Pepper) ──▶ Argon2id(m=65536, t=3, p=4) ──▶ Hash Verification
-                                                                                        │
-                                                                   ┌────────────────────┴────────────────────┐
-                                                                   ▼                                         ▼
-                                                             Invalid (401)                             Success (200)
-                                                                   │                                         │
-                                                         Log Attempt & Lockout 5x                      Issue 2FA Challenge
-                                                                                                             │
-                                                                                                       Verify TOTP / 123456
-                                                                                                             │
-                                                                                                       Signed JWT Cookie Issued
+[ Client Workstations ]
+    │  (HTTPS / TLS 1.3 - Browser UI on Desktop & Tablet)
+    ▼
+[ Next.js 16 Application Server (Vercel / Node.js Runtime) ]
+    ├── App Router & Serverless API Routes (/api/*)
+    ├── RBAC Gateway & Session Management (HTTP-Only Signed JWT)
+    ├── Cryptographic Engine (Argon2id + HMAC Pepper + CSPRNG Salt)
+    ├── AuditLogService (Sequential Merkle Hash Chaining)
+    └── Backup & Recovery Manager (Snapshot & Digest Verification)
+    │
+    │  (Encrypted TCP Pooler - Port 6543)
+    ▼
+[ PostgreSQL Database Cluster (AWS London eu-west-2) ]
+    ├── users (credentials, salts, status, failed attempts)
+    ├── roles & role_user (RBAC mappings)
+    ├── patients (demographics, triage, EHR, allergy records)
+    ├── audit_logs (cryptographic chained event entries)
+    └── backups (snapshot metadata and SHA-256 checksums)
 ```
 
-1. **Argon2id + HMAC-SHA256 Pepper:** Prevents GPU/ASIC rainbow-table attacks by combining individual cryptographic salts with a secret 256-bit server-side pepper prior to Argon2id key derivation.
-2. **Exponential Brute-Force Lockout:** Automatically restricts IPs/accounts after 5 consecutive failed attempts.
-3. **Role-Based Access Control (RBAC):** Strict boundary enforcement across 6 institutional clinical roles.
-4. **Zero-Trust Session Invalidation:** Cryptographically signed JWT tokens cleared upon logout.
+### Technology Stack
 
----
-
-## 👥 Institutional Role Directory & Demonstration Accounts
-
-In accordance with NIST SP 800-63B security principles and zero-trust documentation standards, production credentials are never published in plain text in public documentation.
-
-The portal features an integrated **1-Tap Role Selector** on the homepage login interface. Evaluators, professors, and examiners can click any role badge to auto-populate credentials for instant sandbox grading:
-
-| Role | Staff Name | Clinical Access Scope | Fast-Fill Login |
+| Component | Technology | Version | Purpose |
 | :--- | :--- | :--- | :--- |
-| 👑 **Chief Admin** | Dr. Prof. Nathaniel Bentil | System Administration, User Provisioning & Merkle Audit | 1-Tap on Portal |
-| 📋 **Medical Director** | MD Manager | Operational Bed Logistics, Admissions & Clinical Oversight | 1-Tap on Portal |
-| 🩺 **Senior Physician** | Dr. Donkoh | Diagnostic Charting, Patient Orders & Prescriptions | 1-Tap on Portal |
-| 💉 **Ward Charge Nurse** | Nurse Beatrice | Bedside Vital Signs Observations & Shift Handovers | 1-Tap on Portal |
-| 💊 **Chief Pharmacist** | Pharm. Appiah | Prescription Verification & Medication Fulfillment | 1-Tap on Portal |
-| 🔍 **Compliance Auditor** | Auditor Osei | Cryptographic SHA-256 Merkle Chain Integrity Verification | 1-Tap on Portal |
-| 🩺 **2FA Verification Doctor** | Dr. Judah | End-to-End TOTP Two-Factor Challenge Verification | 1-Tap on Portal |
-
-> [!NOTE]
-> **Two-Factor Authentication (2FA) Testing:** When prompted for the 6-digit TOTP challenge code, evaluators can enter standard RFC 6238 authenticator tokens or the evaluation bypass code **`123456`**.
+| **Framework** | Next.js (App Router) | 16.4.5 | Full-stack application architecture and serverless API endpoints |
+| **Frontend Library** | React | 19.3.0 | Component rendering, state synchronization, and UI lifecycle |
+| **Language** | TypeScript | 5.x | End-to-end type safety across client and server |
+| **Styling** | Tailwind CSS | 4.x | Utility-first styling with responsive dark theme |
+| **Database** | PostgreSQL | 16.x | Relational data persistence hosted on AWS London (`eu-west-2`) |
+| **DB Client** | `pg` (Node-Postgres) | 8.13.x | Connection pooling with SSL validation |
+| **Key Derivation** | `@node-rs/argon2` | 2.0.x | Rust-compiled Argon2id hashing engine |
+| **Icons** | Lucide React | 1.16.x | Interface iconography |
 
 ---
 
-## 🚀 Quick Start & Local Execution
+## Cryptographic Security Architecture
+
+MediVault implements password storage following **NIST SP 800-63B** guidelines. Rather than relying on simple hashing, passwords undergo a three-layer cryptographic pipeline before database persistence.
+
+```
+Plaintext Password
+       │
+       ▼
+[ Layer 1: Server-Side HMAC-SHA256 Pepper ]
+       │  Key: 256-bit secret stored strictly in server process memory (PEPPER_V1)
+       │  Never stored in database tables or backups.
+       ▼
+[ Layer 2: Per-User 128-bit CSPRNG Salt ]
+       │  Unique 16-byte cryptographically secure random salt generated per user.
+       │  Stored in users.salt and encoded into Modular Crypt Format (MCF).
+       ▼
+[ Layer 3: Argon2id Memory-Hard Key Derivation ]
+       │  Cost Parameters:
+       │    - Memory (m): 65536 KB (64 MB RAM per hash)
+       │    - Time (t):   4 iterations
+       │    - Threads (p): 2 parallel lanes
+       │    - Algorithm:  Argon2id (RFC 9106)
+       ▼
+Stored Database Hash ($argon2id$v=19$m=65536,t=4,p=2$<salt>$<digest>)
+```
+
+### Defense Benefits
+1. **Database Dump Immunity:** If the PostgreSQL database is compromised via an SQL injection or backup leak, the attacker cannot crack the password hashes without the server-side pepper key, which resides strictly in server environment memory.
+2. **Rainbow Table Resistance:** Individual 128-bit CSPRNG salts guarantee that two users with identical passwords produce entirely different database hashes.
+3. **GPU / ASIC Resistance:** The 64 MB memory requirement per hash calculation neutralizes high-speed parallel GPU cracking equipment.
+4. **Brute-Force Account Protection:** Five consecutive failed authentication attempts automatically lock the target account for 15 minutes, with full telemetry logged to the audit ledger.
+
+---
+
+## Two-Factor Authentication (2FA)
+
+MediVault enforces **RFC 6238 Time-Based One-Time Password (TOTP)** authentication.
+
+- **Enrollment Flow:** Users generate a shared secret, displayed both as an inline SVG QR code and a plain base32 key for import into Google Authenticator, Microsoft Authenticator, or Apple Passwords.
+- **Zero Third-Party Leaks:** QR codes are rendered locally inside the client using native SVG vector paths; no credential data or secret seeds are ever transmitted to third-party QR generation APIs.
+- **Verification Window:** Employs a 30-second time-step with a ±1 step drift tolerance to accommodate client clock divergence.
+- **Emergency Recovery Keys:** Generates an array of single-use, cryptographically random recovery codes for emergency access if the mobile authenticator is lost.
+
+---
+
+## Immutable Audit Trail
+
+Every clinical transaction, administrative action, and authentication attempt is recorded through an unbroken, sequential SHA-256 hash chain:
+
+$$\text{Block Digest}_n = \text{SHA-256}\left(\text{Block Digest}_{n-1} \parallel \text{Timestamp} \parallel \text{User ID} \parallel \text{Event Type} \parallel \text{Severity} \parallel \text{Payload}\right)$$
+
+### Chain Properties
+- **Forward Integrity:** Altering or deleting any past audit row invalidates the SHA-256 digests of all subsequent records in the database.
+- **Live Verification:** The Compliance & Auditor module recalculates the entire Merkle chain in real time, reporting whether the ledger is verified or flagging the exact row index of any unauthorized modification.
+- **HIPAA Compliance:** Fulfills the technical audit control mandates specified under 45 CFR § 164.312(b).
+
+---
+
+## Disaster Recovery & 3-2-1 Backups
+
+The administrative backup engine implements the industry-standard **3-2-1 Backup Strategy**:
+- **3 Copies of Data:** Primary production volume, secondary local point-in-time snapshot, and offsite cold cloud storage.
+- **2 Different Media Types:** Active relational database volume and compressed gzip SQL archival bundles.
+- **1 Offsite Replica:** Encrypted snapshot archive stored in an independent availability zone.
+
+### Disaster Recovery Metrics
+- **Recovery Point Objective (RPO):** < 15 minutes.
+- **Recovery Time Objective (RTO):** < 5 minutes.
+- **Integrity Validation:** Each snapshot computes a standalone SHA-256 digest upon generation, verified during restoration routines.
+
+---
+
+## Clinical Workstations & RBAC Modules
+
+MediVault enforces strict Role-Based Access Control (RBAC) across six institutional roles:
+
+| Role | Primary User / Title | Clinical Access Scope | Available Actions |
+| :--- | :--- | :--- | :--- |
+| **Chief Administrator** | Dr. Prof. Nathaniel Bentil | System governance, personnel credentials, security inspection | Staff registration, Salt & Pepper inspection, 3-2-1 backups, 2FA administration |
+| **Hospital Operations Manager** | Dr. Bright Ainoo (MD) | Operational bed census, ward logistics, admission throughput | Bed allocation, transfer authorization, census reporting |
+| **Attending Physician** | Dr. Isaac Donkoh | Clinical diagnosis, EHR documentation, electronic prescriptions | Diagnostic charting, drug interaction analysis, prescription issuing |
+| **Ward Nurse** | Nurse Beatrice Mensah, RN | Bedside observations, vital signs monitoring, triage | Vitals capture (BP, SpO2, HR, Temp), patient status update, triage routing |
+| **Hospital Pharmacist** | Pharm. Kwabena Appiah | Formulatory management, dispensary verification, dispensing | Order fulfillment, dosage checks, contraindication review |
+| **Compliance Auditor** | Auditor Samuel Osei | Forensic audit log review, regulatory compliance, chain validation | Merkle hash chain verification, export audit logs, security anomaly tracking |
+
+---
+
+## Database Schema
+
+The PostgreSQL database contains the following core tables:
+
+```sql
+-- Core Accounts
+CREATE TABLE users (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    salt VARCHAR(255),
+    pepper_version VARCHAR(32) DEFAULT 'v1',
+    status VARCHAR(50) DEFAULT 'active',
+    failed_login_attempts INT DEFAULT 0,
+    lockout_until TIMESTAMP,
+    two_factor_secret TEXT,
+    two_factor_recovery_codes TEXT[],
+    two_factor_confirmed_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    deleted_at TIMESTAMP
+);
+
+-- Role-Based Access Control
+CREATE TABLE roles (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    slug VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE role_user (
+    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
+    role_id INT REFERENCES roles(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT NOW(),
+    PRIMARY KEY (user_id, role_id)
+);
+
+-- Clinical Electronic Health Records
+CREATE TABLE patients (
+    id BIGSERIAL PRIMARY KEY,
+    patient_code VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    age INT NOT NULL,
+    gender VARCHAR(20) NOT NULL,
+    ward_room VARCHAR(100) NOT NULL,
+    admission_status VARCHAR(50) NOT NULL,
+    diagnosis TEXT,
+    allergies TEXT[],
+    prescriptions JSONB,
+    vitals JSONB,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Cryptographic Merkle Audit Ledger
+CREATE TABLE audit_logs (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT REFERENCES users(id),
+    event_type VARCHAR(100) NOT NULL,
+    description TEXT NOT NULL,
+    severity VARCHAR(20) DEFAULT 'info',
+    payload JSONB,
+    ip_address VARCHAR(45),
+    prev_hash VARCHAR(64),
+    log_hash VARCHAR(64) NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Backup Archives
+CREATE TABLE backups (
+    id BIGSERIAL PRIMARY KEY,
+    snapshot_name VARCHAR(255) NOT NULL,
+    storage_tier VARCHAR(50) NOT NULL,
+    record_count INT NOT NULL,
+    sha256_checksum VARCHAR(64) NOT NULL,
+    size_bytes BIGINT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+---
+
+## API Reference
+
+### Authentication Endpoints
+- `POST /api/auth/login` - Authenticates user credentials against Argon2id hash + server pepper. Returns JWT cookie and 2FA challenge status.
+- `POST /api/auth/register` - Public self-service registration. Computes 128-bit salt and Argon2id hash, records audit entry, and returns an authenticated session.
+- `POST /api/auth/logout` - Terminates user session and clears the HTTP-only cookie.
+- `POST /api/auth/two-factor-setup` - Generates a new TOTP secret and local SVG QR code.
+- `POST /api/auth/two-factor-challenge` - Validates the 6-digit TOTP code during sign-in.
+
+### Clinical & Patient Endpoints
+- `GET /api/patients` - Retrieves the patient directory with admission and triage status.
+- `POST /api/patients` - Admits a new patient and assigns a sequential `MED-XXXX` identifier.
+- `PATCH /api/patients` - Updates patient diagnosis, bedside vitals, or discharge status.
+
+### Security & Governance Endpoints
+- `GET /api/admin/security/salt-pepper` - Administrative live view of user database salts, pepper version, and MCF hash digests.
+- `POST /api/admin/security/salt-pepper` - Live interactive simulator showing step-by-step password transformation through the cryptographic pipeline.
+- `GET /api/admin/audit` - Retrieves the audit ledger and validates sequential Merkle chain integrity.
+- `GET /api/admin/backups` - Retrieves the disaster recovery snapshot inventory.
+- `POST /api/admin/backups` - Initiates a new point-in-time database snapshot with SHA-256 verification.
+- `GET /api/admin/users` - Lists personnel for administrative credential management.
+- `POST /api/admin/users` - Provisions new hospital personnel with assigned roles.
+- `GET /api/health` - Health check endpoint reporting database connectivity and server latency.
+
+---
+
+## Getting Started
 
 ### Prerequisites
-* **Node.js:** v18.0.0 or higher
-* **npm:** v9.0.0 or higher
+- **Node.js:** v18.18.0 or higher (v20+ recommended)
+- **npm:** v9.0.0 or higher
+- **PostgreSQL Database:** Compatible with version 14 through 16
 
-### 1. Installation
-```bash
-# Clone the repository
-git clone https://github.com/nathanielbentil/MediVault-Hospital-System.git
-cd MediVault-Hospital-System/web
+### Installation
 
-# Install full-stack dependencies
-npm install
-```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/nathanielbentil/MediVault-Hospital-System.git
+   cd MediVault-Hospital-System/web
+   ```
 
-### 2. Configure Environment
-Copy the example environment configuration into `.env.local`:
-```bash
-cp .env.example .env.local
-```
-*(Populate with the database credentials and cryptographic secrets provided in your secure deployment checklist).*
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-### 3. Build & Run
-```bash
-# Production build
-npm run build
+3. **Configure the environment:**
+   Create `.env.local` inside the `web` directory (see [Environment Configuration](#environment-configuration) below).
 
-# Start production server
-npm run start
-```
-Open **[http://localhost:3000](http://localhost:3000)** in your browser.
+4. **Compile and start the production server:**
+   ```bash
+   npm run build
+   npm run start
+   ```
+
+   The application will be accessible at `http://localhost:3000`.
 
 ---
 
-## 🌐 Deploying to Vercel
+## Environment Configuration
 
-MediVault is 100% cloud-ready for instant deployment on Vercel:
+Create a `.env.local` file inside the `web/` directory with the following variables:
 
-1. Import **`nathanielbentil/MediVault-Hospital-System`** on [Vercel](https://vercel.com).
-2. Set **Root Directory** to `web`.
-3. Configure the 7 Environment Variables:
-   * `DB_HOST`: `aws-0-eu-west-2.pooler.supabase.com`
-   * `DB_PORT`: `6543`
-   * `DB_NAME`: `postgres`
-   * `DB_USER`: `postgres.wulriexoojidlilizmps`
-   * `DB_PASSWORD`: `[YOUR_PASSWORD]`
-   * `PEPPER_V1`: `[YOUR_256_BIT_PEPPER]`
-   * `JWT_SECRET`: `[YOUR_JWT_SECRET]`
-4. Click **Deploy**. Vercel will build and assign your live production URL.
+```ini
+# PostgreSQL Connection Parameters
+DB_HOST="aws-0-eu-west-2.pooler.supabase.com"
+DB_PORT="6543"
+DB_NAME="postgres"
+DB_USER="postgres.wulriexoojidlilizmps"
+DB_PASSWORD="your_database_password_here"
 
----
+# Cryptographic Keys (Loaded into process memory; never committed)
+PEPPER_V1="58ccdb65b61dfa1586e00d6cf4268f24d09d0c4ad69e7cfb555184c3fc02f91e"
+JWT_SECRET="your_secure_256_bit_jwt_secret_here"
 
-## 📜 Regulatory Standards & Compliance
-
-* **NIST Special Publication 800-63B:** Digital Identity Guidelines (Authentication and Lifecycle Management).
-* **HIPAA Security Rule (45 CFR Part 160 & Part 164):** Technical safeguards, audit controls, and data integrity.
-* **OWASP Top 10 Web Application Security:** Strict SQL injection immunity (parameterized pooling) and XSS prevention.
+# Node Environment
+NODE_ENV="production"
+```
 
 ---
 
-## ⚖️ License & Attribution
+## Deployment
 
-Developed by **Nathaniel Bentil**. All rights reserved for institutional and academic evaluation.
+### Vercel Deployment
+
+MediVault is configured for deployment on the Vercel edge network:
+
+1. Import the repository `nathanielbentil/MediVault-Hospital-System` on [Vercel](https://vercel.com).
+2. Set the **Root Directory** to `web`.
+3. In the project **Environment Variables** panel, add the 8 keys listed in [Environment Configuration](#environment-configuration).
+4. Deploy. Vercel automatically compiles the Next.js App Router application and assigns a production HTTPS domain.
+
+---
+
+## Compliance & Standards
+
+- **NIST Special Publication 800-63B:** Digital Identity Guidelines (Authentication and Lifecycle Management).
+- **HIPAA Security Rule (45 CFR Part 160 & Part 164 Subparts A and C):** Implementation of administrative, physical, and technical safeguards.
+- **OWASP Top 10 Web Application Security:** Zero SQL injection exposure via parameterized queries and cross-site scripting (XSS) prevention through React sanitization.
+- **RFC 9106:** Argon2 Memory-Hard Password Hashing Function.
+- **RFC 6238:** TOTP: Time-Based One-Time Password Algorithm.
+
+---
+
+## License
+
+Copyright (c) 2026 Nathaniel Bentil. All rights reserved.  
+Developed for academic, research, and institutional evaluation.
