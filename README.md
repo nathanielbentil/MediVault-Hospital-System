@@ -312,19 +312,19 @@ CREATE TABLE backups (
 
 ## Environment Configuration
 
-Create a `.env.local` file inside the `web/` directory with the following variables:
+Create a `.env.local` file inside the `web/` directory with the following template variables (do not commit real secrets or credentials to source control):
 
 ```ini
 # PostgreSQL Connection Parameters
-DB_HOST="aws-0-eu-west-2.pooler.supabase.com"
-DB_PORT="6543"
-DB_NAME="postgres"
-DB_USER="postgres.wulriexoojidlilizmps"
-DB_PASSWORD="your_database_password_here"
+DB_HOST="your_database_host"
+DB_PORT="5432"
+DB_NAME="your_database_name"
+DB_USER="your_database_user"
+DB_PASSWORD="your_database_password"
 
-# Cryptographic Keys (Loaded into process memory; never committed)
-PEPPER_V1="58ccdb65b61dfa1586e00d6cf4268f24d09d0c4ad69e7cfb555184c3fc02f91e"
-JWT_SECRET="your_secure_256_bit_jwt_secret_here"
+# Cryptographic Keys (Loaded strictly into process memory)
+PEPPER_V1="your_256_bit_server_pepper_secret_hex"
+JWT_SECRET="your_256_bit_jwt_signing_secret_hex"
 
 # Node Environment
 NODE_ENV="production"

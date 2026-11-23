@@ -238,7 +238,7 @@
             </p>
             <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-emerald-400 overflow-x-auto">
                 <div class="text-slate-500 mb-1"># Command Prompt / PowerShell:</div>
-                <code>$env:PGPASSWORD='f#_qApAc55qy54n'; & "C:\Users\NATINO\AppData\Local\Programs\pgsql\bin\psql.exe" -h aws-0-eu-west-2.pooler.supabase.com -p 6543 -U postgres.wulriexoojidlilizmps -d postgres -c "SELECT id, role, email, SUBSTRING(password FROM 1 FOR 30) || '...' AS password_hash, salt, pepper_version, status, deleted_at FROM users ORDER BY id;"</code>
+                <code>$env:PGPASSWORD='your_db_password'; psql -h your_db_host -p 5432 -U your_db_user -d postgres -c "SELECT id, role, email, SUBSTRING(password FROM 1 FOR 30) || '...' AS password_hash, salt, pepper_version, status, deleted_at FROM users ORDER BY id;"</code>
             </div>
         </div>
 
