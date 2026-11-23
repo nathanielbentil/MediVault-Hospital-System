@@ -55,6 +55,9 @@ import {
   Binary,
   Flame,
   Server,
+  KeyRound,
+  ShieldCheck,
+  ArrowLeft,
 } from 'lucide-react';
 
 // --- Real Premier Hospital Photography (Homepage Only) ----------------------
@@ -420,8 +423,8 @@ export default function Home() {
   const [loginError, setLoginError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Self-Service Registration form
-  const [authMode, setAuthMode]                     = useState<'signin' | 'signup'>('signin');
+  // Self-Service Registration & Password Recovery form
+  const [authMode, setAuthMode]                     = useState<'signin' | 'signup' | 'forgot'>('signin');
   const [regName, setRegName]                       = useState('');
   const [regEmail, setRegEmail]                     = useState('');
   const [regPassword, setRegPassword]               = useState('');
@@ -432,6 +435,16 @@ export default function Home() {
   const [regError, setRegError]                     = useState('');
   const [regSuccess, setRegSuccess]                 = useState('');
   const [isRegisteringSelf, setIsRegisteringSelf]   = useState(false);
+
+  // Forgot Password Recovery form
+  const [forgotEmail, setForgotEmail]                       = useState('');
+  const [forgotCode, setForgotCode]                         = useState('882941');
+  const [forgotNewPassword, setForgotNewPassword]           = useState('');
+  const [forgotConfirmPassword, setForgotConfirmPassword]   = useState('');
+  const [forgotShowPass, setForgotShowPass]                 = useState(false);
+  const [forgotError, setForgotError]                       = useState('');
+  const [forgotSuccess, setForgotSuccess]                   = useState('');
+  const [isResettingPassword, setIsResettingPassword]       = useState(false);
 
   // 2FA Modal
   const [show2FA, setShow2FA]         = useState(false);
@@ -1149,6 +1162,46 @@ export default function Home() {
     setActiveTab('dashboard');
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotError('');
+    setForgotSuccess('');
+
+    if (forgotNewPassword.length < 8) {
+      setForgotError('Password must be at least 8 characters long.');
+      return;
+    }
+    if (forgotNewPassword !== forgotConfirmPassword) {
+      setForgotError('New password and confirmation do not match.');
+      return;
+    }
+
+    setIsResettingPassword(true);
+    try {
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: forgotEmail,
+          code: forgotCode,
+          password: forgotNewPassword,
+          confirmPassword: forgotConfirmPassword,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setForgotSuccess(data.message || 'Password successfully updated.');
+        triggerToast('Password reset complete. You may now sign in.');
+      } else {
+        setForgotError(data.message || 'Could not reset password.');
+      }
+    } catch {
+      setForgotError('Network error while connecting to security server.');
+    } finally {
+      setIsResettingPassword(false);
+    }
+  };
+
   const handleOpen2FAPairModal = async () => {
     setShow2FAPairModal(true);
     setPairQrLoading(true);
@@ -1393,7 +1446,151 @@ export default function Home() {
               </button>
             </div>
 
-            {authMode === 'signin' ? (
+            {authMode === 'forgot' ? (
+              <div className="space-y-4">
+                <div className="text-center space-y-1.5">
+                  <div className="inline-flex p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 mb-1">
+                    <KeyRound className="h-6 w-6" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">Reset Staff Password</h2>
+                  <p className="text-xs text-slate-400">
+                    Self-Service Credential Recovery under NIST SP 800-63B guidelines.
+                  </p>
+                </div>
+
+                {forgotError && (
+                  <div className="p-3 rounded-xl bg-rose-950/80 border border-rose-500/40 text-rose-300 text-xs flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-rose-400" />
+                    <span>{forgotError}</span>
+                  </div>
+                )}
+
+                {forgotSuccess ? (
+                  <div className="p-4 rounded-xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs space-y-3 text-center">
+                    <div className="font-bold flex items-center justify-center gap-1.5 text-sm">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                      <span>Password Reset Successful!</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      Your new password has been salted with CSPRNG entropy, keyed with the 256-bit server pepper, and hashed using Argon2id. You can now sign in with your updated credentials.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAuthMode('signin');
+                        setPassword(forgotNewPassword);
+                        setForgotSuccess('');
+                        setLoginError('');
+                      }}
+                      className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs transition-all cursor-pointer shadow-md"
+                    >
+                      Return to Sign In
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleForgotPassword} className="space-y-3.5">
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-slate-300">
+                        Staff Email Address
+                      </label>
+                      <input
+                        type="email"
+                        value={forgotEmail}
+                        onChange={(e) => setForgotEmail(e.target.value)}
+                        placeholder="doctor@medivault.cloud"
+                        required
+                        className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-all"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-medium text-slate-300">
+                          6-Digit Recovery Verification Code
+                        </label>
+                        <span className="text-[10px] text-amber-400 font-mono">Demo: 882941</span>
+                      </div>
+                      <input
+                        type="text"
+                        value={forgotCode}
+                        onChange={(e) => setForgotCode(e.target.value)}
+                        placeholder="882941"
+                        required
+                        className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 text-sm text-white font-mono tracking-widest placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-all"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-slate-300">
+                        New Password (Min 8 Characters)
+                      </label>
+                      <div className="relative">
+                        <input
+                          type={forgotShowPass ? 'text' : 'password'}
+                          value={forgotNewPassword}
+                          onChange={(e) => setForgotNewPassword(e.target.value)}
+                          placeholder="Staff@2026!Secure"
+                          required
+                          className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-all"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setForgotShowPass(!forgotShowPass)}
+                          className="absolute right-3 top-2.5 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                        >
+                          {forgotShowPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="block text-xs font-medium text-slate-300">
+                        Confirm New Password
+                      </label>
+                      <input
+                        type={forgotShowPass ? 'text' : 'password'}
+                        value={forgotConfirmPassword}
+                        onChange={(e) => setForgotConfirmPassword(e.target.value)}
+                        placeholder="Staff@2026!Secure"
+                        required
+                        className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-all"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isResettingPassword}
+                      className="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+                    >
+                      {isResettingPassword ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 animate-spin" />
+                          <span>Updating Cryptographic Hash...</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShieldCheck className="h-4 w-4" />
+                          <span>Reset Password & Re-Encrypt Hash</span>
+                        </>
+                      )}
+                    </button>
+
+                    <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
+                      <strong className="text-amber-400">HIPAA Security Protocol:</strong> Passwords are never stored in plaintext. They are salted with a 128-bit CSPRNG salt, keyed with a 256-bit server pepper, and hashed with Argon2id.
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => { setAuthMode('signin'); setForgotError(''); setForgotSuccess(''); }}
+                      className="w-full py-2 text-xs text-slate-400 hover:text-white font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <ArrowLeft className="h-3.5 w-3.5" />
+                      <span>Back to Staff Sign In</span>
+                    </button>
+                  </form>
+                )}
+              </div>
+            ) : authMode === 'signin' ? (
               <>
                 <div className="text-center space-y-1.5">
                   <h2 className="text-2xl font-bold text-white">Staff Sign In</h2>
@@ -1429,6 +1626,18 @@ export default function Home() {
                       <label className="block text-xs font-medium text-slate-300">
                         Password
                       </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAuthMode('forgot');
+                          setForgotEmail(email);
+                          setForgotError('');
+                          setForgotSuccess('');
+                        }}
+                        className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors font-medium cursor-pointer"
+                      >
+                        Forgot Password?
+                      </button>
                     </div>
                     <div className="relative">
                       <input
