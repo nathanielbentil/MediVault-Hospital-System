@@ -546,6 +546,11 @@ export default function Home() {
   const [addDept, setAddDept] = useState('Clinical In-Patient Care');
   const [isRegistering, setIsRegistering] = useState(false);
 
+  // Dynamic Staff Metrics for Admin Dashboard Overview
+  const totalStaffCount = staffDirectory.filter((s) => s.status !== 'DELETED').length;
+  const lockedStaffCount = staffDirectory.filter((s) => s.status === 'LOCKED').length;
+  const activeStaffCount = staffDirectory.filter((s) => s.status === 'ACTIVE').length;
+
   // 3-2-1 Cloud Backups & Restore State
   const [backupSnapshots, setBackupSnapshots] = useState([
     {
@@ -645,17 +650,39 @@ export default function Home() {
     triggerToast('Cryptographic Salt & Pepper Audit JSON exported.');
   };
 
-  const handleToggleLock = (staffId: number) => {
+  const handleToggleLock = async (staffId: number) => {
+    const target = staffDirectory.find((s) => s.id === staffId);
+    if (!target) return;
+    const isCurrentlyLocked = target.status === 'LOCKED' || (target.status as string) === 'suspended';
+    const nextStatus: 'ACTIVE' | 'LOCKED' = isCurrentlyLocked ? 'ACTIVE' : 'LOCKED';
+
+    // Optimistically update UI
     setStaffDirectory((prev) =>
-      prev.map((s) => {
-        if (s.id === staffId) {
-          const nextStatus = s.status === 'ACTIVE' ? 'LOCKED' : 'ACTIVE';
-          triggerToast(`Account status for ${s.name} updated to ${nextStatus}.`);
-          return { ...s, status: nextStatus };
-        }
-        return s;
-      })
+      prev.map((s) => (s.id === staffId ? { ...s, status: nextStatus } : s))
     );
+
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: staffId, action: 'toggle_lock' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        triggerToast(`Account status for ${target.name} updated to ${nextStatus}.`);
+        loadAudit();
+        loadStaffDirectory();
+      } else {
+        // Revert on failure
+        setStaffDirectory((prev) =>
+          prev.map((s) => (s.id === staffId ? { ...s, status: target.status } : s))
+        );
+        triggerToast(data.message || 'Could not update account status.');
+      }
+    } catch {
+      triggerToast(`Account status for ${target.name} updated to ${nextStatus}.`);
+      loadStaffDirectory();
+    }
   };
 
   const handleSoftDelete = async (staffId: number, staffName: string) => {
@@ -675,6 +702,7 @@ export default function Home() {
         );
         triggerToast(`User ${staffName} soft-deleted. Permanent audit record retained in database.`);
         loadAudit();
+        loadStaffDirectory();
       } else {
         triggerToast(data.message || 'Could not soft-delete user.');
       }
@@ -719,6 +747,8 @@ export default function Home() {
         setAddName('');
         setAddEmail('');
         triggerToast(`New staff worker ${addName} registered successfully with role ${addRole}.`);
+        loadStaffDirectory();
+        loadAudit();
       } else {
         triggerToast(data.message || 'Could not register staff member.');
       }
@@ -899,9 +929,44 @@ export default function Home() {
     finally { setAuditLoading(false); }
   }, []);
 
+  const loadStaffDirectory = useCallback(async () => {
+    try {
+      const res = await fetch('/api/admin/users');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.users)) {
+        const mapped: StaffDirectoryUser[] = data.users.map((u: any) => {
+          const rawStatus = (u.status || '').toLowerCase();
+          const isDeleted = Boolean(u.deleted_at);
+          let derivedStatus: 'ACTIVE' | 'LOCKED' | 'DELETED' = 'ACTIVE';
+          if (isDeleted) {
+            derivedStatus = 'DELETED';
+          } else if (rawStatus === 'locked' || rawStatus === 'suspended') {
+            derivedStatus = 'LOCKED';
+          } else {
+            derivedStatus = 'ACTIVE';
+          }
+          return {
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            role: u.role_name || 'Staff',
+            department: u.department || 'Clinical Services',
+            status: derivedStatus,
+            twoFaActive: Boolean(u.two_factor_confirmed_at),
+            failedAttempts: u.failed_login_attempts || 0,
+          };
+        });
+        setStaffDirectory(mapped);
+      }
+    } catch (_) {}
+  }, []);
+
   // -- Tab Switch Helper with URL Synchronization ---------------------------
   const switchTab = (tab: TabType) => {
     setActiveTab(tab);
+    if (tab === 'staff') {
+      loadStaffDirectory();
+    }
     if (tab === 'salt-pepper') {
       setActiveSaltTab('personnel');
       fetchSaltPepperConfig();
@@ -929,8 +994,9 @@ export default function Home() {
           setUser(d.user);
           loadPatients();
           const role = (d.user.role || '').toLowerCase();
-          if (role.includes('admin') || role.includes('chief') || role.includes('auditor')) {
+          if (role.includes('admin') || role.includes('chief') || role.includes('auditor') || role.includes('manager')) {
             loadAudit();
+            loadStaffDirectory();
             handleRunSimulation('Lecturer@MediVault2026!');
             fetchSaltPepperConfig();
           }
@@ -950,7 +1016,7 @@ export default function Home() {
         }
       }
     }
-  }, [loadPatients, loadAudit, fetchSaltPepperConfig]);
+  }, [loadPatients, loadAudit, loadStaffDirectory, fetchSaltPepperConfig]);
 
   // -- Auth Handlers --------------------------------------------------------
   const handleRegisterSelf = async (e: React.FormEvent) => {
@@ -1029,8 +1095,9 @@ export default function Home() {
         setUser(data.user);
         loadPatients();
         const role = (data.user.role || '').toLowerCase();
-        if (role.includes('admin') || role.includes('chief') || role.includes('auditor')) {
+        if (role.includes('admin') || role.includes('chief') || role.includes('auditor') || role.includes('manager')) {
           loadAudit();
+          loadStaffDirectory();
           fetchSaltPepperConfig();
         }
       } else {
@@ -1057,8 +1124,9 @@ export default function Home() {
         setUser(data.user);
         loadPatients();
         const role = (data.user.role || '').toLowerCase();
-        if (role.includes('admin') || role.includes('chief') || role.includes('auditor')) {
+        if (role.includes('admin') || role.includes('chief') || role.includes('auditor') || role.includes('manager')) {
           loadAudit();
+          loadStaffDirectory();
           fetchSaltPepperConfig();
         }
       } else {
@@ -2142,8 +2210,11 @@ export default function Home() {
             <button
               onClick={() => {
                 loadPatients();
-                if (isAdmin || isAuditor) loadAudit();
-                triggerToast('Patient records and telemetry refreshed.');
+                if (isAdmin || isAuditor || isManager) {
+                  loadAudit();
+                  loadStaffDirectory();
+                }
+                triggerToast('Patient records, staff clearances, and telemetry refreshed.');
               }}
               className="px-4 py-2.5 rounded-xl bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 hover:text-white border border-slate-700 hover:border-slate-500 text-xs sm:text-[13px] font-bold transition-all shadow-sm shrink-0 cursor-pointer flex items-center gap-2 active:scale-[0.98]"
             >
@@ -2400,28 +2471,43 @@ export default function Home() {
                         <Users className="h-5 w-5 text-purple-400" />
                       </div>
                     </div>
-                    <div className="text-3xl font-black text-purple-400">21 Personnel</div>
+                    <div className="text-3xl font-black text-purple-400">{totalStaffCount} Personnel</div>
                     <p className="text-[11px] text-purple-400/80">Role-Based Access Control</p>
                   </div>
-                  <div onClick={() => setActiveTab('audit')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
+                  <div onClick={() => switchTab('staff')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-emerald-500/30 hover:border-emerald-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Active Accounts</span>
                       <div className="p-2 rounded-xl bg-emerald-950/80 border border-emerald-500/30">
                         <Key className="h-5 w-5 text-emerald-400" />
                       </div>
                     </div>
-                    <div className="text-3xl font-black text-emerald-400">100% Secured</div>
+                    <div className="text-3xl font-black text-emerald-400">{activeStaffCount} Active</div>
                     <p className="text-[11px] text-emerald-400/80">Argon2id + 2FA Protected</p>
                   </div>
-                  <div onClick={() => triggerToast('Defense status: 0 accounts locked. Sliding lockout active.')} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-amber-500/30 hover:border-amber-400 transition-all space-y-2 shadow-lg">
+                  <div
+                    onClick={() => setShowStaffModal(true)}
+                    className={`cursor-pointer rounded-2xl p-5 bg-slate-900 border transition-all space-y-2 shadow-lg ${
+                      lockedStaffCount > 0
+                        ? 'border-rose-500/70 bg-rose-950/25 shadow-rose-950/50 hover:border-rose-400'
+                        : 'border-amber-500/30 hover:border-amber-400'
+                    }`}
+                  >
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold uppercase text-slate-400">Defense Lockouts</span>
-                      <div className="p-2 rounded-xl bg-amber-950/80 border border-amber-500/30">
-                        <Shield className="h-5 w-5 text-amber-400" />
+                      <div className={`p-2 rounded-xl ${
+                        lockedStaffCount > 0
+                          ? 'bg-rose-950 text-rose-400 border border-rose-500/50'
+                          : 'bg-amber-950/80 text-amber-400 border border-amber-500/30'
+                      }`}>
+                        <Shield className="h-5 w-5" />
                       </div>
                     </div>
-                    <div className="text-3xl font-black text-amber-400">0 Locked</div>
-                    <p className="text-[11px] text-amber-400/80">Sliding Lockout Active</p>
+                    <div className={`text-3xl font-black ${lockedStaffCount > 0 ? 'text-rose-400 animate-pulse' : 'text-amber-400'}`}>
+                      {lockedStaffCount} Blocked
+                    </div>
+                    <p className={`text-[11px] ${lockedStaffCount > 0 ? 'text-rose-400 font-semibold' : 'text-amber-400/80'}`}>
+                      {lockedStaffCount > 0 ? `${lockedStaffCount} Staff Account(s) Blocked / Quarantined` : 'Zero Accounts Blocked'}
+                    </p>
                   </div>
                   <div onClick={() => setShowBackupModal(true)} className="cursor-pointer rounded-2xl p-5 bg-slate-900 border border-cyan-500/30 hover:border-cyan-400 transition-all space-y-2 shadow-lg">
                     <div className="flex items-center justify-between">
@@ -4720,7 +4806,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* 5. Admin: Manage Staff & Roles Modal (All 21 Personnel) */}
+      {/* 5. Admin: Manage Staff & Roles Modal */}
       {showStaffModal && (
         <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-4xl rounded-2xl bg-slate-900 border border-purple-500/50 p-6 space-y-4 shadow-2xl max-h-[85vh] flex flex-col">
@@ -4728,8 +4814,8 @@ export default function Home() {
               <div className="flex items-center gap-2">
                 <div className="p-2 rounded-xl bg-purple-950/80 border border-purple-500/30 text-purple-400"><Users className="h-5 w-5" /></div>
                 <div>
-                  <h3 className="font-bold text-white text-base">Hospital Staff Directory & RBAC Governance</h3>
-                  <p className="text-xs text-slate-400">All 21 authorized clinical officers, roles & HIPAA credentials</p>
+                  <h3 className="font-bold text-white text-base">Hospital Staff Directory & Security Status ({totalStaffCount} Personnel)</h3>
+                  <p className="text-xs text-slate-400">Live PostgreSQL role clearances, security lockouts & active accounts ({lockedStaffCount} Blocked)</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -4753,32 +4839,53 @@ export default function Home() {
                     <th className="py-2.5 px-3">Role</th>
                     <th className="py-2.5 px-3">Staff Name</th>
                     <th className="py-2.5 px-3">Email Address</th>
-                    <th className="py-2.5 px-3">Leadership Scope</th>
+                    <th className="py-2.5 px-3">Department</th>
                     <th className="py-2.5 px-3">Status</th>
+                    <th className="py-2.5 px-3 text-right">Action / Clearance</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-800">
-                  {FULL_STAFF_DIRECTORY.map((s) => (
+                  {staffDirectory.map((s) => (
                     <tr key={s.id} className="hover:bg-slate-800/40">
                       <td className="py-2.5 px-3 font-bold font-mono">
                         <span className="mr-1 inline-flex">{getRoleIcon(s.role)}</span>
-                        <span className={
-                          s.role === 'Admin' ? 'text-purple-400' :
-                          s.role === 'Manager' ? 'text-blue-400' :
-                          s.role === 'Doctor' ? 'text-cyan-400' :
-                          s.role === 'Nurse' ? 'text-pink-400' :
-                          s.role === 'Pharmacist' ? 'text-amber-400' : 'text-emerald-400'
-                        }>
+                        <span className="capitalize text-purple-400">
                           {s.role}
                         </span>
                       </td>
                       <td className="py-2.5 px-3 text-white font-medium">{s.name}</td>
                       <td className="py-2.5 px-3 font-mono text-cyan-300">{s.email}</td>
-                      <td className="py-2.5 px-3 text-slate-400 text-[11px]">{s.leadership}</td>
+                      <td className="py-2.5 px-3 text-slate-400 text-[11px]">{s.department}</td>
                       <td className="py-2.5 px-3">
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-500/30">
-                          {s.status}
-                        </span>
+                        {s.status === 'LOCKED' ? (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-950 text-rose-400 border border-rose-500/40">
+                            BLOCKED (QUARANTINED)
+                          </span>
+                        ) : s.status === 'DELETED' ? (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700">
+                            DECOMMISSIONED
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-500/30">
+                            ACTIVE
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-2.5 px-3 text-right">
+                        {!s.role.toLowerCase().includes('admin') && s.status !== 'DELETED' ? (
+                          <button
+                            onClick={() => handleToggleLock(s.id)}
+                            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                              s.status === 'LOCKED'
+                                ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-sm'
+                                : 'bg-rose-950/80 hover:bg-rose-900 text-rose-300 border border-rose-700/60'
+                            }`}
+                          >
+                            {s.status === 'LOCKED' ? 'Unlock Account' : 'Block / Lock'}
+                          </button>
+                        ) : (
+                          <span className="text-[11px] text-slate-500 font-mono">Protected</span>
+                        )}
                       </td>
                     </tr>
                   ))}

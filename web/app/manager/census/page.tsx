@@ -72,7 +72,7 @@ export default function ManagerCensusPage() {
       .then((d) => {
         if (d.success && d.user) {
           const role = (d.user.role || '').toLowerCase();
-          if (role !== 'manager' && role !== 'admin') {
+          if (!role.includes('manager') && !role.includes('admin') && !role.includes('chief')) {
             router.push('/');
             return;
           }

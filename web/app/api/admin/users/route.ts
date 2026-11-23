@@ -283,18 +283,29 @@ export async function PATCH(req: NextRequest) {
     }
 
     if (action === 'toggle_lock') {
-      const isLocked = targetUser.status === 'LOCKED' || targetUser.status === 'locked';
+      const isLocked = targetUser.status === 'LOCKED' || targetUser.status === 'locked' || targetUser.status === 'suspended';
       const newStatus = isLocked ? 'ACTIVE' : 'LOCKED';
 
-      await pool.query(
-        `UPDATE users 
-         SET status = $1, 
-             failed_login_attempts = 0, 
-             lockout_until = NULL, 
-             updated_at = NOW() 
-         WHERE id = $2`,
-        [newStatus.toLowerCase(), id]
-      );
+      if (newStatus === 'ACTIVE') {
+        await pool.query(
+          `UPDATE users 
+           SET status = 'active', 
+               deleted_at = NULL,
+               failed_login_attempts = 0, 
+               lockout_until = NULL, 
+               updated_at = NOW() 
+           WHERE id = $1`,
+          [id]
+        );
+      } else {
+        await pool.query(
+          `UPDATE users 
+           SET status = 'locked', 
+               updated_at = NOW() 
+           WHERE id = $1`,
+          [id]
+        );
+      }
 
       await AuditLogService.record({
         userId: user.userId,

@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 
     // 1. Fetch user from PostgreSQL
     const userRes = await pool.query(
-      `SELECT u.id, u.name, u.email, u.password, u.pepper_version, u.failed_login_attempts, 
+      `SELECT u.id, u.name, u.email, u.password, u.salt, u.pepper_version, u.status, u.failed_login_attempts, 
               u.lockout_until, u.two_factor_secret, u.two_factor_confirmed_at,
               r.name as role_name
        FROM users u
@@ -41,7 +41,19 @@ export async function POST(req: NextRequest) {
 
     const user = userRes.rows[0];
 
-    // 2. Check Brute-Force Lockout (15 mins after 5 attempts)
+    // 2. Check Administrative Lock or Suspension
+    if (user.status === 'locked' || user.status === 'LOCKED' || user.status === 'suspended') {
+      return NextResponse.json(
+        {
+          success: false,
+          locked: true,
+          message: 'Account is blocked or locked by hospital security administration. Contact your supervisor to restore access.',
+        },
+        { status: 423 }
+      );
+    }
+
+    // 2b. Check Brute-Force Lockout (15 mins after 5 attempts)
     if (user.lockout_until && new Date(user.lockout_until) > new Date()) {
       const remainingMinutes = Math.ceil(
         (new Date(user.lockout_until).getTime() - Date.now()) / 60000

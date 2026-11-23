@@ -27,8 +27,11 @@ import {
 
 interface AuditLogItem {
   id: number;
-  user_email: string;
-  action: string;
+  user_email?: string;
+  user_name?: string;
+  action?: string;
+  description?: string;
+  event_type?: string;
   patient_id?: number | null;
   severity: string;
   ip_address: string;
@@ -76,7 +79,7 @@ export default function SecurityAuditPage() {
       .then((d) => {
         if (d.success && d.user) {
           const role = (d.user.role || '').toLowerCase();
-          if (role !== 'auditor' && role !== 'admin') {
+          if (!role.includes('auditor') && !role.includes('admin') && !role.includes('chief')) {
             router.push('/');
             return;
           }
@@ -125,7 +128,11 @@ export default function SecurityAuditPage() {
   const handleExportCSV = () => {
     const csvContent = "data:text/csv;charset=utf-8," +
       ["ID,User,Action,Severity,IP,Timestamp",
-        ...logs.map(l => `${l.id},"${l.user_email}","${l.action}",${l.severity},${l.ip_address},"${l.created_at}"`)
+        ...logs.map(l => {
+          const userStr = (l.user_email || l.user_name || 'System').replace(/"/g, '""');
+          const actionStr = (l.action || l.description || l.event_type || 'Audit Action').replace(/"/g, '""');
+          return `${l.id},"${userStr}","${actionStr}",${l.severity || 'INFO'},${l.ip_address || '127.0.0.1'},"${l.created_at || ''}"`;
+        })
       ].join("\n");
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
@@ -147,13 +154,16 @@ export default function SecurityAuditPage() {
   // Filter logs
   const filteredLogs = logs.filter((l) => {
     const q = searchQuery.toLowerCase();
+    const userStr = (l.user_email || l.user_name || 'System').toLowerCase();
+    const actionStr = (l.action || l.description || l.event_type || '').toLowerCase();
+    const ipStr = (l.ip_address || '').toLowerCase();
     const matchesSearch =
-      l.user_email.toLowerCase().includes(q) ||
-      l.action.toLowerCase().includes(q) ||
-      l.ip_address.toLowerCase().includes(q);
+      userStr.includes(q) ||
+      actionStr.includes(q) ||
+      ipStr.includes(q);
 
     if (severityFilter === 'all') return matchesSearch;
-    return matchesSearch && l.severity.toLowerCase() === severityFilter.toLowerCase();
+    return matchesSearch && (l.severity || '').toLowerCase() === severityFilter.toLowerCase();
   });
 
   if (loading) {
@@ -442,8 +452,8 @@ export default function SecurityAuditPage() {
                   filteredLogs.map((log) => (
                     <tr key={log.id} className="hover:bg-slate-900/50">
                       <td className="py-3 px-3 font-mono font-bold text-slate-400">#{log.id}</td>
-                      <td className="py-3 px-3 font-bold text-white">{log.user_email}</td>
-                      <td className="py-3 px-3 text-slate-200">{log.action}</td>
+                      <td className="py-3 px-3 font-bold text-white">{log.user_email || log.user_name || 'System Actor'}</td>
+                      <td className="py-3 px-3 text-slate-200">{log.action || log.description || log.event_type || 'Cryptographic Event'}</td>
                       <td className="py-3 px-3">
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
