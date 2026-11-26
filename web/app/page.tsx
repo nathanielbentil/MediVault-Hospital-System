@@ -438,7 +438,7 @@ export default function Home() {
 
   // Forgot Password Recovery form
   const [forgotEmail, setForgotEmail]                       = useState('');
-  const [forgotCode, setForgotCode]                         = useState('882941');
+  const [forgotCode, setForgotCode]                         = useState('');
   const [forgotNewPassword, setForgotNewPassword]           = useState('');
   const [forgotConfirmPassword, setForgotConfirmPassword]   = useState('');
   const [forgotShowPass, setForgotShowPass]                 = useState(false);
@@ -1453,9 +1453,6 @@ export default function Home() {
                     <KeyRound className="h-6 w-6" />
                   </div>
                   <h2 className="text-2xl font-bold text-white">Reset Staff Password</h2>
-                  <p className="text-xs text-slate-400">
-                    Self-Service Credential Recovery under NIST SP 800-63B guidelines.
-                  </p>
                 </div>
 
                 {forgotError && (
@@ -1471,8 +1468,8 @@ export default function Home() {
                       <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                       <span>Password Reset Successful!</span>
                     </div>
-                    <p className="text-[11px] text-slate-300 leading-relaxed">
-                      Your new password has been salted with CSPRNG entropy, keyed with the 256-bit server pepper, and hashed using Argon2id. You can now sign in with your updated credentials.
+                    <p className="text-xs text-slate-300">
+                      Your password has been updated successfully. You can now sign in with your new password.
                     </p>
                     <button
                       type="button"
@@ -1497,24 +1494,21 @@ export default function Home() {
                         type="email"
                         value={forgotEmail}
                         onChange={(e) => setForgotEmail(e.target.value)}
-                        placeholder="doctor@medivault.cloud"
+                        placeholder="name@medivault.cloud"
                         required
                         className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-all"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <label className="block text-xs font-medium text-slate-300">
-                          6-Digit Recovery Verification Code
-                        </label>
-                        <span className="text-[10px] text-amber-400 font-mono">Demo: 882941</span>
-                      </div>
+                      <label className="block text-xs font-medium text-slate-300">
+                        Recovery Verification Code
+                      </label>
                       <input
                         type="text"
                         value={forgotCode}
                         onChange={(e) => setForgotCode(e.target.value)}
-                        placeholder="882941"
+                        placeholder="Enter 6-digit code"
                         required
                         className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 text-sm text-white font-mono tracking-widest placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-all"
                       />
@@ -1522,14 +1516,14 @@ export default function Home() {
 
                     <div className="space-y-1">
                       <label className="block text-xs font-medium text-slate-300">
-                        New Password (Min 8 Characters)
+                        New Password
                       </label>
                       <div className="relative">
                         <input
                           type={forgotShowPass ? 'text' : 'password'}
                           value={forgotNewPassword}
                           onChange={(e) => setForgotNewPassword(e.target.value)}
-                          placeholder="Staff@2026!Secure"
+                          placeholder="••••••••••••"
                           required
                           className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-all"
                         />
@@ -1551,7 +1545,7 @@ export default function Home() {
                         type={forgotShowPass ? 'text' : 'password'}
                         value={forgotConfirmPassword}
                         onChange={(e) => setForgotConfirmPassword(e.target.value)}
-                        placeholder="Staff@2026!Secure"
+                        placeholder="••••••••••••"
                         required
                         className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400/20 transition-all"
                       />
@@ -1565,19 +1559,15 @@ export default function Home() {
                       {isResettingPassword ? (
                         <>
                           <RefreshCw className="h-4 w-4 animate-spin" />
-                          <span>Updating Cryptographic Hash...</span>
+                          <span>Updating Password...</span>
                         </>
                       ) : (
                         <>
-                          <ShieldCheck className="h-4 w-4" />
-                          <span>Reset Password & Re-Encrypt Hash</span>
+                          <KeyRound className="h-4 w-4" />
+                          <span>Reset Password</span>
                         </>
                       )}
                     </button>
-
-                    <div className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
-                      <strong className="text-amber-400">HIPAA Security Protocol:</strong> Passwords are never stored in plaintext. They are salted with a 128-bit CSPRNG salt, keyed with a 256-bit server pepper, and hashed with Argon2id.
-                    </div>
 
                     <button
                       type="button"
@@ -1630,7 +1620,10 @@ export default function Home() {
                         type="button"
                         onClick={() => {
                           setAuthMode('forgot');
-                          setForgotEmail(email);
+                          setForgotEmail('');
+                          setForgotCode('');
+                          setForgotNewPassword('');
+                          setForgotConfirmPassword('');
                           setForgotError('');
                           setForgotSuccess('');
                         }}
