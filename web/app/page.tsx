@@ -59,6 +59,7 @@ import {
   ShieldCheck,
   ArrowLeft,
   ChevronDown,
+  User,
 } from 'lucide-react';
 
 // --- Real Premier Hospital Photography (Homepage Only) ----------------------
@@ -1598,66 +1599,76 @@ export default function Home() {
                 )}
 
                 <form onSubmit={handleLogin} className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <label className="block text-xs font-medium text-slate-300">
-                        Staff Email Address / Username
-                      </label>
-                      <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">1-Click Demo</span>
-                    </div>
+                  {/* Username or Email Input with Embedded Quick Demo Role Dropdown */}
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
+                      Username or Email
+                    </label>
 
-                    {/* 1-Click Demo Account Selector Dropdown */}
-                    <div className="relative">
-                      <select
-                        value={DEMO_STAFF.some(s => s.email === email) ? email : ''}
-                        onChange={(e) => {
-                          const selected = DEMO_STAFF.find(s => s.email === e.target.value);
-                          if (selected) {
-                            setEmail(selected.email);
-                            setPassword(selected.pass);
-                            setLoginError('');
-                          }
-                        }}
-                        className="w-full rounded-xl bg-slate-950/90 border border-cyan-500/50 hover:border-cyan-400 px-3.5 py-2.5 text-xs sm:text-sm text-cyan-300 font-semibold focus:outline-none focus:ring-1 focus:ring-cyan-400/50 transition-all cursor-pointer shadow-md shadow-cyan-950/30 appearance-none pr-9"
-                      >
-                        <option value="" className="bg-slate-900 text-slate-400">
-                          -- Select Role --
-                        </option>
-                        {DEMO_STAFF.map((staff) => {
-                          const roleLabel =
-                            staff.email === 'admin@medivault.cloud' ? 'Administrator' :
-                            staff.email === 'manager@medivault.cloud' ? 'Hospital Manager' :
-                            staff.email === 'doctor@medivault.cloud' ? 'Doctor' :
-                            staff.email === 'nurse@medivault.cloud' ? 'Nurse' :
-                            staff.email === 'pharmacist@medivault.cloud' ? 'Pharmacist' :
-                            staff.email === 'auditor@medivault.cloud' ? 'Auditor' :
-                            staff.email === 'juda@gmail.com' ? 'Doctor (2FA Demo)' :
-                            staff.role;
-                          return (
-                            <option key={staff.email} value={staff.email} className="bg-slate-900 text-white py-1">
-                              {roleLabel}
-                            </option>
-                          );
-                        })}
-                      </select>
-                      <div className="absolute right-3 top-3 pointer-events-none text-cyan-400">
-                        <ChevronDown className="h-4 w-4" />
+                    <div className="relative flex items-center rounded-xl bg-slate-950/80 border border-slate-700/80 focus-within:border-cyan-400 focus-within:ring-1 focus-within:ring-cyan-400/20 transition-all">
+                      <div className="pl-3.5 pr-2.5 text-slate-400 pointer-events-none">
+                        <User className="h-4 w-4" />
+                      </div>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter username or email"
+                        required
+                        className="w-full bg-transparent py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none pr-2"
+                      />
+
+                      {/* Dropdown at the extreme right of the username inside it */}
+                      <div className="relative pr-2 shrink-0 flex items-center">
+                        <select
+                          value=""
+                          onChange={(e) => {
+                            const selected = DEMO_STAFF.find(s => s.email === e.target.value);
+                            if (selected) {
+                              setEmail(selected.email);
+                              setPassword(selected.pass);
+                              setLoginError('');
+                            }
+                          }}
+                          className="rounded-lg bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 hover:border-cyan-400 pl-2.5 pr-7 py-1.5 text-xs text-cyan-300 font-medium focus:outline-none cursor-pointer transition-all appearance-none"
+                          title="Quick Demo Role"
+                        >
+                          <option value="" disabled className="bg-slate-900 text-slate-400 font-semibold">
+                            ✨ Quick Demo Role...
+                          </option>
+                          <option value="admin@medivault.cloud" className="bg-slate-900 text-white py-1">
+                            👑 Administrator (Dr. Nathaniel Bentil)
+                          </option>
+                          <option value="manager@medivault.cloud" className="bg-slate-900 text-white py-1">
+                            🏥 Hospital Manager (Dr. Bright Ainoo)
+                          </option>
+                          <option value="doctor@medivault.cloud" className="bg-slate-900 text-white py-1">
+                            🩺 Attending Doctor (Dr. Isaac Donkoh)
+                          </option>
+                          <option value="nurse@medivault.cloud" className="bg-slate-900 text-white py-1">
+                            💉 Clinical Nurse (Nurse Beatrice Mensah)
+                          </option>
+                          <option value="pharmacist@medivault.cloud" className="bg-slate-900 text-white py-1">
+                            💊 Chief Pharmacist (Pharm. Kwabena Appiah)
+                          </option>
+                          <option value="auditor@medivault.cloud" className="bg-slate-900 text-white py-1">
+                            🛡️ Forensic Auditor (Auditor Samuel Osei)
+                          </option>
+                          <option value="juda@gmail.com" className="bg-slate-900 text-white py-1">
+                            🩺 Attending Doctor (Dr. Judah - 2FA)
+                          </option>
+                        </select>
+                        <div className="absolute right-4 pointer-events-none text-cyan-400">
+                          <ChevronDown className="h-3 w-3" />
+                        </div>
                       </div>
                     </div>
-
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="name@medivault.cloud"
-                      required
-                      className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
-                    />
                   </div>
 
+                  {/* Password Input with Lock Icon */}
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <label className="block text-xs font-medium text-slate-300">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
                         Password
                       </label>
                       <button
@@ -1676,19 +1687,22 @@ export default function Home() {
                         Forgot Password?
                       </button>
                     </div>
-                    <div className="relative">
+                    <div className="relative flex items-center rounded-xl bg-slate-950/80 border border-slate-700/80 focus-within:border-cyan-400 focus-within:ring-1 focus-within:ring-cyan-400/20 transition-all">
+                      <div className="pl-3.5 pr-2.5 text-slate-400 pointer-events-none">
+                        <Lock className="h-4 w-4" />
+                      </div>
                       <input
                         type={showPass ? 'text' : 'password'}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••••••"
                         required
-                        className="w-full rounded-xl bg-slate-950/80 border border-slate-700/80 px-3.5 py-2.5 pr-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/20 transition-all"
+                        className="w-full bg-transparent py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none pr-10"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPass(!showPass)}
-                        className="absolute right-3 top-2.5 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                        className="absolute right-3 text-slate-400 hover:text-white transition-colors cursor-pointer"
                       >
                         {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
