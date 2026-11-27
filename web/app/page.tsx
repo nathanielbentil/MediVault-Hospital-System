@@ -1621,13 +1621,24 @@ export default function Home() {
                         className="w-full rounded-xl bg-slate-950/90 border border-cyan-500/50 hover:border-cyan-400 px-3.5 py-2.5 text-xs sm:text-sm text-cyan-300 font-semibold focus:outline-none focus:ring-1 focus:ring-cyan-400/50 transition-all cursor-pointer shadow-md shadow-cyan-950/30 appearance-none pr-9"
                       >
                         <option value="" className="bg-slate-900 text-slate-400">
-                          -- Select Demo Account from List --
+                          -- Select Role --
                         </option>
-                        {DEMO_STAFF.map((staff) => (
-                          <option key={staff.email} value={staff.email} className="bg-slate-900 text-white py-1">
-                            {staff.name} — [{staff.role.toUpperCase()}] ({staff.email})
-                          </option>
-                        ))}
+                        {DEMO_STAFF.map((staff) => {
+                          const roleLabel =
+                            staff.email === 'admin@medivault.cloud' ? 'Administrator' :
+                            staff.email === 'manager@medivault.cloud' ? 'Hospital Manager' :
+                            staff.email === 'doctor@medivault.cloud' ? 'Doctor' :
+                            staff.email === 'nurse@medivault.cloud' ? 'Nurse' :
+                            staff.email === 'pharmacist@medivault.cloud' ? 'Pharmacist' :
+                            staff.email === 'auditor@medivault.cloud' ? 'Auditor' :
+                            staff.email === 'juda@gmail.com' ? 'Doctor (2FA Demo)' :
+                            staff.role;
+                          return (
+                            <option key={staff.email} value={staff.email} className="bg-slate-900 text-white py-1">
+                              {roleLabel}
+                            </option>
+                          );
+                        })}
                       </select>
                       <div className="absolute right-3 top-3 pointer-events-none text-cyan-400">
                         <ChevronDown className="h-4 w-4" />
