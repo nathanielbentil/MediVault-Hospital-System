@@ -58,6 +58,7 @@ import {
   KeyRound,
   ShieldCheck,
   ArrowLeft,
+  ChevronDown,
 } from 'lucide-react';
 
 // --- Real Premier Hospital Photography (Homepage Only) ----------------------
@@ -1597,10 +1598,42 @@ export default function Home() {
                 )}
 
                 <form onSubmit={handleLogin} className="space-y-4">
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-medium text-slate-300">
-                      Staff Email Address
-                    </label>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-xs font-medium text-slate-300">
+                        Staff Email Address / Username
+                      </label>
+                      <span className="text-[10px] text-cyan-400 font-bold uppercase tracking-wider">1-Click Demo</span>
+                    </div>
+
+                    {/* 1-Click Demo Account Selector Dropdown */}
+                    <div className="relative">
+                      <select
+                        value={DEMO_STAFF.some(s => s.email === email) ? email : ''}
+                        onChange={(e) => {
+                          const selected = DEMO_STAFF.find(s => s.email === e.target.value);
+                          if (selected) {
+                            setEmail(selected.email);
+                            setPassword(selected.pass);
+                            setLoginError('');
+                          }
+                        }}
+                        className="w-full rounded-xl bg-slate-950/90 border border-cyan-500/50 hover:border-cyan-400 px-3.5 py-2.5 text-xs sm:text-sm text-cyan-300 font-semibold focus:outline-none focus:ring-1 focus:ring-cyan-400/50 transition-all cursor-pointer shadow-md shadow-cyan-950/30 appearance-none pr-9"
+                      >
+                        <option value="" className="bg-slate-900 text-slate-400">
+                          -- Select Demo Account from List --
+                        </option>
+                        {DEMO_STAFF.map((staff) => (
+                          <option key={staff.email} value={staff.email} className="bg-slate-900 text-white py-1">
+                            {staff.name} — [{staff.role.toUpperCase()}] ({staff.email})
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-3 top-3 pointer-events-none text-cyan-400">
+                        <ChevronDown className="h-4 w-4" />
+                      </div>
+                    </div>
+
                     <input
                       type="email"
                       value={email}
@@ -1679,44 +1712,6 @@ export default function Home() {
                   >
                     Create Staff Account
                   </button>
-                </div>
-
-                {/* Quick Department Leads Selection Chips */}
-                <div className="pt-4 border-t border-slate-800/80 space-y-2.5">
-                  <p className="text-[11px] font-medium text-slate-400 text-center">
-                    Quick Demo Sign-In:
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 justify-center">
-                    {DEMO_STAFF.map((staff, idx) => {
-                      const borderColors: Record<string, string> = {
-                        purple: 'hover:border-purple-400 border-purple-500/40 text-purple-300',
-                        blue: 'hover:border-blue-400 border-blue-500/40 text-blue-300',
-                        cyan: 'hover:border-cyan-400 border-cyan-500/40 text-cyan-300',
-                        pink: 'hover:border-pink-400 border-pink-500/40 text-pink-300',
-                        amber: 'hover:border-amber-400 border-amber-500/40 text-amber-300',
-                        emerald: 'hover:border-emerald-400 border-emerald-500/40 text-emerald-300',
-                      };
-                      return (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => {
-                            setEmail(staff.email);
-                            setPassword(staff.pass);
-                            setLoginError('');
-                          }}
-                          className={`px-2.5 py-1 rounded-lg border text-[11px] font-medium transition-all cursor-pointer ${
-                            email === staff.email
-                              ? 'bg-slate-800 ring-1 ring-cyan-400 font-bold'
-                              : 'bg-slate-950/60 ' + (borderColors[staff.color] || 'border-slate-800 text-slate-300')
-                          }`}
-                        >
-                          <span className="mr-1">{getRoleIcon(staff.role)}</span>
-                          <span>{staff.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
                 </div>
               </>
             ) : (
