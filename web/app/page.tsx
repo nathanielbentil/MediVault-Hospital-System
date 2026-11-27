@@ -419,8 +419,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   // Login form
-  const [email, setEmail]           = useState('admin@medivault.cloud');
-  const [password, setPassword]     = useState('Admin@MediVault2026!');
+  const [email, setEmail]           = useState('');
+  const [password, setPassword]     = useState('');
   const [showPass, setShowPass]     = useState(false);
   const [loginError, setLoginError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -1618,8 +1618,8 @@ export default function Home() {
                         className="w-full bg-transparent py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none pr-2"
                       />
 
-                      {/* Dropdown at the extreme right of the username inside it */}
-                      <div className="relative pr-2 shrink-0 flex items-center">
+                      {/* Dropdown icon at the extreme right of the username inside it */}
+                      <div className="relative pr-2.5 shrink-0 flex items-center justify-center">
                         <select
                           value=""
                           onChange={(e) => {
@@ -1630,36 +1630,36 @@ export default function Home() {
                               setLoginError('');
                             }
                           }}
-                          className="rounded-lg bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 hover:border-cyan-400 pl-2.5 pr-7 py-1.5 text-xs text-cyan-300 font-medium focus:outline-none cursor-pointer transition-all appearance-none"
-                          title="Quick Demo Role"
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                          title="Select Demo Role"
                         >
                           <option value="" disabled className="bg-slate-900 text-slate-400 font-semibold">
-                            ✨ Quick Demo Role...
+                            -- Select Demo Role --
                           </option>
-                          <option value="admin@medivault.cloud" className="bg-slate-900 text-white py-1">
+                          <option value="admin@medivault.cloud" className="bg-slate-900 text-white py-1.5">
                             👑 Administrator (Dr. Nathaniel Bentil)
                           </option>
-                          <option value="manager@medivault.cloud" className="bg-slate-900 text-white py-1">
+                          <option value="manager@medivault.cloud" className="bg-slate-900 text-white py-1.5">
                             🏥 Hospital Manager (Dr. Bright Ainoo)
                           </option>
-                          <option value="doctor@medivault.cloud" className="bg-slate-900 text-white py-1">
+                          <option value="doctor@medivault.cloud" className="bg-slate-900 text-white py-1.5">
                             🩺 Attending Doctor (Dr. Isaac Donkoh)
                           </option>
-                          <option value="nurse@medivault.cloud" className="bg-slate-900 text-white py-1">
+                          <option value="nurse@medivault.cloud" className="bg-slate-900 text-white py-1.5">
                             💉 Clinical Nurse (Nurse Beatrice Mensah)
                           </option>
-                          <option value="pharmacist@medivault.cloud" className="bg-slate-900 text-white py-1">
+                          <option value="pharmacist@medivault.cloud" className="bg-slate-900 text-white py-1.5">
                             💊 Chief Pharmacist (Pharm. Kwabena Appiah)
                           </option>
-                          <option value="auditor@medivault.cloud" className="bg-slate-900 text-white py-1">
+                          <option value="auditor@medivault.cloud" className="bg-slate-900 text-white py-1.5">
                             🛡️ Forensic Auditor (Auditor Samuel Osei)
                           </option>
-                          <option value="juda@gmail.com" className="bg-slate-900 text-white py-1">
+                          <option value="juda@gmail.com" className="bg-slate-900 text-white py-1.5">
                             🩺 Attending Doctor (Dr. Judah - 2FA)
                           </option>
                         </select>
-                        <div className="absolute right-4 pointer-events-none text-cyan-400">
-                          <ChevronDown className="h-3 w-3" />
+                        <div className="p-1 rounded-md text-slate-400 hover:text-cyan-400 hover:bg-slate-800/50 transition-colors pointer-events-none">
+                          <ChevronDown className="h-4 w-4" />
                         </div>
                       </div>
                     </div>
